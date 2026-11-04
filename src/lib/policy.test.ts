@@ -7,6 +7,7 @@ import {
   newPossessionCode,
   priceRentalReturn,
   priceSignal,
+  scoreListingRisk,
   verifyListing,
 } from "./policy";
 
@@ -221,6 +222,44 @@ describe("priceSignal", () => {
     const s = priceSignal({ askingCents: 1000, offerCents: [20000, 21000] });
     expect(s.level).toBe("unknown");
     expect(s.offerCount).toBe(2);
+  });
+});
+
+describe("scoreListingRisk", () => {
+  const fairPrice = priceSignal({ askingCents: 30000, offerCents: [24200, 23500, 26900, 27400, 39900] });
+  const baitPrice = priceSignal({ askingCents: 9000, offerCents: [24200, 23500, 26900, 27400, 39900] });
+
+  it("calls a deposit-first listing high risk", () => {
+    expect(scoreListingRisk({ flags: [{ flag: "deposit_before_meeting", confidence: 0.9 }], price: null }).level).toBe("high");
+  });
+  it("ignores low-confidence flags", () => {
+    const r = scoreListingRisk({ flags: [{ flag: "gift_cards_or_crypto", confidence: 0.4 }], price: fairPrice });
+    expect(r.level).toBe("no_flags");
+    expect(r.score).toBe(0);
+  });
+  it("counts a repeated flag once", () => {
+    const r = scoreListingRisk({ flags: [{ flag: "urgency_pressure", confidence: 0.9 }, { flag: "urgency_pressure", confidence: 0.9 }], price: null });
+    expect(r.score).toBe(15);
+    expect(r.level).toBe("caution");
+  });
+  it("adds bait pricing to the score", () => {
+    const r = scoreListingRisk({ flags: [{ flag: "urgency_pressure", confidence: 0.9 }], price: baitPrice });
+    expect(r.level).toBe("high");
+    expect(r.reasons.some((x) => x.includes("below the going rate"))).toBe(true);
+  });
+  it("never claims a clean result proves safety", () => {
+    expect(scoreListingRisk({ flags: [], price: null }).headline).toContain("doesn't prove");
+  });
+  it("caps the score at 100", () => {
+    const r = scoreListingRisk({
+      flags: [
+        { flag: "gift_cards_or_crypto", confidence: 1 },
+        { flag: "overpayment_or_check", confidence: 1 },
+        { flag: "verification_code_request", confidence: 1 },
+      ],
+      price: null,
+    });
+    expect(r.score).toBe(100);
   });
 });
 

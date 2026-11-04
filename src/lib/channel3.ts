@@ -56,6 +56,18 @@ function offerCents(o: Offer): number | null {
   return typeof v === "number" && o.price.currency === "USD" ? Math.round(v * 100) : null;
 }
 
+/** Same-model price comparison for the scam check. Null when there's no exact match. */
+export async function comparePrice(input: { make: string; model: string; askingCents: number }): Promise<PriceSignal | null> {
+  const { products } = await post<{ products: Product[] }>("/search", { query: `${input.make} ${input.model}`, limit: 8 });
+  const cents = products
+    .filter((p) => isSameModel({ make: input.make, model: input.model, productTitle: p.title, brands: (p.brands ?? []).map((b) => b.name) }))
+    .flatMap((p) => p.offers ?? [])
+    .filter((o) => (o.availability ?? "InStock") === "InStock")
+    .map(offerCents)
+    .filter((c): c is number => c !== null);
+  return cents.length ? priceSignal({ askingCents: input.askingCents, offerCents: cents }) : null;
+}
+
 export async function checkMarket(listing: Listing, publicPhoto: Photo | null): Promise<MarketCheck> {
   const fp = listing.fingerprint;
   const query = [fp?.make, fp?.model].filter(Boolean).join(" ") || listing.title;

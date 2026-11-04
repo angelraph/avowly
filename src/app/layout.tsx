@@ -25,6 +25,8 @@ const footer = [
     links: [
       ["Sell an item", "/new?mode=sale"],
       ["Rent something out", "/new?mode=rental"],
+      ["Scam check", "/check"],
+      ["My deals", "/my"],
       ["Browse listings", "/browse"],
       ["For AI agents", "/agents"],
     ],
@@ -60,7 +62,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
               <Logo size={26} />
             </Link>
             <nav className="flex items-center gap-1 text-sm">
+              <Link href="/check" className="hidden rounded-md px-2.5 py-1.5 text-ink-700 hover:text-ink-900 sm:inline">Scam check</Link>
               <Link href="/browse" className="hidden rounded-md px-2.5 py-1.5 text-ink-700 hover:text-ink-900 sm:inline">Browse</Link>
+              <Link href="/my" className="hidden rounded-md px-2.5 py-1.5 text-ink-700 hover:text-ink-900 lg:inline">My deals</Link>
               <Link href="/support" className="hidden rounded-md px-2.5 py-1.5 text-ink-700 hover:text-ink-900 sm:inline">Help</Link>
               <Link href="/docs" className="hidden rounded-md px-2.5 py-1.5 text-ink-700 hover:text-ink-900 md:inline">Docs</Link>
               <Link href="/agents" className="hidden rounded-md px-2.5 py-1.5 text-ink-700 hover:text-ink-900 sm:inline">Agents</Link>

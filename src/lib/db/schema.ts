@@ -92,6 +92,21 @@ export const photos = pgTable("photos", {
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
 
+/**
+ * Shareable scam-check results. Stores only the verdict and flag labels: never the
+ * pasted text or the screenshot, which can contain other people's details.
+ */
+export const scamChecks = pgTable("scam_checks", {
+  id: text("id").primaryKey(),
+  level: text("level").notNull(),
+  score: integer("score").notNull(),
+  headline: text("headline").notNull(),
+  reasons: jsonb("reasons").$type<string[]>().notNull(),
+  product: text("product"),
+  priceMessage: text("price_message"),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
 /** Support requests from the help center, optionally tied to a deal. */
 export const supportTickets = pgTable("support_tickets", {
   id: text("id").primaryKey(),

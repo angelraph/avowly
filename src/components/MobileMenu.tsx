@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 
 const LINKS: [string, string][] = [
+  ["Is this listing a scam?", "/check"],
+  ["My deals", "/my"],
   ["Browse listings", "/browse"],
   ["Sell an item", "/new?mode=sale"],
   ["Rent something out", "/new?mode=rental"],

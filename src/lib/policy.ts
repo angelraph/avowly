@@ -359,6 +359,62 @@ export function priceSignal(input: { askingCents: number; offerCents: number[] }
   return { ...base, level: "fair", message: "In line with typical retail offers for this model." };
 }
 
+// ---------------------------------------------------------------- listing risk
+
+/** The only warning signs the model may report, each with a published weight. */
+export const RISK_FLAGS = {
+  deposit_before_meeting: { weight: 40, label: "Asks for a deposit or payment before you see the item" },
+  friends_and_family: { weight: 35, label: "Asks for a no-protection payment (friends & family, Zelle, Cash App, wire)" },
+  gift_cards_or_crypto: { weight: 50, label: "Asks for gift cards or crypto" },
+  overpayment_or_check: { weight: 50, label: "Overpayment, cashier's check or \"my shipper will collect\" story" },
+  verification_code_request: { weight: 50, label: "Asks you for a verification code" },
+  move_off_platform: { weight: 20, label: "Pushes the conversation off the platform" },
+  urgency_pressure: { weight: 15, label: "Pressure to act fast" },
+  no_meetup_shipping_only: { weight: 20, label: "Won't meet in person; shipping only" },
+  away_or_overseas_story: { weight: 25, label: "Seller is away or overseas, or has a sad-story reason" },
+  stock_or_generic_photos: { weight: 15, label: "Photos look like stock or catalog images, not the real item" },
+  vague_or_copied_description: { weight: 10, label: "Vague or copy-pasted description" },
+} as const;
+
+export type RiskFlag = keyof typeof RISK_FLAGS;
+export type RiskLevel = "high" | "caution" | "no_flags";
+
+export type ListingRisk = {
+  level: RiskLevel;
+  score: number;
+  reasons: string[];
+  headline: string;
+};
+
+/** Plain, published scoring. The model reports flags; this decides the verdict. */
+export function scoreListingRisk(input: {
+  flags: { flag: RiskFlag; confidence: number }[];
+  price: PriceSignal | null;
+}): ListingRisk {
+  const seen = new Set<RiskFlag>();
+  const reasons: string[] = [];
+  let score = 0;
+  for (const f of input.flags) {
+    if (f.confidence < 0.7 || seen.has(f.flag)) continue;
+    seen.add(f.flag);
+    score += RISK_FLAGS[f.flag].weight;
+    reasons.push(RISK_FLAGS[f.flag].label);
+  }
+  if (input.price?.level === "too_low") {
+    score += 35;
+    reasons.push(`Priced far below the going rate (${input.price.percentOfReference}% of typical retail)`);
+  }
+  score = Math.min(score, 100);
+  const level: RiskLevel = score >= 40 ? "high" : score > 0 ? "caution" : "no_flags";
+  const headline =
+    level === "high"
+      ? "This has the signs of a scam."
+      : level === "caution"
+        ? "Be careful with this one."
+        : "No warning signs found. That doesn't prove it's safe.";
+  return { level, score, reasons, headline };
+}
+
 // ---------------------------------------------------------------- hold clock
 
 export function holdClock(authorizedAt: Date, now: Date = new Date()) {

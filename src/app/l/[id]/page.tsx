@@ -7,6 +7,7 @@ import { MarketCard } from "@/components/MarketCard";
 import { NotifyButton } from "@/components/NotifyButton";
 import { PayButton } from "@/components/PayButton";
 import { PhotoMosaic } from "@/components/PhotoMosaic";
+import { SellerKit } from "@/components/SellerKit";
 import { ShareListing } from "@/components/ShareListing";
 import { DEAL_STATUS, Status } from "@/components/Status";
 import type { MarketCheck } from "@/lib/channel3";
@@ -273,6 +274,7 @@ export default async function ListingPage({
               </div>
               <NotifyButton subscriptionKey={listing.sellerKey} listingId={listing.id} label="Notify me when a buyer pays" />
               {listing.status === "draft" && <p className="text-sm text-ink-500">Finish verifying from the create page.</p>}
+              {listing.status === "verified" && <SellerKit listingId={listing.id} title={listing.title} />}
               {liveDeals.length === 0 ? (
                 <p className="text-sm text-ink-500">No buyers yet. Share your listing link in your Marketplace, Craigslist or Reddit post.</p>
               ) : (

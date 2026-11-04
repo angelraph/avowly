@@ -159,6 +159,21 @@ export default async function Home() {
         )}
       </section>
 
+      {/* ------------------------------------------------------------ scam check */}
+      <section className="mx-auto max-w-6xl px-4 pb-24">
+        <Reveal className="grid items-center gap-6 rounded-[10px] border border-line bg-card p-6 sm:p-10 md:grid-cols-[1.5fr_auto]">
+          <div>
+            <p className="status text-brass-ink">Free tool</p>
+            <h2 className="mt-3 text-3xl font-semibold tracking-[-0.03em] sm:text-4xl">Not sure about a listing? Check it first.</h2>
+            <p className="mt-3 max-w-xl text-ink-500">
+              Paste any listing or the seller&apos;s messages. Clasp looks for the warning signs of a scam and compares the price with live retail offers. No
+              sign-up, nothing stored.
+            </p>
+          </div>
+          <Link href="/check" className="rounded-[10px] bg-ink-900 px-6 py-3 text-center font-medium text-paper hover:bg-ink-700">Is this a scam?</Link>
+        </Reveal>
+      </section>
+
       {/* ------------------------------------------------------------ FAQ preview */}
       <section className="mx-auto max-w-6xl px-4 pb-24">
         <div className="grid gap-10 md:grid-cols-[1fr_1.6fr]">

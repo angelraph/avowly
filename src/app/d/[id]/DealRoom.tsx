@@ -111,6 +111,14 @@ export function DealRoom({ id, urlKey, initialError }: { id: string; urlKey: str
   const [error, setError] = useState<string | null>(initialError ?? null);
   const [notice, setNotice] = useState<string | null>(null);
 
+  // Remember this deal on the device so it shows up in My deals (agent-started deals arrive by link).
+  useEffect(() => {
+    if (!urlKey || !state?.role) return;
+    try {
+      if (state.role === "buyer") localStorage.setItem(`clasp:deal:${id}`, urlKey);
+    } catch {}
+  }, [id, urlKey, state?.role]);
+
   useEffect(() => {
     if (urlKey) return;
     try {

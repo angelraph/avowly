@@ -17,30 +17,32 @@ export async function ogCard(input: {
   line: string;
   footer: string;
   photoId: string | null;
+  tone?: "brass" | "oxblood" | "green";
 }) {
   const photo = await photoDataUrl(input.photoId);
+  const color = input.tone === "oxblood" ? "#8F2D2A" : input.tone === "green" ? "#1F6B4A" : "#7A5532";
   return new ImageResponse(
     (
-      <div style={{ display: "flex", width: "100%", height: "100%", background: "#11141b", color: "white", fontFamily: "sans-serif" }}>
+      <div style={{ display: "flex", width: "100%", height: "100%", background: "#F4F1EA", color: "#141413", fontFamily: "sans-serif" }}>
         {photo && (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={photo} alt="" width={480} height={630} style={{ objectFit: "cover", width: 480, height: 630 }} />
         )}
         <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", flex: 1, padding: 56 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 48, height: 48, borderRadius: 12, background: "white", color: "#11141b", fontSize: 30, fontWeight: 700 }}>
-              C
-            </div>
-            <div style={{ fontSize: 34, fontWeight: 700 }}>Clasp</div>
+            <svg width="56" height="56" viewBox="0 0 64 64" fill="none">
+              <path d="M50 17.5 L32 7.5 L12.5 18.5 L12.5 45.5 L32 56.5 L50 46.5" stroke="#A67C52" strokeWidth="8.5" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M26.5 20 H37.5 Q40 20 40 22.5 V37.6 L32 42.6 L24 37.6 V22.5 Q24 20 26.5 20 Z" fill="#141413" />
+              <path d="M27.6 31.2 L30.9 34.4 L36.6 28.2" stroke="#D9B98F" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            <div style={{ fontSize: 38, fontWeight: 700 }}>Clasp</div>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
-            <div style={{ display: "flex", alignSelf: "flex-start", background: "#067647", borderRadius: 999, padding: "8px 20px", fontSize: 26, fontWeight: 600 }}>
-              {input.badge}
-            </div>
-            <div style={{ fontSize: photo ? 52 : 64, fontWeight: 700, lineHeight: 1.1 }}>{input.title.slice(0, 70)}</div>
-            <div style={{ fontSize: 30, color: "#b6bdcb", lineHeight: 1.3 }}>{input.line}</div>
+            <div style={{ display: "flex", fontSize: 24, fontWeight: 700, letterSpacing: 3, textTransform: "uppercase", color }}>{input.badge}</div>
+            <div style={{ fontSize: photo ? 50 : 62, fontWeight: 700, lineHeight: 1.1 }}>{input.title.slice(0, 70)}</div>
+            <div style={{ fontSize: 30, color: "#6F6A62", lineHeight: 1.3 }}>{input.line}</div>
           </div>
-          <div style={{ fontSize: 24, color: "#b6bdcb" }}>{input.footer}</div>
+          <div style={{ fontSize: 24, color: "#6F6A62" }}>{input.footer}</div>
         </div>
       </div>
     ),

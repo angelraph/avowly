@@ -57,6 +57,13 @@
       "when": 1792043103853,
       "tag": "0007_support_tickets",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1793787481351,
+      "tag": "0008_scam_checks",
+      "breakpoints": true
     }
   ]
 }
