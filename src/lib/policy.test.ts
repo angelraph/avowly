@@ -68,6 +68,18 @@ describe("decideSaleHandoff", () => {
       expect(same.verdict).toBe("match");
     }
   });
+  it("reads an IMEI shown with a software version after it", () => {
+    const other = "356938035643809";
+    const swapped = decideSaleHandoff({ listed, features: [], hasAntiTheftLock: true, reads: [{ kind: "IMEI (SIM slot 1)", value: `${other} / 78`, confidence: 0.99 }], featureChecks: [], lockStatus: "off" });
+    expect(swapped.verdict).toBe("mismatch");
+    const same = decideSaleHandoff({ listed, features: [], hasAntiTheftLock: true, reads: [{ kind: "IMEI", value: `${IMEI}/78`, confidence: 0.99 }], featureChecks: [], lockStatus: "off" });
+    expect(same.verdict).toBe("match");
+  });
+  it("rejects 17 digits whose first 15 aren't a valid IMEI", () => {
+    const v = decideSaleHandoff({ listed, features: [], hasAntiTheftLock: true, reads: [{ kind: "IMEI", value: "49015420323751978", confidence: 0.99 }], featureChecks: [], lockStatus: "off" });
+    expect(v.verdict).toBe("rescan");
+    expect(v.canRelease).toBe(false);
+  });
   it("applies the IMEI check digit whatever the label says", () => {
     const v = decideSaleHandoff({ listed, features: [], hasAntiTheftLock: true, reads: [{ kind: "IMEI (SIM SLOT 1)", value: "490154203237519", confidence: 0.99 }], featureChecks: [], lockStatus: "off" });
     expect(v.verdict).toBe("rescan");

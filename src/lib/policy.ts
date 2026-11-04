@@ -51,6 +51,15 @@ export function canonicalKind(kind: string): string {
   return k;
 }
 
+/**
+ * Android's *#06# screen can show the software version after the IMEI ("...86 / 78"), which reads
+ * as 17 digits. Keep the 15-digit IMEI only when its check digit proves that's what the number is.
+ */
+function imeiDigits(value: string): string {
+  const digits = normalizeIdentifier(value);
+  return digits.length === 17 && isValidImei(digits.slice(0, 15)) ? digits.slice(0, 15) : digits;
+}
+
 /** Keeps only confident, well-formed reads, normalized for comparison. */
 export function trustedIdentifiers(reads: ReadIdentifier[]): Identifier[] {
   const out: Identifier[] = [];
@@ -58,7 +67,7 @@ export function trustedIdentifiers(reads: ReadIdentifier[]): Identifier[] {
   for (const read of reads) {
     if (read.confidence < MIN_READ_CONFIDENCE) continue;
     const kind = canonicalKind(read.kind);
-    const value = normalizeIdentifier(read.value);
+    const value = kind === "IMEI" ? imeiDigits(read.value) : normalizeIdentifier(read.value);
     if (value.length < 5) continue;
     if (kind === "IMEI" && !isValidImei(value)) continue;
     const key = `${kind}:${value}`;
