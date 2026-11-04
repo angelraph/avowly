@@ -28,6 +28,6 @@ console.log("\nMCP tools/list", mcp.status, (txt.match(/"name":"[^"]+"/g) ?? [])
 const search = await fetch(base + "/api/mcp", {
   method: "POST",
   headers: { "Content-Type": "application/json", Accept: "application/json, text/event-stream" },
-  body: JSON.stringify({ jsonrpc: "2.0", id: 2, method: "tools/call", params: { name: "search_listings", arguments: { query: "phone" } } }),
+  body: JSON.stringify({ jsonrpc: "2.0", id: 2, method: "tools/call", params: { name: "search_verified_listings", arguments: { query: "phone" } } }),
 });
-console.log("MCP search_listings", search.status, (await search.text()).slice(0, 300));
+console.log("MCP search_verified_listings", search.status, (await search.text()).slice(0, 300));

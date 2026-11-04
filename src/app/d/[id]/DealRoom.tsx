@@ -49,7 +49,14 @@ function eventLabel(e: State["events"][number]): string {
     "paypal.reauthorized": "Hold renewed with PayPal",
     "paypal.capture": `PayPal captured${amt} (${String(p.purpose ?? "").replace("_", " ")})`,
     "paypal.payout": `Payout sent to seller${amt}`,
-    "dispute.seen": `Buyer opened a PayPal dispute (${p.disputeId ?? ""})`,
+    "dispute.seen":
+      p.status === "WAITING_FOR_SELLER_RESPONSE"
+        ? `PayPal asked the seller to respond to dispute ${p.disputeId ?? ""}`
+        : p.status === "WAITING_FOR_BUYER_RESPONSE"
+          ? `PayPal passed dispute ${p.disputeId ?? ""} back to the buyer`
+          : p.status === "RESOLVED"
+            ? `PayPal dispute ${p.disputeId ?? ""} resolved`
+            : `Buyer opened a PayPal dispute (${p.disputeId ?? ""})`,
     "dispute.evidence_submitted": "Avowly sent the handoff record to PayPal as evidence",
     "dispute.defense_failed": "Couldn't send evidence automatically. Use “Send record to PayPal”",
     "paypal.voided": "PayPal hold cancelled, money released",

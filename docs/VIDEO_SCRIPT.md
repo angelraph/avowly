@@ -1,27 +1,18 @@
-# Demo video script (target 2:50, hard limit under 3:00)
+# Demo video script (target 2:45, hard limit under 3:00)
 
-**Rules to respect:** public on YouTube; show it working on the device it's built for (a phone); no copyrighted music; don't show third-party logos such as Facebook. Hide personal notifications; turn on Do Not Disturb. Use a clean test phone screen with no real contacts.
+Produced from screen recordings of the live site (https://avowly.vercel.app) at phone size, framed as a phone. Every screen is real PayPal sandbox activity from Nov 4, 2026: the Oppo A58 sale (deal jz8gdc2k34f7), the HP laptop rental (deal d6r8tnmjta2m), and the PayPal dispute PP-R-GVB-10196424. Narration is a synthesized voice; no music.
 
-**Setup:** two phones (seller, buyer) or one phone plus a screen recording, one item, one different device for the switch, paper and pen.
+**Rules respected:** public on YouTube; shown at phone size; no copyrighted music; no third-party marketplace logos; no personal data on screen (photos are pixelated by Avowly before storage, no full IMEI, no emails).
 
-| Time | Screen | Say |
+| # | Screen | Narration |
 |---|---|---|
-| 0:00 | Black, then the two phones and a stranger's hands | "A third of the Marketplace listings one UK bank's fraud team checked were fake. So when you meet a stranger to buy a phone, you bring cash and hope." |
-| 0:12 | Avowly home page | "Avowly fixes that moment. PayPal holds the money. AI checks the item in your hands. The seller is paid when it's the real thing, and never if it isn't." |
-| 0:25 | Seller phone: create listing, code on screen | "The seller gets a one-time code." |
-| 0:32 | Paper beside the item, photo taken, Verify | "They photograph it beside the item. A stolen photo can't have this code. Avowly reads the serial, and blurs anyone's personal details before anything is saved." |
-| 0:48 | Listing page, price card | "The listing shows what was verified, and a live market price." |
-| 0:56 | Buyer phone: PayPal approval sheet | "The buyer pays in PayPal. It's a real authorization: held, not charged." |
-| 1:05 | Deal room: HELD, big amount | "Held." |
-| 1:10 | Seller hands over the wrong phone, buyer scans | "At the meetup, the seller hands over a different phone." |
-| 1:20 | Red MISMATCH screen | "Mismatch. The AI only reads the number and is never told what to expect. Plain code compares. Not one cent moved." |
-| 1:32 | Right phone, scan, MATCHED | "The right phone. Matched." |
-| 1:38 | Tap Release; seller phone notification | "Release. PayPal captures, and the seller is paid on the spot." |
-| 1:50 | Activity feed with PayPal confirmations, PDF record | "Both sides get PayPal's own confirmations, and a record that goes to PayPal automatically if anyone disputes it later." |
-| 2:02 | Rental: camera returned, missing charger | "Rentals use the same engine. This camera came back without its charger." |
-| 2:10 | KEPT $25, RELEASED $275 | "Twenty-five dollars kept, from a price list both sides agreed to. Two hundred seventy-five released. A partial capture, not an argument." |
-| 2:22 | Agent asks for a phone, gets a PayPal link | "AI shopping agents can find verified items too, but only you can approve the hold in PayPal." |
-| 2:32 | Scam check result, message to seller | "And anyone can paste a listing into our free scam check, then ask the seller to prove it. That's how Avowly spreads." |
-| 2:42 | Proof page, logo, tagline | "Avowly. Real items. Real payments. Money moves only when the thing does." |
-
-**Record only after every step works on the live site.** Everything shown must be real sandbox activity.
+| 1 | Title card | "When you meet a stranger to buy a used phone, you bring cash and hope. One UK bank checked a hundred marketplace listings and found a third were fake. Avowly fixes that moment." |
+| 2 | Home page, scrolling | "PayPal holds the money. AI checks the item in your hands. The seller is paid when it's the real thing, and never if it isn't." |
+| 3 | New listing form | "A seller lists an item and gets a one-time code. They photograph the item beside that code, so a stolen photo can't pass. Avowly reads the serial or IMEI, and blurs anyone's personal details before a photo is saved." |
+| 4 | Verified listing page | "This is a real listing: an Oppo A58, verified. The buyer pays with PayPal, but the money is only authorized. Held, not charged." |
+| 5 | Seller's deal room, activity feed | "Here is the real record of that sale. PayPal confirmed the hold. At the meetup, a different phone was scanned first: mismatch, nothing moved. Then the right phone, with its anti-theft lock still on: blocked. Lock off: matched. The buyer pressed release, PayPal captured the payment, and the seller was paid by PayPal Payouts. Every step is confirmed by PayPal's own webhooks." |
+| 6 | Public proof page with the dispute step | "Then we tested the worst case. The buyer opened a PayPal dispute, claiming the phone never arrived. Two seconds after PayPal asked the seller to respond, Avowly had already sent the full handoff record as evidence. The seller did nothing." |
+| 7 | Rental proof page and deal room | "Rentals use the same engine. One hold covers the fee and deposit. This laptop came back without its charger. The AI compared it with the pickup photos, and plain code charged twenty-five dollars from a price list both sides saw up front. The other seventy-five came back automatically." |
+| 8 | For agents page | "AI shopping agents can use Avowly too. Our MCP server lets an agent find verified items and start a protected purchase, but only a human can approve it in PayPal." |
+| 9 | Scam check result | "Anyone can paste a listing into the free scam check. This one, an iPhone at a fifth of its price, wanting gift cards and shipping only, came back high risk, with a ready message asking the seller to prove it with Avowly." |
+| 10 | How it's built, closing card | "The rule behind all of it: the AI reads, plain rules decide. The model never sees a price, never knows which serial to expect, and never touches PayPal. Avowly. Money moves only when the thing does." |
