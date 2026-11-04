@@ -21,7 +21,7 @@ Use two browser windows; a normal one (seller) and a private one (buyer).
 2. Write the one-time code on paper. Add a photo of the paper beside the item, and a photo of its serial number. Tap **Verify with AI**, and copy the listing link.
 3. **Buyer:** open the link in the private window, tap the PayPal button, log in with the sandbox **buyer** login, choose the card, and complete. You land in the deal room: **CLASPED**.
 4. **Try the fraud case:** in the deal room, upload a photo of a *different* serial number. Expect **MISMATCH**, and nothing charged.
-5. **Real handoff:** upload the real serial. For phones and tablets, add the Find My / Find Hub screen with the switch off. Expect **MATCHED**, then tap **Release**.
+5. **Real handoff:** upload the real serial. For phones and tablets, the deal room also lists a second step: a photo of the Find My / Find Hub switch turned off, with a "Where's the switch?" guide. Expect **MATCHED**, then tap **Release**.
 6. Open the proof page and download the handoff record PDF.
 
 ## Rental

@@ -1,6 +1,8 @@
+import { createHash } from "node:crypto";
 import { z } from "zod";
 import { getDb, schema } from "@/lib/db";
 import { handler } from "@/lib/http";
+import { sendConfirmation } from "@/lib/notify";
 import { clientIp, rateLimit } from "@/lib/ratelimit";
 import { getDeal, getListing, HttpError, roleFor } from "@/lib/store";
 
@@ -29,6 +31,7 @@ export const POST = handler(async (req: Request) => {
   let role: "seller" | "buyer";
   let resolvedListingId: string;
   let resolvedDealId: string | null = null;
+  let title: string;
   if (dealId) {
     const { deal, listing } = await getDeal(dealId);
     const r = roleFor(deal, listing, key);
@@ -36,22 +39,24 @@ export const POST = handler(async (req: Request) => {
     role = r;
     resolvedListingId = listing.id;
     resolvedDealId = r === "buyer" ? deal.id : null;
+    title = listing.title;
   } else if (listingId) {
     const listing = await getListing(listingId);
     if (key !== listing.sellerKey) throw new HttpError(403, "Only the seller can follow this listing");
     role = "seller";
     resolvedListingId = listing.id;
+    title = listing.title;
   } else {
     throw new HttpError(400, "listingId or dealId is required");
   }
 
   const db = await getDb();
+  // One row per device per thing it follows, so a second deal doesn't silence the first.
+  const id = createHash("sha256").update([subscription.endpoint, role, resolvedListingId, resolvedDealId ?? ""].join("|")).digest("hex");
   await db
     .insert(schema.pushSubscriptions)
-    .values({ endpoint: subscription.endpoint, keys: subscription.keys, role, listingId: resolvedListingId, dealId: resolvedDealId })
-    .onConflictDoUpdate({
-      target: schema.pushSubscriptions.endpoint,
-      set: { keys: subscription.keys, role, listingId: resolvedListingId, dealId: resolvedDealId },
-    });
-  return { subscribed: true, role };
+    .values({ id, endpoint: subscription.endpoint, keys: subscription.keys, role, listingId: resolvedListingId, dealId: resolvedDealId })
+    .onConflictDoUpdate({ target: schema.pushSubscriptions.id, set: { keys: subscription.keys } });
+  const delivered = await sendConfirmation(subscription, title);
+  return { subscribed: true, role, delivered };
 });

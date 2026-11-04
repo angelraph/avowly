@@ -6,6 +6,7 @@
 import { PDFDocument, rgb, StandardFonts, type PDFFont, type PDFPage } from "pdf-lib";
 import type { Deal, Listing } from "./db/schema";
 import { formatMoney } from "./money";
+import { publicConditionNotes } from "./sanitize";
 import { dealEvents, loadPhotos, photoIds } from "./store";
 
 // Standard PDF fonts only cover WinAnsi; keep text to plain ASCII.
@@ -109,7 +110,8 @@ export async function buildEvidencePdf(deal: Deal, listing: Listing): Promise<Ui
   if (fp) {
     if (fp.identifiers.length) w.text(`Identifiers read: ${fp.identifiers.map((i) => `${i.kind} ${i.value}`).join(", ")}`);
     if (fp.distinctiveFeatures?.length) w.text(`Unique marks recorded: ${list(fp.distinctiveFeatures)}`);
-    if (fp.conditionNotes.length) w.text(`Condition disclosed to buyer: ${list(fp.conditionNotes)}`);
+    const disclosed = publicConditionNotes(fp.conditionNotes);
+    if (disclosed.length) w.text(`Condition disclosed to buyer: ${list(disclosed)}`);
   }
   w.gap();
 
@@ -150,7 +152,9 @@ export async function buildEvidencePdf(deal: Deal, listing: Listing): Promise<Ui
   // Photos, each captioned with the stage it came from.
   const stages = listing.mode === "sale" ? ["listing", "handoff"] : ["listing", "pickup", "return"];
   for (const stage of stages) {
-    const ids = await photoIds({ listingId: listing.id, stage, ...(stage === "listing" ? {} : { dealId: deal.id }) });
+    // A sale's record shows the scan that settled it. Earlier tries could be some other device, whose details don't belong here.
+    const settling = stage === "handoff" && decision?.kind === "sale_handoff" ? (decision.photoIds as string[] | undefined) : undefined;
+    const ids = settling ?? (await photoIds({ listingId: listing.id, stage, ...(stage === "listing" ? {} : { dealId: deal.id }) }));
     const photos = await loadPhotos(ids.slice(-6));
     for (const [i, photo] of photos.entries()) {
       let image;

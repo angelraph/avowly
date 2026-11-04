@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { NotifyButton } from "@/components/NotifyButton";
 import { PhotoPicker } from "@/components/PhotoPicker";
 import { ShareProof } from "@/components/ShareProof";
@@ -10,7 +10,7 @@ import { formatMoney } from "@/lib/money";
 
 type Charge = { reason: string; amountCents: number; evidencePhotoId: string | null };
 type Decision =
-  | { kind: "sale_handoff"; verdict: "match" | "mismatch" | "rescan" | "locked"; canRelease: boolean; reasons: string[]; photoIds: string[] }
+  | { kind: "sale_handoff"; verdict: "match" | "mismatch" | "rescan" | "locked"; canRelease: boolean; reasons: string[]; photoIds: string[]; identityConfirmed?: boolean; lockStatus?: "off" | "on" | "not_shown" }
   | { kind: "rental_return"; verdict: "clean" | "charge"; charges: Charge[]; flaggedNotCharged: string[]; totalCents: number; releasedCents: number; photoIds: string[] };
 
 type State = {
@@ -88,6 +88,56 @@ function eventLabel(e: State["events"][number]): string {
     return `PayPal confirmed: ${webhook[name] ?? name}${amt}`;
   }
   return map[e.type] ?? e.type;
+}
+
+function Step({ done, n, children }: { done: boolean; n: number; children: ReactNode }) {
+  return (
+    <li className="flex gap-3">
+      <span className={`mt-0.5 flex h-6 w-6 flex-none items-center justify-center rounded-full text-xs font-semibold ${done ? "bg-matched text-white" : "bg-ink-100 text-ink-700"}`}>
+        {done ? "✓" : n}
+      </span>
+      <div className={`min-w-0 flex-1 text-sm ${done ? "text-ink-500" : "text-ink-700"}`}>{children}</div>
+    </li>
+  );
+}
+
+/** What the buyer still needs to photograph, ticking off what already passed. */
+function ScanGuide({ kinds, marks, hasLock, identityDone, lockDone }: { kinds: string[]; marks: string[]; hasLock: boolean; identityDone: boolean; lockDone: boolean }) {
+  const label = kinds.join(" / ");
+  return (
+    <div className="space-y-3">
+      <ol className="space-y-3">
+        <Step done={identityDone} n={1}>
+          {kinds.length ? (
+            <>
+              <strong>Photograph the {label}</strong> on the item in your hands.
+              {kinds.includes("IMEI") && " On a phone, dial *#06# on it yourself and photograph that screen."}
+            </>
+          ) : (
+            <>
+              <strong>Photograph these marks up close:</strong> {marks.join("; ")}.
+            </>
+          )}
+        </Step>
+        {hasLock && (
+          <Step done={lockDone} n={2}>
+            <strong>Photograph the Find switch turned off.</strong> Ask the seller to turn it off, so the device can&apos;t be locked after you buy it.
+            {!lockDone && (
+              <details className="mt-2 rounded-[10px] border border-line bg-paper px-3 py-2">
+                <summary className="cursor-pointer font-medium text-ink-900">Where&apos;s the switch?</summary>
+                <ul className="mt-2 space-y-2">
+                  <li><strong>Android:</strong> Settings → Google → All services → Find Hub (or Find My Device).</li>
+                  <li><strong>iPhone:</strong> Settings → your name → Find My → Find My iPhone.</li>
+                  <li><strong>Can&apos;t see it?</strong> Search &quot;Find&quot; in Settings. The photo must show the switch itself; a map or device info page won&apos;t count.</li>
+                </ul>
+              </details>
+            )}
+          </Step>
+        )}
+      </ol>
+      <p className="text-xs text-ink-500">Photos clear after each check. Ticked steps stay ticked for an hour, so add only what&apos;s left.</p>
+    </div>
+  );
 }
 
 function useCountdown(target: string | undefined) {
@@ -197,11 +247,11 @@ export function DealRoom({ id, urlKey, initialError }: { id: string; urlKey: str
           ? { cents: 0, label: "charged" }
           : { cents: isOpenHold ? held : deal.authorizedCents, label: isOpenHold ? "held by PayPal, not charged" : "to authorize" };
 
-  const scanner = (title: string, hint: string, path: string, cta: string) => (
+  const scanner = (title: string, hint: ReactNode, path: string, cta: string) => (
     <div className="card space-y-4">
       <div>
         <h2 className="text-lg font-semibold tracking-tight">{title}</h2>
-        <p className="mt-1 text-sm text-ink-500">{hint}</p>
+        <div className="mt-2 text-sm text-ink-500">{hint}</div>
       </div>
       <PhotoPicker files={photos} onChange={setPhotos} />
       <button className="btn-primary" disabled={!!busy || photos.length === 0} onClick={() => act(path, cta, true)}>
@@ -338,12 +388,13 @@ export function DealRoom({ id, urlKey, initialError }: { id: string; urlKey: str
           ) : (
             scanner(
               "Scan the item in your hands",
-              [
-                listing.identifierKinds.length
-                  ? `Photograph the ${listing.identifierKinds.join(" / ")} on the device you're holding (on a phone, dial *#06# yourself).`
-                  : `Photograph these marks up close: ${listing.distinctiveFeatures.join("; ")}.`,
-                listing.hasAntiTheftLock ? "Also photograph the Find My / Find Hub screen with its main switch off. One scan or separate scans both work." : "",
-              ].join(" "),
+              <ScanGuide
+                kinds={listing.identifierKinds}
+                marks={listing.distinctiveFeatures}
+                hasLock={listing.hasAntiTheftLock}
+                identityDone={decision?.kind === "sale_handoff" && !!decision.identityConfirmed}
+                lockDone={decision?.kind === "sale_handoff" && decision.lockStatus === "off"}
+              />,
               "handoff",
               "Check this item",
             )
@@ -355,7 +406,7 @@ export function DealRoom({ id, urlKey, initialError }: { id: string; urlKey: str
       )}
       {listing.mode === "sale" && deal.status === "held" && role === "seller" && (
         <p className="rounded-[10px] border border-line bg-card p-5 text-ink-700">
-          The buyer&apos;s money is held. At the meetup they scan the item; if it matches your verified listing, you&apos;re paid on the spot.
+          The buyer&apos;s money is held. At the meetup they scan the item; if it matches your verified listing, you&apos;re paid on the spot.{listing.hasAntiTheftLock && " They will also ask you to turn off the Find switch: Settings → Google → All services → Find Hub on Android, or Settings → your name → Find My on iPhone."}
         </p>
       )}
 
@@ -416,7 +467,7 @@ export function DealRoom({ id, urlKey, initialError }: { id: string; urlKey: str
 
       {role && deal.capturedCents > 0 && (
         <section className="space-y-2">
-          <a className="btn-secondary" href={`/api/deals/${id}/record?k=${encodeURIComponent(key ?? "")}`} target="_blank" rel="noreferrer">
+          <a className="btn-secondary" href={`/api/deals/${id}/record?k=${encodeURIComponent(key ?? "")}`} download>
             Download the handoff record (PDF)
           </a>
           {role === "seller" && (

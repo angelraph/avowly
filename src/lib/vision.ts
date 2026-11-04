@@ -120,6 +120,9 @@ function handoffSchema(features: string[]) {
     .describe(
       'The main owner-location/anti-theft switch as shown on screen: iPhone "Find My iPhone", Android/Google "Find Hub" (formerly "Find My Device"; switch often labelled "Allow device to be located" or "Use Find Hub"), or a brand equivalent (e.g. OPPO/ColorOS "Find My Phone", Samsung "Find My Mobile"). "off" if that main switch is clearly off, "on" if it is clearly on, "not_shown" if that main switch is not visible (a sub-setting like offline finding does not count).',
     ),
+  findPageWithoutSwitch: z
+    .boolean()
+    .describe("True if a photo shows a Find Hub / Find My app or settings page (such as a device info page or a map) but NOT the page with the main on/off switch"),
   notes: z.array(z.string()),
   });
 }

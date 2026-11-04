@@ -27,7 +27,8 @@ export function PhotoPicker({
   max?: number;
   hint?: string;
 }) {
-  const input = useRef<HTMLInputElement>(null);
+  const camera = useRef<HTMLInputElement>(null);
+  const gallery = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
   const [previews, setPreviews] = useState<string[]>([]);
 
@@ -45,7 +46,8 @@ export function PhotoPicker({
       onChange([...files, ...shrunk].slice(0, max));
     } finally {
       setBusy(false);
-      if (input.current) input.current.value = "";
+      if (camera.current) camera.current.value = "";
+      if (gallery.current) gallery.current.value = "";
     }
   }
 
@@ -56,7 +58,7 @@ export function PhotoPicker({
           <div key={src} className="relative aspect-square overflow-hidden rounded-xl bg-ink-100">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={src} alt={`Photo ${i + 1}`} className="h-full w-full object-cover" />
-            <span className="absolute left-1.5 top-1.5 rounded-md bg-black/60 px-1.5 text-xs text-white">{i}</span>
+            <span className="absolute left-1.5 top-1.5 rounded-md bg-black/60 px-1.5 text-xs text-white">{i + 1}</span>
             <button
               type="button"
               onClick={() => onChange(files.filter((_, j) => j !== i))}
@@ -68,27 +70,31 @@ export function PhotoPicker({
           </div>
         ))}
         {files.length < max && (
-          <button
-            type="button"
-            onClick={() => input.current?.click()}
-            disabled={busy}
-            className="flex aspect-square flex-col items-center justify-center rounded-xl border-2 border-dashed border-ink-300 text-sm text-ink-500 hover:border-ink-500"
-          >
-            <span className="text-2xl leading-none">+</span>
-            <span>{busy ? "Processing…" : "Take photo"}</span>
-          </button>
+          <>
+            <button
+              type="button"
+              onClick={() => camera.current?.click()}
+              disabled={busy}
+              className="flex aspect-square flex-col items-center justify-center rounded-xl border-2 border-dashed border-ink-300 text-sm text-ink-500 hover:border-ink-500"
+            >
+              <span className="text-2xl leading-none">+</span>
+              <span>{busy ? "Processing…" : "Take photo"}</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => gallery.current?.click()}
+              disabled={busy}
+              className="flex aspect-square flex-col items-center justify-center rounded-xl border-2 border-dashed border-ink-300 px-1 text-center text-sm text-ink-500 hover:border-ink-500"
+            >
+              <span className="text-2xl leading-none">↑</span>
+              <span>Photo or screenshot</span>
+            </button>
+          </>
         )}
       </div>
       {hint && <p className="mt-2 text-sm text-ink-500">{hint}</p>}
-      <input
-        ref={input}
-        type="file"
-        accept="image/*"
-        capture="environment"
-        multiple
-        hidden
-        onChange={(e) => add(e.target.files)}
-      />
+      <input ref={camera} type="file" accept="image/*" capture="environment" hidden onChange={(e) => add(e.target.files)} />
+      <input ref={gallery} type="file" accept="image/*" multiple hidden onChange={(e) => add(e.target.files)} />
     </div>
   );
 }

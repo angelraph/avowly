@@ -19,6 +19,7 @@ function urlBase64ToUint8Array(base64: string): Uint8Array<ArrayBuffer> {
 export function NotifyButton({ subscriptionKey, listingId, dealId, label }: { subscriptionKey: string; listingId?: string; dealId?: string; label: string }) {
   const [state, setState] = useState<State>("idle");
   const [error, setError] = useState<string | null>(null);
+  const [sent, setSent] = useState<boolean | null>(null);
   const storageKey = `clasp:push:${dealId ?? listingId}`;
 
   useEffect(() => {
@@ -57,19 +58,30 @@ export function NotifyButton({ subscriptionKey, listingId, dealId, label }: { su
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ key: subscriptionKey, listingId, dealId, subscription: sub.toJSON() }),
       });
-      if (!res.ok) throw new Error((await res.json()).error ?? "Couldn't turn on notifications");
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "Couldn't turn on notifications");
+      setSent(data.delivered === true);
       try {
         localStorage.setItem(storageKey, "1");
       } catch {}
       setState("on");
     } catch (err) {
-      setError(err instanceof Error ? err.message : String(err));
+      const raw = err instanceof Error ? err.message : String(err);
+      setError(/abort|push service|registration failed/i.test(raw) ? "This browser couldn't turn on notifications. Private windows can't get them, so open this link in a normal window." : raw);
       setState("idle");
     }
   }
 
-  if (state === "on") return <p className="text-sm text-ok-600">🔔 Notifications on for this {dealId ? "deal" : "listing"}.</p>;
-  if (state === "denied") return <p className="text-sm text-ink-500">Notifications are blocked for this site in your browser settings.</p>;
+  if (state === "on")
+    return (
+      <div className="space-y-1 text-sm">
+        <p className="text-ok-600">🔔 Notifications on for this {dealId ? "deal" : "listing"}.</p>
+        {sent === true && <p className="text-ink-500">A test one was just sent. Don&apos;t see it? Allow notifications for your browser in your phone&apos;s Settings → Apps.</p>}
+        {sent === false && <p className="text-bad-600">We couldn&apos;t reach this device. Check that your phone allows notifications for your browser, then try again.</p>}
+        <button type="button" className="text-clasp-600 underline" onClick={enable}>Send a test notification</button>
+      </div>
+    );
+  if (state === "denied") return <p className="text-sm text-ink-500">Notifications are blocked. Private windows always block them, so use a normal window; otherwise allow them for this site in your browser settings.</p>;
   if (state === "unsupported") return null;
   if (state === "ios-install")
     return <p className="text-sm text-ink-500">To get alerts on iPhone: tap Share → Add to Home Screen, then open Clasp from there.</p>;

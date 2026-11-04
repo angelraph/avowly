@@ -33,6 +33,7 @@ export const POST = handler(async (req: Request, { params }: RouteCtx) => {
     await updateListing(listing.id, { status: "closed" });
     await logEvent({ dealId: id, type: "deal.released", payload: { captureId: capture.id } });
     notifyLater("seller", listing, deal, { title: `You've been paid ${formatMoney(listing.priceCents)}`, body: `The buyer verified "${listing.title}" and released the payment. PayPal is sending it to your account.` });
+    notifyLater("buyer", listing, deal, { title: "Payment sent", body: `You released ${formatMoney(listing.priceCents)} for "${listing.title}". Your handoff record is in the deal.` });
     return { status: "released", captureId: capture.id };
   });
 });

@@ -127,7 +127,8 @@ export const rateLimits = pgTable("rate_limits", {
 
 /** Browser push subscriptions, scoped to the listing (seller) or deal (buyer) they follow. */
 export const pushSubscriptions = pgTable("push_subscriptions", {
-  endpoint: text("endpoint").primaryKey(),
+  id: text("id").primaryKey(),
+  endpoint: text("endpoint").notNull(),
   keys: jsonb("keys").$type<{ p256dh: string; auth: string }>().notNull(),
   role: text("role").$type<"seller" | "buyer">().notNull(),
   listingId: text("listing_id").notNull().references(() => listings.id),

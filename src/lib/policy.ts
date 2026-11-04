@@ -138,6 +138,8 @@ export type HandoffVerdict = {
   canRelease: boolean;
   matched: Identifier | null;
   reasons: string[];
+  /** The item itself checked out; only the anti-theft switch can still be outstanding. */
+  identityConfirmed?: boolean;
 };
 
 export type FeatureCheck = { feature: string; status: "seen" | "absent" | "not_in_view"; confidence: number };
@@ -146,6 +148,7 @@ function lockGate(base: Omit<HandoffVerdict, "verdict" | "canRelease" | "reasons
   if (hasLock && lockStatus !== "off") {
     return {
       ...base,
+      identityConfirmed: true,
       // Not shown is a missing photo, not a locked device: ask for it rather than alarm the buyer.
       verdict: lockStatus === "on" ? "locked" : "rescan",
       canRelease: false,
@@ -153,11 +156,11 @@ function lockGate(base: Omit<HandoffVerdict, "verdict" | "canRelease" | "reasons
         ...reasons,
         lockStatus === "on"
           ? "The anti-theft lock (Find My / Find Hub) is still on. A locked device can't be used by the buyer."
-          : "Also photograph the Find My / Find Hub screen so the buyer can confirm the lock is off.",
+          : "Now add a photo of the Find Hub / Find My screen with its main switch turned off.",
       ],
     };
   }
-  return { ...base, verdict: "match", canRelease: true, reasons };
+  return { ...base, identityConfirmed: true, verdict: "match", canRelease: true, reasons };
 }
 
 /** Items without a serial: every recorded mark that's in view must be there, and enough must be seen. */

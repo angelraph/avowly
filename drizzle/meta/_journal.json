@@ -64,6 +64,13 @@
       "when": 1793787481351,
       "tag": "0008_scam_checks",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1793795457952,
+      "tag": "0009_push_per_deal",
+      "breakpoints": true
     }
   ]
 }

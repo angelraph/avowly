@@ -59,6 +59,22 @@ async function sendPush(audience: Audience, listing: Listing, deal: Deal | null,
   if (gone.length) await db.delete(schema.pushSubscriptions).where(inArray(schema.pushSubscriptions.endpoint, gone));
 }
 
+/** Sent the moment notifications are turned on, so people find out now if their phone blocks them. */
+export async function sendConfirmation(subscription: { endpoint: string; keys: { p256dh: string; auth: string } }, title: string): Promise<boolean> {
+  if (!pushConfigured()) return false;
+  try {
+    await webpush.sendNotification(
+      subscription,
+      JSON.stringify({ title: "Notifications are on", body: `You'll get updates here about "${title}".`, url: env.appUrl(), tag: "confirm" }),
+      { TTL: 60 * 10 },
+    );
+    return true;
+  } catch (err) {
+    console.error("Push confirmation failed", (err as { statusCode?: number }).statusCode, err);
+    return false;
+  }
+}
+
 function escapeHtml(s: string) {
   return s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
 }

@@ -67,6 +67,10 @@ export const POST = handler(async (req: Request, { params }: RouteCtx) => {
     lockStatus,
   });
 
+  if (verdict.verdict === "rescan" && lockStatus === "not_shown" && reading.findPageWithoutSwitch) {
+    verdict.reasons.push("That photo shows the Find app, but not the page with the switch. See \"Where's the switch?\" below.");
+  }
+
   const decision = {
     kind: "sale_handoff",
     ...verdict,
@@ -80,8 +84,10 @@ export const POST = handler(async (req: Request, { params }: RouteCtx) => {
   await logEvent({ dealId: id, type: `handoff.${verdict.verdict}`, payload: { reading, verdict, carriedIdentity: carryIdentity, lockStatus } });
   if (verdict.verdict === "mismatch") {
     notifyLater("seller", listing, deal, { title: "Handoff check failed", body: `The buyer scanned an item that isn't the one you verified for "${listing.title}". No money moved; the hold is still in place.` });
+    notifyLater("buyer", listing, deal, { title: "Not the listed item", body: `The item scanned doesn't match "${listing.title}". Nothing was charged and your hold is still in place.` });
   } else if (verdict.verdict === "match") {
     notifyLater("seller", listing, deal, { title: "Item matched at the handoff", body: `"${listing.title}" checked out. You'll be paid as soon as the buyer taps Release.` });
+    notifyLater("buyer", listing, deal, { title: "It's the listed item", body: `"${listing.title}" checked out. Open the deal and tap Release when you have it in your hands.` });
   }
   return decision;
 });
