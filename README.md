@@ -73,7 +73,7 @@ The model reports what it sees, with a confidence. It never calls PayPal, never 
 
 - `npm test`: unit tests for every money rule, scam scoring and data sanitizing.
 - `npm run test:paypal`: runs the money paths against the PayPal sandbox with a test card. Results: fee capture then void of the remainder; fee then final partial capture; a further capture refused (`AUTHORIZATION_ALREADY_CAPTURED`); void before capture; capture then payout to a sandbox seller.
-- A full sale was run through the app in the PayPal sandbox using photos of a real phone, including a different device's IMEI being refused.
+- A full sale ran on the live site in the PayPal sandbox with a real phone, started by an AI agent over MCP and approved by a person in PayPal. A different phone's IMEI got MISMATCH, the anti-theft switch left on was blocked, and the right phone captured the hold and paid the seller. PayPal's webhooks confirmed each step.
 
 ## Run it locally
 
