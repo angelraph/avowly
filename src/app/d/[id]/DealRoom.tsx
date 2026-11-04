@@ -444,14 +444,32 @@ export function DealRoom({ id, urlKey, initialError }: { id: string; urlKey: str
         deal.status === "active" &&
         role === "seller" &&
         scanner("Scan it back in", "Same angles as pickup, with every accessory laid out.", "return", "Compare with pickup")}
+      {listing.mode === "rental" && deal.status === "active" && role === "buyer" && (
+        <p className="rounded-[10px] border border-line bg-card p-5 text-sm text-ink-700">
+          You have the item. When you hand it back, the owner scans it in from their own page, and you&apos;ll see the result here. Your deposit stays on hold until then.
+        </p>
+      )}
+      {listing.mode === "rental" && deal.status === "returned" && role === "buyer" && (
+        <p className="rounded-[10px] border border-line bg-card p-5 text-sm text-ink-700">
+          The owner has scanned the item back in. Your deposit is settled once they confirm the result above.
+        </p>
+      )}
       {listing.mode === "rental" && deal.status === "returned" && role === "seller" && decision?.kind === "rental_return" && (
-        <button className="btn-primary py-4 text-base" disabled={!!busy} onClick={() => act("settle", "settle")}>
-          {busy === "settle"
-            ? "Settling with PayPal…"
-            : decision.totalCents > 0
-              ? `Keep ${formatMoney(decision.totalCents)} · release ${formatMoney(decision.releasedCents)}`
-              : `Release the full ${formatMoney(listing.depositCents)} deposit`}
-        </button>
+        <div className="space-y-3">
+          <button className="btn-primary py-4 text-base" disabled={!!busy} onClick={() => act("settle", "settle")}>
+            {busy === "settle"
+              ? "Settling with PayPal…"
+              : decision.totalCents > 0
+                ? `Keep ${formatMoney(decision.totalCents)} · release ${formatMoney(decision.releasedCents)}`
+                : `Release the full ${formatMoney(listing.depositCents)} deposit`}
+          </button>
+          <details className="rounded-[10px] border border-line bg-card p-4">
+            <summary className="cursor-pointer text-sm font-medium">Wrong photo? Scan it again</summary>
+            <div className="mt-3">
+              {scanner("Scan it back in", "This replaces the result above. Nothing has moved yet.", "return", "Compare with pickup")}
+            </div>
+          </details>
+        </div>
       )}
 
       {(deal.status === "released" || deal.status === "settled") && (
