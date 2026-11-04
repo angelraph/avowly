@@ -8,12 +8,12 @@ const SERIAL = "3569 3803 5643 809";
 const SCENES = ["listing", "held", "scan", "matched"] as const;
 type Scene = (typeof SCENES)[number];
 
-function Status({ tone, children }: { tone: "brass" | "matched" | "ink"; children: React.ReactNode }) {
-  const color = tone === "brass" ? "text-brass-ink" : tone === "matched" ? "text-matched" : "text-ink-700";
-  const dot = tone === "brass" ? "bg-brass" : tone === "matched" ? "bg-matched" : "bg-ink-500";
+function Status({ tone, children }: { tone: "accent" | "matched" | "ink"; children: React.ReactNode }) {
+  const color = tone === "accent" ? "text-accent-ink" : tone === "matched" ? "text-matched" : "text-ink-700";
+  const dot = tone === "accent" ? "bg-accent" : tone === "matched" ? "bg-matched" : "bg-ink-500";
   return (
     <span className={`status ${color}`}>
-      <span className={`h-1.5 w-1.5 rounded-full ${dot} ${tone === "brass" ? "animate-pulse" : ""}`} />
+      <span className={`h-1.5 w-1.5 rounded-full ${dot} ${tone === "accent" ? "animate-pulse" : ""}`} />
       {children}
     </span>
   );
@@ -64,7 +64,7 @@ export function FlowPhone() {
 
           {/* held */}
           <div className={`absolute inset-x-0 top-12 px-4 transition-all duration-700 ${scene === "held" ? "opacity-100" : "pointer-events-none translate-y-2 opacity-0"}`}>
-            <Status tone="brass">Held</Status>
+            <Status tone="accent">Held</Status>
             <p className="amount mt-3 text-5xl">$262.50</p>
             <p className="mt-1 text-sm text-ink-500">held by PayPal, not charged</p>
             <dl className="mt-6 space-y-2 border-t border-line pt-4 text-sm">
@@ -79,7 +79,7 @@ export function FlowPhone() {
           <div className={`absolute inset-x-0 top-12 px-4 transition-all duration-700 ${scene === "scan" ? "opacity-100" : "pointer-events-none translate-y-2 opacity-0"}`}>
             <div className="relative aspect-[3/4] w-full overflow-hidden rounded-[10px] bg-ink-900">
               <div className="absolute inset-6 rounded-[10px] border border-paper/40" />
-              <div className="absolute inset-x-6 top-6 h-px animate-[scan_1.6s_ease-in-out_infinite] bg-brass" />
+              <div className="absolute inset-x-6 top-6 h-px animate-[scan_1.6s_ease-in-out_infinite] bg-accent" />
               <div className="absolute inset-x-0 bottom-6 px-8 text-center">
                 <p className="status text-paper/60">Reading IMEI</p>
                 <p className="serial mt-1 text-paper">{SERIAL.slice(0, typed)}<span className="animate-pulse">▍</span></p>

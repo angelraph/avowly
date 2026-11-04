@@ -59,7 +59,7 @@ export function HoldCard() {
     <Card title="Held, not charged" body="The buyer approves in PayPal. The money waits in a hold until the item checks out.">
       <div className="mx-6 mb-6 w-full rounded-[10px] border border-line bg-paper p-5">
         <div className="flex items-center justify-between">
-          <span className="status text-brass-ink"><span className="h-1.5 w-1.5 animate-pulse rounded-full bg-brass" />Held</span>
+          <span className="status text-accent-ink"><span className="h-1.5 w-1.5 animate-pulse rounded-full bg-accent" />Held</span>
           <span className="serial text-ink-500">AUTH 8MF54…482J</span>
         </div>
         <p className="amount mt-3 text-4xl">$262.50</p>
@@ -176,7 +176,7 @@ export function AgentCard() {
         <div className="mx-6 mb-6 min-h-[150px] w-full rounded-[10px] bg-ink-900 p-4 font-mono text-[11.5px] leading-relaxed text-paper/85">
           {AGENT_LINES.map(([dir, a, b], j) => (
             <p key={j} className={`transition-opacity duration-300 ${j <= n ? "opacity-100" : "opacity-0"}`}>
-              <span className={dir === "›" ? "text-[#D9B98F]" : "text-paper/50"}>{dir}</span> <span className="text-paper">{a}</span>{" "}
+              <span className={dir === "›" ? "text-[#B59CFF]" : "text-paper/50"}>{dir}</span> <span className="text-paper">{a}</span>{" "}
               <span className="text-paper/55">{b}</span>
             </p>
           ))}

@@ -10,7 +10,7 @@ type Row = { href: string; title: string; cents: number; word: string; tone: Ton
 const LISTING: Record<string, { word: string; tone: Tone }> = {
   draft: { word: "Not verified", tone: "muted" },
   verified: { word: "Live", tone: "matched" },
-  reserved: { word: "Held", tone: "brass" },
+  reserved: { word: "Held", tone: "accent" },
   closed: { word: "Sold", tone: "ink" },
 };
 

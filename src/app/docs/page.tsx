@@ -31,13 +31,13 @@ function Diagram() {
       <svg viewBox="0 0 760 320" className="min-w-[640px]" role="img" aria-label="Avowly architecture">
         <defs>
           <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-            <path d="M0 0 L10 5 L0 10 z" fill="#6F6A62" />
+            <path d="M0 0 L10 5 L0 10 z" fill="#68657A" />
           </marker>
         </defs>
-        <g fontFamily="var(--font-geist-sans)" fontSize="12" fill="#141413">
+        <g fontFamily="var(--font-geist-sans)" fontSize="12" fill="#15131F">
           <rect x="10" y="110" width="130" height="70" rx="10" className={box} />
           <text x="75" y="140" textAnchor="middle" fontWeight="600">Phone browser</text>
-          <text x="75" y="158" textAnchor="middle" fill="#6F6A62">camera · PayPal JS v6</text>
+          <text x="75" y="158" textAnchor="middle" fill="#68657A">camera · PayPal JS v6</text>
 
           <rect x="200" y="20" width="200" height="260" rx="10" className={box} />
           <text x="300" y="44" textAnchor="middle" fontWeight="600">Avowly (Next.js)</text>
@@ -49,29 +49,29 @@ function Diagram() {
             ["MCP server", 238],
           ].map(([t, y]) => (
             <g key={t as string}>
-              <rect x="218" y={(y as number) - 16} width="164" height="30" rx="6" fill={t === "Policy (plain code)" ? "#F1E8DA" : "#F4F1EA"} stroke="#E6E1D6" />
+              <rect x="218" y={(y as number) - 16} width="164" height="30" rx="6" fill={t === "Policy (plain code)" ? "#EEE9FE" : "#F7F6FB"} stroke="#E7E5F0" />
               <text x="300" y={(y as number) + 4} textAnchor="middle">{t as string}</text>
             </g>
           ))}
 
           <rect x="470" y="20" width="130" height="60" rx="10" className={box} />
           <text x="535" y="46" textAnchor="middle" fontWeight="600">OpenAI</text>
-          <text x="535" y="63" textAnchor="middle" fill="#6F6A62">images in, JSON out</text>
+          <text x="535" y="63" textAnchor="middle" fill="#68657A">images in, JSON out</text>
 
           <rect x="470" y="110" width="130" height="80" rx="10" className={box} />
           <text x="535" y="136" textAnchor="middle" fontWeight="600">PayPal</text>
-          <text x="535" y="153" textAnchor="middle" fill="#6F6A62">Orders · Payments</text>
-          <text x="535" y="169" textAnchor="middle" fill="#6F6A62">Payouts · Disputes</text>
+          <text x="535" y="153" textAnchor="middle" fill="#68657A">Orders · Payments</text>
+          <text x="535" y="169" textAnchor="middle" fill="#68657A">Payouts · Disputes</text>
 
           <rect x="470" y="220" width="130" height="60" rx="10" className={box} />
           <text x="535" y="246" textAnchor="middle" fontWeight="600">Postgres</text>
-          <text x="535" y="263" textAnchor="middle" fill="#6F6A62">Neon · PGlite locally</text>
+          <text x="535" y="263" textAnchor="middle" fill="#68657A">Neon · PGlite locally</text>
 
           <rect x="650" y="110" width="100" height="80" rx="10" className={box} />
           <text x="700" y="140" textAnchor="middle" fontWeight="600">AI agents</text>
-          <text x="700" y="158" textAnchor="middle" fill="#6F6A62">via MCP</text>
+          <text x="700" y="158" textAnchor="middle" fill="#68657A">via MCP</text>
 
-          <g stroke="#6F6A62" strokeWidth="1.2" fill="none" markerEnd="url(#arr)">
+          <g stroke="#68657A" strokeWidth="1.2" fill="none" markerEnd="url(#arr)">
             <path d="M140 145 H198" />
             <path d="M382 70 C425 70 425 44 468 44" />
             <path d="M382 112 C425 112 425 58 468 58" />
@@ -80,9 +80,9 @@ function Diagram() {
             <path d="M700 192 C700 310 420 312 384 246" />
             <path d="M535 192 V218" strokeDasharray="3 3" />
           </g>
-          <text x="425" y="172" textAnchor="middle" fontSize="10.5" fill="#7A5532">only policy</text>
-          <text x="425" y="185" textAnchor="middle" fontSize="10.5" fill="#7A5532">calls PayPal</text>
-          <text x="545" y="208" fontSize="10.5" fill="#6F6A62">webhooks</text>
+          <text x="425" y="172" textAnchor="middle" fontSize="10.5" fill="#4F25C9">only policy</text>
+          <text x="425" y="185" textAnchor="middle" fontSize="10.5" fill="#4F25C9">calls PayPal</text>
+          <text x="545" y="208" fontSize="10.5" fill="#68657A">webhooks</text>
         </g>
       </svg>
       <figcaption className="mt-2 text-xs text-ink-500">The vision model never calls PayPal and never decides money. Only the policy layer does.</figcaption>

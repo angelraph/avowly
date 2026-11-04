@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     "PayPal holds the money. AI checks the item at the handoff. Money moves only when the thing does.",
 };
 
-export const viewport: Viewport = { width: "device-width", initialScale: 1, themeColor: "#f4f1ea" };
+export const viewport: Viewport = { width: "device-width", initialScale: 1, themeColor: "#f7f6fb" };
 
 const footer = [
   {

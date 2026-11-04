@@ -41,7 +41,7 @@ export default function AboutPage() {
       <section className="bg-ink-900 text-paper">
         <div className="mx-auto grid max-w-6xl gap-10 px-4 py-16 md:grid-cols-2">
           <Reveal>
-            <p className="status text-[#D9B98F]">Why now</p>
+            <p className="status text-[#B59CFF]">Why now</p>
             <h2 className="mt-3 text-3xl font-semibold tracking-[-0.03em]">The trust gap is widening.</h2>
           </Reveal>
           <Reveal delay={100} className="space-y-4 text-paper/75">
@@ -68,13 +68,13 @@ export default function AboutPage() {
       <section className="border-y border-line bg-card/60">
         <div className="mx-auto max-w-6xl px-4 py-20">
           <Reveal>
-            <p className="status text-brass-ink">Where Avowly goes next</p>
+            <p className="status text-accent-ink">Where Avowly goes next</p>
             <h2 className="mt-3 max-w-2xl text-3xl font-semibold tracking-[-0.03em]">One engine for every handoff between strangers.</h2>
           </Reveal>
           <ol className="mt-10 grid gap-x-10 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
             {NEXT.map(([t, b], i) => (
               <Reveal as="li" key={t} delay={(i % 3) * 80}>
-                <p className="amount text-brass">{String(i + 1).padStart(2, "0")}</p>
+                <p className="amount text-accent">{String(i + 1).padStart(2, "0")}</p>
                 <p className="mt-1 font-medium">{t}</p>
                 <p className="mt-1 text-sm text-ink-500">{b}</p>
               </Reveal>
@@ -92,9 +92,9 @@ export default function AboutPage() {
               reads the physical world and plain rules that decide every payment.
             </p>
             <p>
-              It&apos;s open source. Read <Link href="/docs" className="text-brass-ink underline underline-offset-4">how it works</Link>, browse the{" "}
-              <a href="https://github.com/angelraph/avowly" className="text-brass-ink underline underline-offset-4">code</a>, or{" "}
-              <Link href="/new" className="text-brass-ink underline underline-offset-4">try a deal</Link>.
+              It&apos;s open source. Read <Link href="/docs" className="text-accent-ink underline underline-offset-4">how it works</Link>, browse the{" "}
+              <a href="https://github.com/angelraph/avowly" className="text-accent-ink underline underline-offset-4">code</a>, or{" "}
+              <Link href="/new" className="text-accent-ink underline underline-offset-4">try a deal</Link>.
             </p>
           </div>
         </div>

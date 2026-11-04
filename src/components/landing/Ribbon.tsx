@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 
 /**
- * A slowly flowing band of fine brass lines. Stripe's ribbon,
+ * A slowly flowing band of fine accent lines. Stripe's ribbon,
  * drawn with hairlines instead of gradients. Static when reduced motion is on.
  */
 export function Ribbon({ lines = 28, className = "" }: { lines?: number; className?: string }) {
@@ -40,7 +40,7 @@ export function Ribbon({ lines = 28, className = "" }: { lines?: number; classNa
     <svg className={className} viewBox="0 0 1200 600" preserveAspectRatio="xMidYMid slice" aria-hidden>
       <g ref={group} fill="none" strokeLinecap="round">
         {Array.from({ length: lines }, (_, i) => (
-          <path key={i} stroke="#A67C52" strokeOpacity={0.12 + (i / lines) * 0.4} strokeWidth={i % 7 === 0 ? 1.4 : 0.8} />
+          <path key={i} stroke="#6D3DF5" strokeOpacity={0.12 + (i / lines) * 0.4} strokeWidth={i % 7 === 0 ? 1.4 : 0.8} />
         ))}
       </g>
     </svg>

@@ -37,7 +37,7 @@ function mask(value: string) {
 function Highlight({ title, body }: { title: string; body: string }) {
   return (
     <div className="flex gap-4">
-      <span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-brass" />
+      <span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-accent" />
       <div>
         <p className="font-medium">{title}</p>
         <p className="text-sm text-ink-500">{body}</p>
@@ -216,7 +216,7 @@ export default async function ListingPage({
                   <p className="status text-ink-500">Unique marks checked at the handoff</p>
                   <ul className="mt-2 space-y-1.5 text-sm text-ink-700">
                     {fp.distinctiveFeatures.map((f) => (
-                      <li key={f} className="flex gap-2"><span className="text-brass">◆</span>{f}</li>
+                      <li key={f} className="flex gap-2"><span className="text-accent">◆</span>{f}</li>
                     ))}
                   </ul>
                 </div>
@@ -269,7 +269,7 @@ export default async function ListingPage({
               <AutoRefresh />
               <div className="flex items-center justify-between">
                 <h2 className="text-lg font-semibold">Seller view</h2>
-                <Status tone={listing.status === "verified" ? "matched" : listing.status === "reserved" ? "brass" : "muted"}>
+                <Status tone={listing.status === "verified" ? "matched" : listing.status === "reserved" ? "accent" : "muted"}>
                   {listing.status === "verified" ? "Live" : listing.status}
                 </Status>
               </div>

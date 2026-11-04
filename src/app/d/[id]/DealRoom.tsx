@@ -501,7 +501,7 @@ export function DealRoom({ id, urlKey, initialError }: { id: string; urlKey: str
               <li key={i} className="relative text-sm">
                 <span
                   className={`absolute -left-[24.5px] top-1.5 h-2 w-2 rounded-full ring-4 ring-paper ${
-                    e.type.includes("mismatch") ? "bg-oxblood" : fromPayPal ? "bg-matched" : isMoney ? "bg-brass" : "bg-ink-300"
+                    e.type.includes("mismatch") ? "bg-oxblood" : fromPayPal ? "bg-matched" : isMoney ? "bg-accent" : "bg-ink-300"
                   }`}
                 />
                 <div className="flex items-baseline justify-between gap-3">

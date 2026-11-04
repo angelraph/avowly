@@ -48,7 +48,7 @@ export default function SupportPage() {
       title="How to use Avowly, step by step."
       lead={
         <>
-          Short guides for every moment of a deal. Looking for quick answers? Try the <Link href="/faq" className="text-brass-ink underline underline-offset-4">FAQ</Link>.
+          Short guides for every moment of a deal. Looking for quick answers? Try the <Link href="/faq" className="text-accent-ink underline underline-offset-4">FAQ</Link>.
         </>
       }
       toc={GUIDES}

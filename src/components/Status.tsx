@@ -1,12 +1,12 @@
 /**
- * Money states as words in small tracked capitals. Brass means held, green means matched
- * and paid, dark brass means part was kept, oxblood means the switch was caught. A release
+ * Money states as words in small tracked capitals. Violet means held, green means matched
+ * and paid, dark accent means part was kept, oxblood means the switch was caught. A release
  * back to the buyer is a success, so it's ink, not red.
  */
-export type Tone = "brass" | "matched" | "kept" | "oxblood" | "ink" | "muted";
+export type Tone = "accent" | "matched" | "kept" | "oxblood" | "ink" | "muted";
 
 const TONES: Record<Tone, { text: string; dot: string }> = {
-  brass: { text: "text-brass-ink", dot: "bg-brass" },
+  accent: { text: "text-accent-ink", dot: "bg-accent" },
   matched: { text: "text-matched", dot: "bg-matched" },
   kept: { text: "text-kept", dot: "bg-kept" },
   oxblood: { text: "text-oxblood", dot: "bg-oxblood" },
@@ -27,13 +27,13 @@ export function Status({ tone, children, pulse = false }: { tone: Tone; children
 /** Deal status → the word and tone shown everywhere. */
 export const DEAL_STATUS: Record<string, { word: string; tone: Tone; line: string }> = {
   awaiting_payment: { word: "Awaiting payment", tone: "muted", line: "Waiting for the buyer to approve in PayPal" },
-  held: { word: "Held", tone: "brass", line: "Held by PayPal, not charged" },
-  releasing: { word: "Releasing", tone: "brass", line: "Paying the seller" },
+  held: { word: "Held", tone: "accent", line: "Held by PayPal, not charged" },
+  releasing: { word: "Releasing", tone: "accent", line: "Paying the seller" },
   released: { word: "Released", tone: "matched", line: "Matched and paid to the seller" },
-  picking_up: { word: "Recording", tone: "brass", line: "Recording pickup condition" },
-  active: { word: "Rented", tone: "brass", line: "Fee paid · deposit held" },
-  returned: { word: "Returned", tone: "brass", line: "Return checked · awaiting settlement" },
-  settling: { word: "Settling", tone: "brass", line: "Settling the deposit" },
+  picking_up: { word: "Recording", tone: "accent", line: "Recording pickup condition" },
+  active: { word: "Rented", tone: "accent", line: "Fee paid · deposit held" },
+  returned: { word: "Returned", tone: "accent", line: "Return checked · awaiting settlement" },
+  settling: { word: "Settling", tone: "accent", line: "Settling the deposit" },
   settled: { word: "Settled", tone: "ink", line: "Deposit settled" },
   voiding: { word: "Cancelling", tone: "muted", line: "Releasing the hold" },
   voided: { word: "Cancelled", tone: "muted", line: "Hold released · nothing charged" },

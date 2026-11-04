@@ -1,17 +1,17 @@
 @import "tailwindcss";
 
 /*
- * Avowly: a paper receipt and a maker's stamp. Warm paper, warm ink, one metal (brass).
- * Status colors are reserved for money states: matched (green), kept (dark brass),
+ * Avowly: clean, cool neutrals and one accent, the logo's violet.
+ * Status colors are reserved for money states: matched (green), kept (amber),
  * mismatch (oxblood, rare). PayPal's own button keeps PayPal's colors.
  */
 @theme {
-  --color-paper: #f4f1ea;
-  --color-card: #fbf9f5;
-  --color-line: #e6e1d6;
-  --color-brass: #a67c52;
-  --color-brass-ink: #7a5532;
-  --color-brass-tint: #f1e8da;
+  --color-paper: #f7f6fb;
+  --color-card: #ffffff;
+  --color-line: #e7e5f0;
+  --color-accent: #6d3df5;
+  --color-accent-ink: #4f25c9;
+  --color-accent-tint: #eee9fe;
   --color-matched: #1f6b4a;
   --color-matched-tint: #e6efe8;
   --color-kept: #8a5a12;
@@ -19,18 +19,18 @@
   --color-oxblood: #8f2d2a;
   --color-oxblood-tint: #f5e5e2;
 
-  /* Neutral ramp, warm. Existing class names map onto the new palette. */
-  --color-ink-50: #f4f1ea;
-  --color-ink-100: #ece8df;
-  --color-ink-200: #e6e1d6;
-  --color-ink-300: #d2cbbd;
-  --color-ink-500: #6f6a62;
-  --color-ink-700: #3a3733;
-  --color-ink-900: #141413;
+  /* Neutral ramp, cool. */
+  --color-ink-50: #f7f6fb;
+  --color-ink-100: #efedf5;
+  --color-ink-200: #e7e5f0;
+  --color-ink-300: #d0cde0;
+  --color-ink-500: #68657a;
+  --color-ink-700: #363349;
+  --color-ink-900: #15131F;
 
-  --color-avowly-50: #f1e8da;
-  --color-avowly-500: #a67c52;
-  --color-avowly-600: #7a5532;
+  --color-avowly-50: #eee9fe;
+  --color-avowly-500: #6d3df5;
+  --color-avowly-600: #4f25c9;
   --color-ok-50: #e6efe8;
   --color-ok-600: #1f6b4a;
   --color-hold-50: #f4eadb;
@@ -83,7 +83,7 @@ body {
 }
 
 ::selection {
-  background: var(--color-brass-tint);
+  background: var(--color-accent-tint);
 }
 
 @utility card {
@@ -104,7 +104,7 @@ body {
 }
 
 @utility field {
-  @apply w-full rounded-[10px] border border-line bg-card px-3 py-2.5 outline-none placeholder:text-ink-500/70 focus:border-brass focus:ring-2 focus:ring-brass/20;
+  @apply w-full rounded-[10px] border border-line bg-card px-3 py-2.5 outline-none placeholder:text-ink-500/70 focus:border-accent focus:ring-2 focus:ring-accent/20;
 }
 @utility label {
   @apply mb-1 block text-sm font-medium text-ink-700;
@@ -152,7 +152,7 @@ body {
   font-weight: 600;
 }
 .prose-avowly a {
-  color: var(--color-brass-ink);
+  color: var(--color-accent-ink);
   text-decoration: underline;
   text-underline-offset: 3px;
 }

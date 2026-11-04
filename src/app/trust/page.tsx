@@ -20,7 +20,7 @@ const TOC = [
 function Pillar({ word, title, body }: { word: string; title: string; body: string }) {
   return (
     <div className="rounded-[10px] border border-line bg-card p-5">
-      <p className="status text-brass-ink">{word}</p>
+      <p className="status text-accent-ink">{word}</p>
       <p className="mt-2 font-medium">{title}</p>
       <p className="mt-1 text-sm text-ink-500">{body}</p>
     </div>

@@ -12,7 +12,7 @@ export default async function Image({ params }: { params: Promise<{ id: string }
   const [row] = await db.select().from(schema.scamChecks).where(eq(schema.scamChecks.id, id));
   return ogCard({
     badge: row?.level === "high" ? "High risk" : row?.level === "caution" ? "Caution" : "Scam check",
-    tone: row?.level === "high" ? "oxblood" : "brass",
+    tone: row?.level === "high" ? "oxblood" : "accent",
     title: row?.headline ?? "Is this listing a scam?",
     line: row?.reasons[0] ?? "Check any marketplace listing for free.",
     footer: "Free scam check by Avowly",

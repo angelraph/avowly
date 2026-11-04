@@ -49,7 +49,7 @@ export default async function Home() {
               </Link>
             </div>
             <p className="mt-5 animate-[rise_0.7s_0.32s_both] text-sm text-ink-500">
-              For Marketplace, Craigslist and Reddit deals, local meetups and gear rentals. <Link href="/browse" className="text-brass-ink underline-offset-4 hover:underline">Browse verified listings</Link>
+              For Marketplace, Craigslist and Reddit deals, local meetups and gear rentals. <Link href="/browse" className="text-accent-ink underline-offset-4 hover:underline">Browse verified listings</Link>
             </p>
           </div>
           <div className="animate-[rise_0.9s_0.2s_both]">
@@ -62,7 +62,7 @@ export default async function Home() {
       <section className="bg-ink-900 text-paper">
         <div className="mx-auto max-w-6xl px-4 py-20">
           <Reveal>
-            <p className="status text-[#D9B98F]">The problem</p>
+            <p className="status text-[#B59CFF]">The problem</p>
             <h2 className="mt-3 max-w-3xl text-3xl font-semibold tracking-[-0.03em] sm:text-4xl">
               Buying from a stranger still runs on cash, hope and screenshots.
             </h2>
@@ -87,7 +87,7 @@ export default async function Home() {
       {/* ------------------------------------------------------------ how it works */}
       <section id="how" className="mx-auto max-w-6xl scroll-mt-20 px-4 py-24">
         <Reveal>
-          <p className="status text-brass-ink">How it works</p>
+          <p className="status text-accent-ink">How it works</p>
           <h2 className="mt-3 max-w-3xl text-3xl font-semibold tracking-[-0.03em] sm:text-5xl">
             Money moves when the thing does.
             <span className="text-ink-500"> Not before, and not on anyone&apos;s word.</span>
@@ -100,7 +100,7 @@ export default async function Home() {
           <Reveal className="md:col-span-2" delay={100}>
             <div className="flex h-full flex-col justify-between rounded-[10px] border border-line bg-card p-6">
               <div>
-                <p className="status text-brass-ink">The rule</p>
+                <p className="status text-accent-ink">The rule</p>
                 <p className="mt-3 font-serif text-2xl leading-snug">The AI reads. Plain rules decide.</p>
               </div>
               <p className="mt-6 text-sm text-ink-500">
@@ -116,7 +116,7 @@ export default async function Home() {
       <section className="border-y border-line bg-card/60">
         <div className="mx-auto max-w-6xl px-4 py-24">
           <Reveal>
-            <p className="status text-brass-ink">Beyond the handoff</p>
+            <p className="status text-accent-ink">Beyond the handoff</p>
             <h2 className="mt-3 max-w-3xl text-3xl font-semibold tracking-[-0.03em] sm:text-5xl">
               One engine for every handoff.
               <span className="text-ink-500"> Sales, rentals, disputes, and the agents that shop for us.</span>
@@ -163,7 +163,7 @@ export default async function Home() {
       <section className="mx-auto max-w-6xl px-4 pb-24">
         <Reveal className="grid items-center gap-6 rounded-[10px] border border-line bg-card p-6 sm:p-10 md:grid-cols-[1.5fr_auto]">
           <div>
-            <p className="status text-brass-ink">Free tool</p>
+            <p className="status text-accent-ink">Free tool</p>
             <h2 className="mt-3 text-3xl font-semibold tracking-[-0.03em] sm:text-4xl">Not sure about a listing? Check it first.</h2>
             <p className="mt-3 max-w-xl text-ink-500">
               Paste any listing or the seller&apos;s messages. Avowly looks for the warning signs of a scam and compares the price with live retail offers. No
@@ -179,7 +179,7 @@ export default async function Home() {
         <div className="grid gap-10 md:grid-cols-[1fr_1.6fr]">
           <Reveal>
             <h2 className="text-3xl font-semibold tracking-[-0.03em]">Questions, answered plainly.</h2>
-            <Link href="/faq" className="mt-4 inline-block text-brass-ink underline-offset-4 hover:underline">All questions →</Link>
+            <Link href="/faq" className="mt-4 inline-block text-accent-ink underline-offset-4 hover:underline">All questions →</Link>
           </Reveal>
           <Reveal delay={100} className="divide-y divide-line border-y border-line">
             {faqPreview.map((f) => (

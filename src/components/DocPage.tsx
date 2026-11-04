@@ -24,7 +24,7 @@ export function DocPage({
   return (
     <div className="mx-auto max-w-6xl px-4 pb-10 pt-10 sm:pt-14">
       <header className="max-w-3xl">
-        <p className="status text-brass-ink">{eyebrow}</p>
+        <p className="status text-accent-ink">{eyebrow}</p>
         <h1 className="mt-3 text-4xl font-semibold leading-[1.08] tracking-[-0.03em] sm:text-5xl">{title}</h1>
         {lead && <div className="mt-4 text-lg leading-relaxed text-ink-500 sm:text-xl">{lead}</div>}
         {updated && <p className="mt-4 text-xs text-ink-500">Last updated {updated}</p>}
