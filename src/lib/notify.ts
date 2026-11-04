@@ -129,6 +129,9 @@ export async function sendEmail(to: string, msg: Message, url: string): Promise<
     return { sent: false, provider, error: restricted ? "This server can only email its owner until a sending domain is verified" : `Email service answered ${res.status}` };
   } catch (err) {
     console.error("Email failed", err);
+    // Gmail answers 535 when given the account password instead of an App Password.
+    if ((err as { code?: string }).code === "EAUTH")
+      return { sent: false, provider, error: "The email account rejected the server's login. It needs a Google App Password, not the normal password" };
     return { sent: false, provider, error: "The email service couldn't be reached" };
   }
 }
