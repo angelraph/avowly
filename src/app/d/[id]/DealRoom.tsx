@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useState, type ReactNode } from "react";
+import { EmailUpdates } from "@/components/EmailUpdates";
 import { NotifyButton } from "@/components/NotifyButton";
 import { PhotoPicker } from "@/components/PhotoPicker";
 import { ShareProof } from "@/components/ShareProof";
@@ -72,7 +73,9 @@ function eventLabel(e: State["events"][number]): string {
     "deal.released": "Deal complete",
     "deal.settled": "Rental settled",
     "support.ticket_opened": `Support ticket ${p.ticket ?? ""} opened`,
-    "notify.push": `Notification sent to the ${p.audience ?? "party"}: ${p.accepted ?? 0} of ${p.devices ?? 0} device${p.devices === 1 ? "" : "s"} reached`,
+    "notify.email": `Email to the ${p.audience ?? "party"}: ${p.sent ? "sent" : "not sent"}`,
+    "notify.email_set": `The ${p.audience ?? "party"} turned on email updates${p.sent ? "" : " (test email didn't send)"}`,
+    "notify.push":`Notification sent to the ${p.audience ?? "party"}: ${p.accepted ?? 0} of ${p.devices ?? 0} device${p.devices === 1 ? "" : "s"} reached`,
   };
   const webhook: Record<string, string> = {
     "CHECKOUT.ORDER.APPROVED": "buyer approved the payment",
@@ -506,11 +509,14 @@ export function DealRoom({ id, urlKey, initialError }: { id: string; urlKey: str
       )}
 
       {role && key && !["released", "settled", "voided"].includes(deal.status) && (
-        <NotifyButton
-          subscriptionKey={key}
-          dealId={id}
-          label={listing.mode === "rental" && role === "buyer" ? "Notify me when my deposit is back" : "Notify me about this deal"}
-        />
+        <section className="space-y-3">
+          <NotifyButton
+            subscriptionKey={key}
+            dealId={id}
+            label={listing.mode === "rental" && role === "buyer" ? "Notify me when my deposit is back" : "Notify me about this deal"}
+          />
+          <EmailUpdates subscriptionKey={key} dealId={id} />
+        </section>
       )}
 
       {notice && <p className="text-sm text-matched">{notice}</p>}

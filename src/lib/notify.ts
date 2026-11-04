@@ -91,26 +91,60 @@ function escapeHtml(s: string) {
   return s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
 }
 
-async function sendEmail(to: string | null | undefined, msg: Message, url: string) {
-  const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey || !to) return;
-  const res = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
-    body: JSON.stringify({
-      from: process.env.EMAIL_FROM ?? "Avowly <onboarding@resend.dev>",
-      to: [to],
-      subject: msg.title,
-      html: `<div style="font-family:system-ui,sans-serif;max-width:480px"><h2 style="margin:0 0 8px">${escapeHtml(msg.title)}</h2><p style="color:#363c4a">${escapeHtml(msg.body)}</p><p><a href="${url}" style="display:inline-block;background:#11141b;color:#fff;padding:12px 18px;border-radius:12px;text-decoration:none">Open in Avowly</a></p><p style="color:#6b7385;font-size:12px">Avowly: money moves only when the thing does.</p></div>`,
-    }),
-  });
-  if (!res.ok) console.error("Email failed", res.status, await res.text());
+/** Which email service is configured: Gmail (reaches anyone, no domain needed) or Resend. */
+export function emailProvider(): "gmail" | "resend" | null {
+  if (process.env.GMAIL_USER && process.env.GMAIL_APP_PASSWORD) return "gmail";
+  if (process.env.RESEND_API_KEY) return "resend";
+  return null;
+}
+
+function emailHtml(msg: Message, url: string) {
+  return `<div style="font-family:system-ui,sans-serif;max-width:480px"><h2 style="margin:0 0 8px">${escapeHtml(msg.title)}</h2><p style="color:#363c4a">${escapeHtml(msg.body)}</p><p><a href="${url}" style="display:inline-block;background:#15131F;color:#fff;padding:12px 18px;border-radius:12px;text-decoration:none">Open in Avowly</a></p><p style="color:#6b7385;font-size:12px">Avowly: money moves only when the thing does. You get this because you asked for updates on this deal.</p></div>`;
+}
+
+export type EmailResult = { sent: boolean; provider: "gmail" | "resend" | null; error?: string };
+
+/** Sends one email. Never throws; the result says what happened so callers can record it. */
+export async function sendEmail(to: string, msg: Message, url: string): Promise<EmailResult> {
+  const provider = emailProvider();
+  if (!provider) return { sent: false, provider, error: "Email isn't set up on this server" };
+  const text = `${msg.body}\n\nOpen in Avowly: ${url}`;
+  try {
+    if (provider === "gmail") {
+      const { createTransport } = await import("nodemailer");
+      const transport = createTransport({ service: "gmail", auth: { user: process.env.GMAIL_USER, pass: process.env.GMAIL_APP_PASSWORD } });
+      await transport.sendMail({ from: `Avowly <${process.env.GMAIL_USER}>`, to, subject: msg.title, text, html: emailHtml(msg, url) });
+      return { sent: true, provider };
+    }
+    const res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ from: process.env.EMAIL_FROM ?? "Avowly <onboarding@resend.dev>", to: [to], subject: msg.title, text, html: emailHtml(msg, url) }),
+    });
+    if (res.ok) return { sent: true, provider };
+    const body = await res.text();
+    console.error("Email failed", res.status, body);
+    // Resend's test sender only reaches the account owner's own inbox until a domain is verified.
+    const restricted = res.status === 403 && /own email|verify a domain/i.test(body);
+    return { sent: false, provider, error: restricted ? "This server can only email its owner until a sending domain is verified" : `Email service answered ${res.status}` };
+  } catch (err) {
+    console.error("Email failed", err);
+    return { sent: false, provider, error: "The email service couldn't be reached" };
+  }
+}
+
+async function emailParty(audience: Audience, listing: Listing, deal: Deal | null, msg: Message, url: string) {
+  const to = audience === "seller" ? listing.notifyEmail : deal?.buyerEmail;
+  // PayPal sandbox accounts use example.com addresses, which have no inbox.
+  if (!to || !emailProvider() || /@([\w-]+\.)*example\.com$/i.test(to)) return;
+  const result = await sendEmail(to, msg, url);
+  // The address itself is never logged, only whether it went.
+  await logEvent({ dealId: deal?.id ?? null, listingId: listing.id, type: "notify.email", payload: { audience, title: msg.title, sent: result.sent, provider: result.provider } });
 }
 
 export async function notify(audience: Audience, listing: Listing, deal: Deal | null, msg: Message) {
   const url = linkFor(audience, listing, deal);
-  const email = audience === "seller" ? listing.notifyEmail : deal?.buyerEmail;
-  await Promise.allSettled([sendPush(audience, listing, deal, msg, url), sendEmail(email, msg, url)]).then((results) =>
+  await Promise.allSettled([sendPush(audience, listing, deal, msg, url), emailParty(audience, listing, deal, msg, url)]).then((results) =>
     results.forEach((r) => r.status === "rejected" && console.error("Notify failed", r.reason)),
   );
 }

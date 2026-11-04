@@ -80,7 +80,7 @@ export async function authorizeDeal(dealId: string, key: string | null | undefin
   try {
     const { auth, payerEmail } = await paypal.authorizeOrder(orderId);
     const authorizedAt = auth.create_time ? new Date(auth.create_time) : new Date();
-    await updateDeal(dealId, { status: "held", authorizationId: auth.id, authorizedAt, buyerEmail: payerEmail });
+    await updateDeal(dealId, { status: "held", authorizationId: auth.id, authorizedAt, buyerEmail: deal.buyerEmail ?? payerEmail });
     await logEvent({ dealId, type: "paypal.authorized", payload: { authorizationId: auth.id, status: auth.status, amount: auth.amount, expires: auth.expiration_time } });
     notifyLater("seller", listing, { ...deal, status: "held" }, {
       title: listing.mode === "sale" ? `Buyer paid into a hold: ${formatMoney(listing.priceCents)}` : "Your rental is booked",

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AutoRefresh } from "@/components/AutoRefresh";
 import { MarketCard } from "@/components/MarketCard";
+import { EmailUpdates } from "@/components/EmailUpdates";
 import { NotifyButton } from "@/components/NotifyButton";
 import { PayButton } from "@/components/PayButton";
 import { publicConditionNotes } from "@/lib/sanitize";
@@ -274,6 +275,11 @@ export default async function ListingPage({
                 </Status>
               </div>
               <NotifyButton subscriptionKey={listing.sellerKey} listingId={listing.id} label="Notify me when a buyer pays" />
+              {listing.notifyEmail ? (
+                <p className="text-sm text-ink-500">✉️ Updates are emailed to the address you gave when listing.</p>
+              ) : (
+                <EmailUpdates subscriptionKey={listing.sellerKey} listingId={listing.id} />
+              )}
               {listing.status === "draft" && <p className="text-sm text-ink-500">Finish verifying from the create page.</p>}
               {listing.status === "verified" && <SellerKit listingId={listing.id} title={listing.title} />}
               {liveDeals.length === 0 ? (

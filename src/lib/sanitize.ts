@@ -4,7 +4,7 @@
  */
 const TIMELINE_FIELDS = ["amount", "purpose", "by", "disputeId", "ticket"] as const;
 /** Short status words (PayPal enums, push results): passed only as plain strings or numbers. */
-const TIMELINE_SCALARS = { status: "string", audience: "string", accepted: "number", devices: "number" } as const;
+const TIMELINE_SCALARS = { status: "string", audience: "string", accepted: "number", devices: "number", sent: "boolean" } as const;
 
 export function timelinePayload(payload: Record<string, unknown>): Record<string, unknown> {
   const out: Record<string, unknown> = {};
