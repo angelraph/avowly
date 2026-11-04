@@ -56,6 +56,7 @@ export function NewListing({ initialMode }: { initialMode: Mode }) {
   const [created, setCreated] = useState<Created | null>(null);
   const [photos, setPhotos] = useState<File[]>([]);
   const [verdict, setVerdict] = useState<Verdict | null>(null);
+  const [publicPhotos, setPublicPhotos] = useState<number | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -109,6 +110,7 @@ export function NewListing({ initialMode }: { initialMode: Mode }) {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
       setVerdict(data.verdict);
+      setPublicPhotos(typeof data.publicPhotos === "number" ? data.publicPhotos : null);
       if (!data.verdict.verified) setPhotos([]);
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
@@ -131,6 +133,11 @@ export function NewListing({ initialMode }: { initialMode: Mode }) {
           <div className="mt-4 break-all rounded-xl bg-white p-3 font-mono text-sm ring-1 ring-ink-200">{link}</div>
           <button className="btn-primary mt-3" onClick={() => navigator.clipboard.writeText(link)}>Copy link</button>
         </div>
+        {publicPhotos === 0 && (
+          <p className="rounded-[10px] border border-line bg-card p-4 text-sm text-ink-700">
+            Your listing is live without a public photo, because the photos showed personal details or screens. They stay private. Next time, use a plain surface with nothing personal in view, and buyers will see the item.
+          </p>
+        )}
         <Link href={`/l/${created.id}?k=${created.sellerKey}`} className="btn-secondary">Open my seller view</Link>
         <p className="text-center text-xs text-ink-500">Keep your seller view link private. It lets you manage this listing.</p>
       </div>
@@ -158,7 +165,7 @@ export function NewListing({ initialMode }: { initialMode: Mode }) {
         )}
 
         <div className="card">
-          <PhotoPicker files={photos} onChange={setPhotos} hint="2–4 photos work best. Good light, no glare." />
+          <PhotoPicker files={photos} onChange={setPhotos} hint="2–4 photos work best. Good light, no glare, a plain surface, and nothing personal in view: screens, documents and names keep a photo private." />
         </div>
         {error && <p className="text-sm text-bad-600">{error}</p>}
         <button className="btn-primary" disabled={busy || photos.length === 0} onClick={verify}>

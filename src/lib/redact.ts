@@ -24,7 +24,7 @@ const regionsSchema = z.object({
 });
 export type Region = z.infer<typeof regionsSchema>["regions"][number];
 
-const INSTRUCTIONS = `You protect privacy in photos used to verify second-hand items. Find every area showing personal information about anyone: phone numbers, contact or caller names, call logs and contact lists, chat messages, notification banners, email addresses, account names, postal addresses, faces, card or bank numbers, and anything else identifying a person.
+const INSTRUCTIONS = `You protect privacy in photos used to verify second-hand items. Find every area showing personal information about anyone: phone numbers, contact or caller names, call logs and contact lists, chat messages, notification banners, email addresses, account names, postal addresses, faces, card or bank numbers, names printed or handwritten on notebooks, documents, stickers or packaging, and anything else identifying a person.
 
 Do NOT mark: the item's own serial number, IMEI, model number or battery figures; a short handwritten code on paper; the physical item; on/off switches and their labels.
 

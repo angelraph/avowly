@@ -161,7 +161,7 @@ export default async function ListingPage({
                 />
               ) : (
                 (fp.distinctiveFeatures ?? []).length > 0 && (
-                  <Highlight title={`${fp.distinctiveFeatures.length} unique marks on file`} body="Recorded at listing and checked again on the item in your hands." />
+                  <Highlight title={`${fp.distinctiveFeatures.length} unique mark${fp.distinctiveFeatures.length === 1 ? "" : "s"} on file`} body="Recorded at listing and checked again on the item in your hands." />
                 )
               )}
               {fp.hasAntiTheftLock && (

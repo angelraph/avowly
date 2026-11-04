@@ -40,7 +40,7 @@ export function summarize(l: Listing): ListingSummary {
     verifiedBy: fp?.identifiers.length
       ? `${fp.identifiers[0].kind} on file (checked again at handoff)`
       : fp?.distinctiveFeatures?.length
-        ? `${fp.distinctiveFeatures.length} unique marks on file`
+        ? `${fp.distinctiveFeatures.length} unique mark${fp.distinctiveFeatures.length === 1 ? "" : "s"} on file`
         : "possession photo",
     conditionNotes: publicConditionNotes(fp?.conditionNotes ?? []),
     marketSignal: market?.signal?.message ?? null,

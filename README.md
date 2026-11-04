@@ -95,7 +95,7 @@ Open http://localhost:3000. No database setup is needed: without `DATABASE_URL`,
 - The model reads; it isn't a certified inspector. Low-confidence reads ask for another photo and are never charged.
 - A matching serial proves it's the listed item, not that every part works.
 - Lock status comes from the device's own screen; carrier blacklist checks aren't included.
-- Redaction relies on the model finding personal areas, so very small or unusual text could be missed.
+- Redaction relies on the model finding personal areas, so small or decorative text can be missed, and a box can land in the wrong place. In testing, a name in decorative script on a notebook stayed readable in one photo. Photos that show anything personal stay private to the deal's parties, and sellers are told to use a plain surface.
 
 ## License
 

@@ -57,5 +57,5 @@ export const POST = handler(async (req: Request, { params }: RouteCtx) => {
   });
   // Market price check runs after the response so verification stays fast.
   if (verdict.verified) after(() => runMarketCheck(id).catch((err) => console.error("Market check failed", err)));
-  return { verdict, reading };
+  return { verdict, reading, publicPhotos: publicIds.length };
 });
