@@ -112,8 +112,11 @@ export async function sendEmail(to: string, msg: Message, url: string): Promise<
   try {
     if (provider === "gmail") {
       const { createTransport } = await import("nodemailer");
-      const transport = createTransport({ service: "gmail", auth: { user: process.env.GMAIL_USER, pass: process.env.GMAIL_APP_PASSWORD } });
-      await transport.sendMail({ from: `Avowly <${process.env.GMAIL_USER}>`, to, subject: msg.title, text, html: emailHtml(msg, url) });
+      // Google shows app passwords in groups of four ("abcd efgh ..."); the spaces aren't part of it.
+      const user = process.env.GMAIL_USER!.trim();
+      const pass = process.env.GMAIL_APP_PASSWORD!.replace(/\s+/g, "");
+      const transport = createTransport({ service: "gmail", auth: { user, pass } });
+      await transport.sendMail({ from: `Avowly <${user}>`, to, subject: msg.title, text, html: emailHtml(msg, url) });
       return { sent: true, provider };
     }
     const res = await fetch("https://api.resend.com/emails", {
