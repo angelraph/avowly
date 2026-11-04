@@ -152,8 +152,9 @@ export async function buildEvidencePdf(deal: Deal, listing: Listing): Promise<Ui
   // Photos, each captioned with the stage it came from.
   const stages = listing.mode === "sale" ? ["listing", "handoff"] : ["listing", "pickup", "return"];
   for (const stage of stages) {
-    // A sale's record shows the scan that settled it. Earlier tries could be some other device, whose details don't belong here.
-    const settling = stage === "handoff" && decision?.kind === "sale_handoff" ? (decision.photoIds as string[] | undefined) : undefined;
+    // The record shows the scan that settled the deal. Earlier tries could be another device, or a photo that was replaced.
+    const isSettlingScan = (stage === "handoff" && decision?.kind === "sale_handoff") || (stage === "return" && decision?.kind === "rental_return");
+    const settling = isSettlingScan ? (decision?.photoIds as string[] | undefined) : undefined;
     const ids = settling ?? (await photoIds({ listingId: listing.id, stage, ...(stage === "listing" ? {} : { dealId: deal.id }) }));
     const photos = await loadPhotos(ids.slice(-6));
     for (const [i, photo] of photos.entries()) {
