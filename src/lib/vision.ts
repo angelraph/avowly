@@ -44,7 +44,7 @@ async function read<T extends z.ZodType>(
 }
 
 const identifierRead = z.object({
-  kind: z.string().describe('"IMEI", "SERIAL", or another identifier type printed on the item or shown on its settings screen'),
+  kind: z.string().describe('Exactly "IMEI" for any IMEI whatever slot it is labelled, exactly "SERIAL" for a serial number, or another identifier type printed on the item or shown on its settings screen'),
   value: z.string().describe("Exactly the characters visible. Do not guess hidden or blurred characters."),
   confidence: z.number().describe("0 to 1: how sure you are every character is read correctly"),
   photoIndex: z.number().int(),
@@ -73,7 +73,7 @@ const listingSchema = z.object({
     .boolean()
     .describe("True only if this kind of item has an owner-account anti-theft lock (e.g. smartphones, tablets, some laptops and watches)"),
   batteryHealthPercent: z.number().nullable().describe("Only if a battery health screen is visible"),
-  conditionNotes: z.array(z.string()).describe("Specific visible wear: scratches, dents, cracks, with location"),
+  conditionNotes: z.array(z.string()).describe("Specific visible wear: scratches, dents, cracks, with location. Describe the item only; never mention photo numbers or what the photos do not show."),
   photos: z
     .array(
       z.object({

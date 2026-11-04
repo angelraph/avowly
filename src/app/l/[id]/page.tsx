@@ -6,6 +6,7 @@ import { AutoRefresh } from "@/components/AutoRefresh";
 import { MarketCard } from "@/components/MarketCard";
 import { NotifyButton } from "@/components/NotifyButton";
 import { PayButton } from "@/components/PayButton";
+import { publicConditionNotes } from "@/lib/sanitize";
 import { PhotoMosaic } from "@/components/PhotoMosaic";
 import { SellerKit } from "@/components/SellerKit";
 import { ShareListing } from "@/components/ShareListing";
@@ -200,11 +201,11 @@ export default async function ListingPage({
                   </div>
                 )}
               </dl>
-              {fp.conditionNotes.length > 0 && (
+              {publicConditionNotes(fp.conditionNotes).length > 0 && (
                 <div className="mt-5">
                   <p className="status text-ink-500">Condition seen in the photos</p>
                   <ul className="mt-2 space-y-1.5 text-sm text-ink-700">
-                    {fp.conditionNotes.map((n) => (
+                    {publicConditionNotes(fp.conditionNotes).map((n) => (
                       <li key={n} className="flex gap-2"><span className="text-ink-300">—</span>{n}</li>
                     ))}
                   </ul>

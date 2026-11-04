@@ -4,6 +4,7 @@ import type { MarketCheck } from "./channel3";
 import { getDb, schema } from "./db";
 import type { Listing } from "./db/schema";
 import { env } from "./env";
+import { publicConditionNotes } from "./sanitize";
 import { feeFor } from "./store";
 
 export type ListingSummary = {
@@ -41,7 +42,7 @@ export function summarize(l: Listing): ListingSummary {
       : fp?.distinctiveFeatures?.length
         ? `${fp.distinctiveFeatures.length} unique marks on file`
         : "possession photo",
-    conditionNotes: fp?.conditionNotes ?? [],
+    conditionNotes: publicConditionNotes(fp?.conditionNotes ?? []),
     marketSignal: market?.signal?.message ?? null,
   };
 }

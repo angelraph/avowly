@@ -25,3 +25,12 @@ describe("decisionView", () => {
     expect(decisionView(null)).toBeNull();
   });
 });
+
+describe("publicConditionNotes", () => {
+  it("keeps wear and drops remarks about the photos", async () => {
+    const { publicConditionNotes } = await import("./sanitize");
+    expect(
+      publicConditionNotes(["Display is powered on in photo 0.", "Exact model is not visible in the supplied photos.", "Black rear panel has light surface marks."]),
+    ).toEqual(["Black rear panel has light surface marks."]);
+  });
+});

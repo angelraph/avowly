@@ -59,6 +59,20 @@ describe("decideSaleHandoff", () => {
     expect(v.verdict).toBe("match");
     expect(v.canRelease).toBe(true);
   });
+  it("treats every IMEI label as an IMEI, as phones show them", () => {
+    const other = "356938035643809";
+    for (const kind of ["IMEI (SIM SLOT 1)", "IMEI2", "imei 1"]) {
+      const swapped = decideSaleHandoff({ listed, features: [], hasAntiTheftLock: true, reads: [{ kind, value: other, confidence: 0.95 }], featureChecks: [], lockStatus: "off" });
+      expect(swapped.verdict).toBe("mismatch");
+      const same = decideSaleHandoff({ listed: [{ kind: "IMEI (SIM SLOT 1)", value: IMEI }], features: [], hasAntiTheftLock: true, reads: [{ kind, value: IMEI, confidence: 0.95 }], featureChecks: [], lockStatus: "off" });
+      expect(same.verdict).toBe("match");
+    }
+  });
+  it("applies the IMEI check digit whatever the label says", () => {
+    const v = decideSaleHandoff({ listed, features: [], hasAntiTheftLock: true, reads: [{ kind: "IMEI (SIM SLOT 1)", value: "490154203237519", confidence: 0.99 }], featureChecks: [], lockStatus: "off" });
+    expect(v.verdict).toBe("rescan");
+    expect(v.canRelease).toBe(false);
+  });
   it("blocks a swapped device", () => {
     const v = decideSaleHandoff({ listed, features: [], hasAntiTheftLock: true, reads: [{ kind: "IMEI", value: "356938035643809", confidence: 0.95 }], featureChecks: [], lockStatus: "off" });
     expect(v.verdict).toBe("mismatch");

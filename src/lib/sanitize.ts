@@ -20,3 +20,8 @@ export function decisionView(decision: unknown): unknown {
   delete copy.featureChecks;
   return copy;
 }
+
+/** Condition lines for public pages: real wear only, not the AI's remarks about the photos themselves. */
+export function publicConditionNotes(notes: string[]): string[] {
+  return notes.filter((n) => !/\bphoto\s*\d+\b|\b(supplied|provided) photos?\b|\bnot visible\b|\bpowered on\b/i.test(n));
+}

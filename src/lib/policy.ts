@@ -39,13 +39,25 @@ export function isValidImei(value: string): boolean {
   return sum % 10 === 0;
 }
 
+/**
+ * The AI labels a number however the screen does ("IMEI (SIM SLOT 1)", "IMEI2"). Rules compare
+ * and validate by kind, so every IMEI label must become plain "IMEI". IMEISV is a different number.
+ */
+export function canonicalKind(kind: string): string {
+  const k = kind.trim().toUpperCase();
+  if (/IMEI\s*[/-]?\s*SV/.test(k)) return "IMEISV";
+  if (k.includes("IMEI")) return "IMEI";
+  if (/SERIAL|^S\/?N\b/.test(k)) return "SERIAL";
+  return k;
+}
+
 /** Keeps only confident, well-formed reads, normalized for comparison. */
 export function trustedIdentifiers(reads: ReadIdentifier[]): Identifier[] {
   const out: Identifier[] = [];
   const seen = new Set<string>();
   for (const read of reads) {
     if (read.confidence < MIN_READ_CONFIDENCE) continue;
-    const kind = read.kind.toUpperCase();
+    const kind = canonicalKind(read.kind);
     const value = normalizeIdentifier(read.value);
     if (value.length < 5) continue;
     if (kind === "IMEI" && !isValidImei(value)) continue;
@@ -181,7 +193,8 @@ export function decideSaleHandoff(input: {
 
   const base = { method: "identifier" as const };
   const scanned = trustedIdentifiers(input.reads);
-  const listed = input.listed.map((i) => ({ kind: i.kind.toUpperCase(), value: normalizeIdentifier(i.value) }));
+  const listed = input.listed.map((i) => ({ kind: canonicalKind(i.kind), value: normalizeIdentifier(i.value) }));
+  const listedKinds = [...new Set(listed.map((l) => l.kind))];
 
   if (scanned.length === 0) {
     return {
@@ -189,7 +202,7 @@ export function decideSaleHandoff(input: {
       verdict: "rescan",
       canRelease: false,
       matched: null,
-      reasons: [`Couldn't read an identifier clearly. Scan the ${listed.map((i) => i.kind).join(" or ")} again.`],
+      reasons: [`Couldn't read an identifier clearly. Scan the ${listedKinds.join(" or ")} again.`],
     };
   }
 
@@ -213,7 +226,7 @@ export function decideSaleHandoff(input: {
       verdict: "rescan",
       canRelease: false,
       matched: null,
-      reasons: [`Scanned ${scanned.map((s) => s.kind).join(", ")}, but the listing was verified by ${listed.map((l) => l.kind).join(", ")}. Scan that instead.`],
+      reasons: [`Scanned ${[...new Set(scanned.map((s) => s.kind))].join(", ")}, but the listing was verified by ${listedKinds.join(", ")}. Scan that instead.`],
     };
   }
 
