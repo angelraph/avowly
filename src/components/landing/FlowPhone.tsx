@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Mark } from "@/components/Logo";
 import { ItemSketch } from "./ItemSketch";
 
-const SERIAL = "3569 3803 5643 809";
+const SERIAL = "4901 5420 3237 518";
 const SCENES = ["listing", "held", "scan", "matched"] as const;
 type Scene = (typeof SCENES)[number];
 
@@ -91,7 +91,7 @@ export function FlowPhone() {
           {/* matched */}
           <div className={`absolute inset-x-0 top-12 px-4 transition-all duration-700 ${scene === "matched" ? "opacity-100" : "pointer-events-none translate-y-2 opacity-0"}`}>
             <Status tone="matched">Matched</Status>
-            <p className="serial mt-3 text-ink-700">IMEI ···· 5066 = listed ···· 5066</p>
+            <p className="serial mt-3 text-ink-700">IMEI ···· 7518 = listed ···· 7518</p>
             <p className="amount mt-6 text-5xl">$250.00</p>
             <p className="mt-1 text-sm text-ink-500">released to Uzoechi</p>
             <div className="mt-6 space-y-2 border-t border-line pt-4 text-xs">

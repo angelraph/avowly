@@ -84,11 +84,11 @@ export function SwitchCard() {
         <div className="mx-6 mb-6 w-full space-y-3">
           <div className="flex items-center justify-between rounded-[10px] border border-line bg-paper px-4 py-3">
             <span className="text-xs text-ink-500">Listed</span>
-            <span className="serial">IMEI ···· 5066</span>
+            <span className="serial">IMEI ···· 7518</span>
           </div>
           <div className={`flex items-center justify-between rounded-[10px] border px-4 py-3 transition-colors duration-500 ${swap ? "border-oxblood/30 bg-oxblood-tint" : "border-matched/25 bg-matched-tint"}`}>
             <span className="text-xs text-ink-500">In hand</span>
-            <span className="serial">{swap ? "IMEI 4901 5420 3237 518" : "IMEI 3569 3803 5643 809"}</span>
+            <span className="serial">{swap ? "IMEI 3569 3803 5643 809" : "IMEI 4901 5420 3237 518"}</span>
           </div>
           <p className={`status transition-colors duration-500 ${swap ? "text-oxblood" : "text-matched"}`}>
             {swap ? "Mismatch · hold stays · $0 charged" : "Matched · $250.00 released"}
