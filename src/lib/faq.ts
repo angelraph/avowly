@@ -19,6 +19,10 @@ export const FAQ: FaqGroup[] = [
         a: "Listing is free and sellers receive their full asking price. Buyers pay a small buyer protection fee (5%, minimum $1) on top, shown before they approve. If a deal is cancelled before the handoff, nothing is charged at all.",
       },
       {
+        q: "What is the free scam check?",
+        a: "Paste any listing or the seller's messages, or add a screenshot, and Clasp looks for the warning signs of a scam and compares the price with live retail offers. There's no sign-up and we don't store what you send, only the verdict. No warning signs doesn't prove a listing is safe, which is why you can ask the seller to verify with Clasp.",
+      },
+      {
         q: "Is this real money?",
         a: "Not yet. Clasp is a prototype running on the PayPal sandbox, PayPal's test environment. Every payment step is a real PayPal API call, but with test accounts and test money.",
       },

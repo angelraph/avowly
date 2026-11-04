@@ -1,93 +1,101 @@
 # Clasp
 
-**Pay strangers like you trust them.** PayPal holds the money. AI checks the item at the handoff. Money moves only when the thing does.
+**Pay strangers like you trust them.** PayPal holds the money. AI checks the item in the buyer's hands. The seller is paid the moment it's the real thing, and never if it isn't.
 
-Clasp secures any handoff between strangers, whether the item changes owners (a sale) or comes back (a rental).
+**Live:** https://clasp-nine.vercel.app · **Judges:** [testing guide](docs/JUDGE_TESTING.md) · **Docs:** [/docs](https://clasp-nine.vercel.app/docs) · **Agents:** `https://clasp-nine.vercel.app/api/mcp`
+
+Runs on the PayPal sandbox. Every payment step is a real PayPal API call; no real money moves.
 
 ## The problem
 
-- Peer-to-peer marketplaces have no safe way to pay. A UK bank (TSB) contacted 100 Facebook Marketplace sellers and found 34% of the listings were fraudulent.
-- Online shopping was the second most-reported fraud category in the FTC's 2024 data, a year with $12.5B in reported fraud losses.
-- Cash and instant transfers protect nobody. Sellers fear "empty box" claims, buyers fear swapped or locked devices, and rental owners and renters argue over deposits from memory.
+Buying from a stranger still runs on cash, hope and screenshots.
 
-Escrow apps already exist, but in each one a person clicks "received" to release the money. Clasp releases it when the item is **proven**.
+- A UK bank (TSB) contacted 100 Facebook Marketplace sellers and found **34% of the listings were fraudulent** (2023).
+- Reported US fraud losses reached **$12.5B** in 2024, with online shopping the second most reported category (FTC).
+- Cash and instant transfers protect nobody. Sellers fear "empty box" claims, buyers fear swapped or locked devices, and rental deposits are argued from memory.
+
+Escrow apps exist, but in each one I found, a person taps "received" and the money moves on their word. **In Clasp, the item itself releases the payment.**
 
 ## How it works
 
 ### Sale
-1. **Possession proof.** The seller writes a one-time code on paper and photographs it next to the item. The AI reads the code and records what makes this exact item unique: a serial number or IMEI if it has one (IMEIs are Luhn-checked), otherwise its distinctive marks.
-2. **PayPal hold.** The buyer approves in PayPal. The order uses `intent: AUTHORIZE`, so price plus a small buyer protection fee is held, not charged.
-3. **Handoff scan.** The buyer photographs the item in hand. The model reads identifiers and the Find My screen, **without being told what it should match**. Plain code compares:
-   - Match → `capture` → Clasp pays the seller their full price with the Payouts API.
-   - Mismatch or locked → no capture. The hold stays or is voided.
+1. **Possession proof.** The seller photographs the item beside a one-time code. A photo copied from elsewhere can't have it.
+2. **PayPal hold.** The buyer approves in PayPal. Price plus buyer protection is authorized, not charged.
+3. **Handoff scan.** At the meetup the buyer scans the item. The model transcribes the serial or IMEI **without being told what to expect**; plain code compares it. Items with no serial match on recorded unique marks. Devices must show their anti-theft lock off.
+4. **Release.** Match: capture, and the seller receives their full price by PayPal Payouts. Mismatch: nothing is charged.
+5. **Proof.** Both sides get a shareable proof page and a PDF handoff record, which goes to PayPal automatically if a dispute is opened.
 
-### Rental
-One authorization covers the fee plus the deposit.
-1. **Pickup.** The renter records condition and accessories. The fee is captured with `final_capture: false`, and the deposit stays held.
-2. **Return.** The owner scans the item back. The AI compares it with the pickup photos.
-3. **Settle.** Code charges only confident findings that match the owner's **pre-agreed** price table, capped at the deposit, with `final_capture: true`. A clean return voids the hold.
+### Rental: the same engine, two handoffs
+One hold covers fee + protection + deposit. The fee is captured at pickup with `final_capture: false`. At return the AI compares the item with its pickup photos, and code charges only confident findings from a price list both sides saw up front, capped at the deposit. A clean return voids the rest.
 
-### The rule
-The model reports. Code decides. The model never sees prices it could change, never calls PayPal, and can't add a charge. Everything is in [`src/lib/policy.ts`](src/lib/policy.ts), with unit tests in [`src/lib/policy.test.ts`](src/lib/policy.test.ts).
+### Self-spreading
+- **Free scam check** ([/check](https://clasp-nine.vercel.app/check)): paste any listing and get a verdict, plus a ready message asking the seller to verify with Clasp. The asking buyer recruits the seller.
+- **Live badge and post kit:** sellers paste a verified link or badge into posts on any marketplace, and the badge shows the listing's real status.
+- **Proof pages and link previews:** every completed deal is a shareable, privacy-safe proof of a good seller.
+
+### Agents commit. People approve.
+An MCP server lets AI shopping agents find verified listings and start a protected purchase. They can't move money: the tool returns a PayPal link only the human can approve, and the item still releases payment.
+
+## The design rule: the AI reads, plain rules decide
+
+The model reports what it sees, with a confidence. It never calls PayPal, never sees a price it could change, and treats text in photos as data, not instructions. Every capture, charge and release is decided in [`src/lib/policy.ts`](src/lib/policy.ts), covered by [unit tests](src/lib/policy.test.ts).
+
+## Privacy
+
+- Before any photo is stored, other people's personal information (phone numbers, names, call logs, faces) is pixelated. The original is never saved, EXIF is stripped, and if the check fails nothing is stored.
+- Photos are private by default; only clean item shots can appear publicly.
+- Scam-check input is never stored. IP addresses are stored only as salted hashes.
+- Deal data requires a party's key; proof pages show no keys, emails or full serials.
 
 ## PayPal integration
 
-| Capability | Where |
+| Capability | Used for | Code |
+|---|---|---|
+| JS SDK v6 | PayPal button, one-time payment session | `src/components/PayButton.tsx` |
+| Orders v2 `AUTHORIZE` | Holds; redirect approval for agent purchases | `src/lib/paypal.ts`, `src/lib/deals.ts` |
+| Payments v2 | Partial and final capture, void, reauthorize | `src/lib/paypal.ts`, `src/lib/store.ts` |
+| Payouts | Paying sellers at release | `captureForSeller` in `src/lib/store.ts` |
+| Webhooks | Signature-verified confirmations in each timeline | `src/app/api/webhooks/paypal/route.ts` |
+| Disputes | Automatic evidence: PDF via `provide-evidence` | `src/lib/disputes.ts`, `src/lib/evidence.ts` |
+
+`PayPal-Request-Id` makes every money call idempotent, and a compare-and-set status change stops double captures. Holds are renewed after the 3-day honor period, up to day 29.
+
+## AI and sponsor tools
+
+| Tool | How it's used |
 |---|---|
-| JS SDK v6 PayPal button, one-time payment session | `src/components/PayButton.tsx` |
-| Orders v2 `intent: AUTHORIZE` | `createAuthorizeOrder` in `src/lib/paypal.ts` |
-| Authorize order | `authorizeOrder` |
-| Partial and final captures (`final_capture`) | `captureAuthorization` |
-| Void | `voidAuthorization` |
-| Reauthorize after the 3-day honor period (to day 29) | `reauthorize`, `ensureFreshHold` in `src/lib/store.ts` |
-| Payouts: seller paid the moment the item checks out | `payout`, `captureForSeller` in `src/lib/store.ts` |
-| Webhooks with signature verification | `src/app/api/webhooks/paypal/route.ts` |
-| `PayPal-Request-Id` idempotency on every money movement | `call()` in `src/lib/paypal.ts` |
+| **OpenAI Responses API** (vision, strict structured outputs) | Reads possession codes, serials, marks, lock screens and accessories; compares pickup and return photos; finds personal information to blur; picks scam-check flags from a fixed list |
+| **Channel3** | Live retail prices for the market check and scam check, compared only against the same brand and model number, with at least 3 offers before any verdict |
+| **Model Context Protocol** (`mcp-handler`) | Agent commerce server |
+| Vercel, Neon | Hosting, Postgres |
 
-## AI
+## Tested for real
 
-- **OpenAI Responses API** with image input and strict structured outputs (Zod schemas). See `src/lib/vision.ts`.
-- **Model:** set with `OPENAI_MODEL`.
-- **Uses:**
-  - Reading the possession code, IMEI or serial numbers, and battery and lock screens
-  - Condition notes
-  - Accessory inventory
-  - Pickup-vs-return damage comparison against a fixed list of damage categories
+- `npm test`: unit tests for every money rule, scam scoring and data sanitizing.
+- `npm run test:paypal`: runs the money paths against the PayPal sandbox with a test card. Results: fee capture then void of the remainder; fee then final partial capture; a further capture refused (`AUTHORIZATION_ALREADY_CAPTURED`); void before capture; capture then payout to a sandbox seller.
+- A full sale was run through the app in the PayPal sandbox using photos of a real phone, including a different device's IMEI being refused.
 
 ## Run it locally
 
-Requirements: Node 20+, a PayPal sandbox app, an OpenAI API key.
+Requires Node 20+, a PayPal sandbox app and an OpenAI key.
 
 ```bash
+git clone https://github.com/angelraph/clasp
+cd clasp
 npm install
-cp .env.example .env.local   # fill in PayPal + OpenAI values
+cp .env.example .env.local   # add your PayPal sandbox and OpenAI keys
 npm run dev
 ```
 
-Open http://localhost:3000. No database setup is needed: without `DATABASE_URL`, Clasp uses an embedded Postgres (PGlite) stored in `./.data`.
-
-Run the policy tests:
-
-```bash
-npm test
-```
-
-### Test the full flow with PayPal sandbox accounts
-1. Create a sale listing. Use a US sandbox **Business** account email as the PayPal email.
-2. Verify it with photos: the code on paper next to the phone, plus the IMEI screen.
-3. Open the listing link in another browser and pay with a US sandbox **Personal** account.
-4. In the deal room, scan the item. A different phone is refused. The listed phone releases the payment.
-
-## Deploy
-
-`render.yaml` is a Render Blueprint for the web service plus Postgres. Fill in the secrets when Render prompts, then add the webhook (see [SETUP.md](SETUP.md)).
+Open http://localhost:3000. No database setup is needed: without `DATABASE_URL`, Clasp uses an embedded Postgres in `./.data`. Create US sandbox accounts as described in [SETUP.md](SETUP.md).
 
 ## Honest limits
 
-- Runs on the PayPal **sandbox**.
-- Production would use PayPal's partner platform features (platform fees, delayed disbursement), which need PayPal approval.
-- The vision model reads; it is not a certified inspector. Anything below the confidence threshold is flagged, never charged.
-- Activation-lock status comes from the device's own screen. A blacklist or IMEI database check is not included.
+- Sandbox only. Production would use PayPal's platform features, which need partner approval.
+- The model reads; it isn't a certified inspector. Low-confidence reads ask for another photo and are never charged.
+- A matching serial proves it's the listed item, not that every part works.
+- Lock status comes from the device's own screen; carrier blacklist checks aren't included.
+- Redaction relies on the model finding personal areas, so very small or unusual text could be missed.
 
 ## License
 

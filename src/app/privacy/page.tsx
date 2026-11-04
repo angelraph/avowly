@@ -49,6 +49,7 @@ export default function PrivacyPage() {
             <tr><td>Deal timeline (PayPal IDs, statuses, times)</td><td>Clasp and PayPal</td><td>To run the deal and build the handoff record</td></tr>
             <tr><td>Notification subscriptions</td><td>Your browser, if you opt in</td><td>To deliver push notifications</td></tr>
             <tr><td>Support messages and email</td><td>You</td><td>To answer you</td></tr>
+            <tr><td>Scam-check verdicts (not what you pasted)</td><td>The check you run</td><td>So the result can be shared. Your text and screenshots are sent for analysis and never stored.</td></tr>
             <tr><td>A one-way scrambled tag of your IP address</td><td>Your request</td><td>Rate limiting. The raw IP isn&apos;t stored.</td></tr>
           </tbody>
         </table>
@@ -75,7 +76,7 @@ export default function PrivacyPage() {
           <thead><tr><th>Service</th><th>What they receive</th><th>Purpose</th></tr></thead>
           <tbody>
             <tr><td>PayPal</td><td>Order amounts, seller PayPal email, and the handoff record if a dispute is opened</td><td>Payments, payouts, disputes</td></tr>
-            <tr><td>OpenAI</td><td>Photos, to read them and to find personal information to blur</td><td>Verification and redaction. API data isn&apos;t used for model training by default.</td></tr>
+            <tr><td>OpenAI</td><td>Photos, to read them and to find personal information to blur; text and screenshots you submit to the scam check</td><td>Verification and redaction. API data isn&apos;t used for model training by default.</td></tr>
             <tr><td>Channel3</td><td>The product make and model, and one public item photo</td><td>Market price checks</td></tr>
             <tr><td>Neon and Vercel</td><td>Stored data and requests</td><td>Database and hosting</td></tr>
             <tr><td>Your browser&apos;s push service</td><td>Notification text</td><td>Push notifications, if you opt in</td></tr>

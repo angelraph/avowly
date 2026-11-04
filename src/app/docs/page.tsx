@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { DocPage } from "@/components/DocPage";
 import { env } from "@/lib/env";
 
@@ -17,6 +18,7 @@ const TOC = [
   { id: "paypal", label: "PayPal integration" },
   { id: "webhooks", label: "Webhooks & disputes" },
   { id: "agents", label: "Agents (MCP)" },
+  { id: "growth", label: "Scam check & badge" },
   { id: "api", label: "HTTP API" },
   { id: "run", label: "Run it" },
   { id: "limits", label: "Limits" },
@@ -155,7 +157,7 @@ export default function DocsPage() {
           re-encoded, which strips EXIF data like GPS. The original is never stored; if the check fails, the upload is refused.
         </p>
         <p>
-          Photos are private by default. Only shots the model marks as showing the item and nothing identifying appear on public pages. Every
+          Scam-check input is never stored, and IP addresses are kept only as salted hashes for rate limiting. Photos are private by default. Only shots the model marks as showing the item and nothing identifying appear on public pages. Every
           other photo needs a seller or buyer key.
         </p>
 
@@ -194,7 +196,18 @@ export default function DocsPage() {
         <p>
           Tools: <code>search_verified_listings</code>, <code>get_listing</code>, <code>start_protected_purchase</code>,
           <code>get_deal_status</code>. Agents can start a purchase but never move money: the tool returns a PayPal approval link that the human
-          must open. See <a href="/agents">For AI agents</a>.
+          must open. See <Link href="/agents">For AI agents</Link>.
+        </p>
+
+        <h2 id="growth">Scam check &amp; badge</h2>
+        <p>
+          <Link href="/check">The free scam check</Link> sends pasted text or screenshots for analysis and stores only the verdict. The model can only choose
+          flags from a fixed list; <code>scoreListingRisk</code> in <code>policy.ts</code> scores them with published weights and adds live price evidence.
+          A clean result never claims a listing is safe. Instructions planted in a listing are ignored.
+        </p>
+        <p>
+          <code>GET /api/badge/:id</code> returns a live SVG badge that reflects the listing&apos;s real status, so a sold item can&apos;t keep showing as
+          available.
         </p>
 
         <h2 id="api">HTTP API</h2>
@@ -210,6 +223,8 @@ export default function DocsPage() {
             <tr><td><code>POST /api/deals/:id/cancel</code></td><td>Release the hold before capture</td></tr>
             <tr><td><code>GET /api/deals/:id/record</code></td><td>Handoff record PDF (party key)</td></tr>
             <tr><td><code>POST /api/support</code></td><td>Open a support ticket</td></tr>
+            <tr><td><code>POST /api/check</code></td><td>Run the free scam check</td></tr>
+            <tr><td><code>GET /api/badge/:id</code></td><td>Live verified badge (SVG)</td></tr>
           </tbody>
         </table>
         <p>Write endpoints and every AI call are rate limited per caller and per listing or deal.</p>

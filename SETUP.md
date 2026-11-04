@@ -27,10 +27,10 @@ Save each sandbox email and password. Log into them at https://www.sandbox.paypa
 - Key: https://platform.openai.com/api-keys → `OPENAI_API_KEY`
 - Credit: https://platform.openai.com/settings/organization/billing/overview ($5–10 is plenty)
 
-## 5. Render (hosting)
-- Sign up with GitHub: https://dashboard.render.com/register
-- Claim $50: https://credits-portal-mmdm.onrender.com/claim/paypal-ai-hackathon
-- How credits apply: https://render.com/docs/credits
+## 5. Vercel and Neon (hosting)
+- Import the repo at https://vercel.com/new
+- Add a Neon database from the Vercel Storage tab; it sets `DATABASE_URL`.
+- Copy your `.env.local` values into the project's Environment Variables.
 
 ## 6. Channel3 (optional, week 4)
 - https://trychannel3.com/developers, promo code `PAYPAL-HACKATHON-2026`
@@ -47,8 +47,8 @@ Then open `.env.local` and paste your values.
 ## 9. PayPal Discord
 - https://discord.gg/sJ2G6DyvSK
 
-## Later: webhooks (after the first Render deploy)
+## Later: webhooks (after the first deploy)
 1. Open your sandbox app → **Webhooks** → **Add Webhook**
-2. URL: `https://<your-render-app>.onrender.com/api/webhooks/paypal`
+2. URL: `https://<your-app>.vercel.app/api/webhooks/paypal`
 3. Events: `CHECKOUT.ORDER.APPROVED`, `PAYMENT.AUTHORIZATION.CREATED`, `PAYMENT.AUTHORIZATION.VOIDED`, `PAYMENT.CAPTURE.COMPLETED`, `PAYMENT.CAPTURE.DECLINED`, `PAYMENT.CAPTURE.PENDING`, `PAYMENT.CAPTURE.REFUNDED`, `CUSTOMER.DISPUTE.CREATED`, `CUSTOMER.DISPUTE.UPDATED`, `CUSTOMER.DISPUTE.RESOLVED`
-4. Copy the **Webhook ID** → `PAYPAL_WEBHOOK_ID` on Render
+4. Copy the **Webhook ID** → `PAYPAL_WEBHOOK_ID` on Vercel
