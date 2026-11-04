@@ -48,3 +48,6 @@ next-env.d.ts
 /.agents/
 /.claude/
 skills-lock.json
+
+# Rendered demo video (upload to YouTube, don't commit)
+/video-out/
