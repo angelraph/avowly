@@ -60,8 +60,19 @@ export function NewListing({ initialMode }: { initialMode: Mode }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  /** Parses a dollar field, or throws a message that names the field instead of a raw parse error. */
+  const amount = (value: string, what: string) => {
+    if (!value.trim()) throw new Error(`Enter ${what}.`);
+    try {
+      return parseDollarsToCents(value);
+    } catch {
+      throw new Error(`"${value}" isn't a dollar amount for ${what}. Use numbers only, like 20 or 19.99.`);
+    }
+  };
   const rows = (r: Row[]) =>
-    r.filter((x) => x.label.trim()).map((x) => ({ label: x.label.trim(), name: x.label.trim(), priceCents: parseDollarsToCents(x.price) }));
+    r
+      .filter((x) => x.label.trim())
+      .map((x) => ({ label: x.label.trim(), name: x.label.trim(), priceCents: amount(x.price, `the price of "${x.label.trim()}"`) }));
 
   async function create(e: React.FormEvent) {
     e.preventDefault();
@@ -76,8 +87,8 @@ export function NewListing({ initialMode }: { initialMode: Mode }) {
           title,
           description,
           location,
-          priceCents: parseDollarsToCents(price),
-          depositCents: mode === "rental" ? parseDollarsToCents(deposit) : 0,
+          priceCents: amount(price, mode === "rental" ? "the rental fee" : "the price"),
+          depositCents: mode === "rental" ? amount(deposit, "the deposit") : 0,
           sellerName,
           sellerPaypalEmail: email,
           notifyEmail,

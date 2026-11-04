@@ -40,6 +40,8 @@ Next.js and TypeScript on Vercel, Postgres on Neon. PayPal: JS SDK v6, Orders v2
 
 ## Accomplishments
 - A full sale ran on the live site: an AI agent found a real phone and started the purchase, a person approved in PayPal, a different phone was refused, a locked phone was blocked, and the right phone paid the seller.
+- A rental ran on the live site: a missing charger was found at return, $25 was charged from the agreed price list and $75 of the deposit came back.
+- A real PayPal dispute ("item not received") was answered automatically: Avowly sent the handoff record as evidence 2 seconds after PayPal asked the seller, and PayPal passed the case back to the buyer.
 - Every money rule is unit tested, and the money paths have a repeatable script against the sandbox.
 - In the scam check, a listing that told the AI to approve it still came back high risk.
 - Testing on a real phone found what tidy test data missed: screens label an IMEI "SIM slot 1" and add a software version after it. Both are now handled and covered by tests.

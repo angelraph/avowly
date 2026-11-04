@@ -9,6 +9,7 @@ import webpush from "web-push";
 import { getDb, schema } from "./db";
 import type { Deal, Listing } from "./db/schema";
 import { env } from "./env";
+import { logEvent } from "./store";
 
 export type Audience = "seller" | "buyer";
 export type Message = { title: string; body: string };
@@ -40,23 +41,34 @@ async function sendPush(audience: Audience, listing: Listing, deal: Deal | null,
         ? and(eq(schema.pushSubscriptions.role, "seller"), eq(schema.pushSubscriptions.listingId, listing.id))
         : and(eq(schema.pushSubscriptions.role, "buyer"), eq(schema.pushSubscriptions.dealId, deal?.id ?? "")),
     );
+  if (!subs.length) return;
   const gone: string[] = [];
+  const statuses: number[] = [];
   await Promise.all(
     subs.map(async (s) => {
       try {
-        await webpush.sendNotification(
+        const res = await webpush.sendNotification(
           { endpoint: s.endpoint, keys: s.keys },
           JSON.stringify({ title: msg.title, body: msg.body, url, tag: deal?.id ?? listing.id }),
           { TTL: 60 * 60 * 24 },
         );
+        statuses.push(res.statusCode);
       } catch (err) {
         const status = (err as { statusCode?: number }).statusCode;
+        statuses.push(status ?? 0);
         if (status === 404 || status === 410) gone.push(s.endpoint);
         else console.error("Push failed", status, err);
       }
     }),
   );
   if (gone.length) await db.delete(schema.pushSubscriptions).where(inArray(schema.pushSubscriptions.endpoint, gone));
+  // Record what the push service answered, so "did they get told?" has an answer in the deal history.
+  await logEvent({
+    dealId: deal?.id ?? null,
+    listingId: listing.id,
+    type: "notify.push",
+    payload: { audience, title: msg.title, devices: subs.length, accepted: statuses.filter((s) => s >= 200 && s < 300).length, statuses },
+  });
 }
 
 /** Sent the moment notifications are turned on, so people find out now if their phone blocks them. */

@@ -65,6 +65,7 @@ function eventLabel(e: State["events"][number]): string {
     "deal.released": "Deal complete",
     "deal.settled": "Rental settled",
     "support.ticket_opened": `Support ticket ${p.ticket ?? ""} opened`,
+    "notify.push": `Notification sent to the ${p.audience ?? "party"}: ${p.accepted ?? 0} of ${p.devices ?? 0} device${p.devices === 1 ? "" : "s"} reached`,
   };
   const webhook: Record<string, string> = {
     "CHECKOUT.ORDER.APPROVED": "buyer approved the payment",

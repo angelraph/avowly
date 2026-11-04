@@ -76,7 +76,11 @@ export function NotifyButton({ subscriptionKey, listingId, dealId, label }: { su
     return (
       <div className="space-y-1 text-sm">
         <p className="text-ok-600">🔔 Notifications on for this {dealId ? "deal" : "listing"}.</p>
-        {sent === true && <p className="text-ink-500">A test one was just sent. Don&apos;t see it? Allow notifications for your browser in your phone&apos;s Settings → Apps.</p>}
+        {sent === true && (
+          <p className="text-ink-500">
+            A test one was just sent. Don&apos;t see it within a minute? Your phone is holding it back: open Settings → Apps → Chrome (or your browser) → Notifications and allow them, then under Battery set it to allow background activity. Oppo, Xiaomi and Huawei phones block this by default.
+          </p>
+        )}
         {sent === false && <p className="text-bad-600">We couldn&apos;t reach this device. Check that your phone allows notifications for your browser, then try again.</p>}
         <button type="button" className="text-avowly-600 underline" onClick={enable}>Send a test notification</button>
       </div>

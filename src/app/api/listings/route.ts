@@ -5,7 +5,7 @@ import { clientIp, rateLimit } from "@/lib/ratelimit";
 import { newPossessionCode } from "@/lib/policy";
 import { HttpError, logEvent, newId, newKey } from "@/lib/store";
 
-const cents = z.number().int().positive().max(1_000_000);
+const cents = z.number().int().positive("Amounts must be more than $0").max(1_000_000, "Amounts can't be more than $10,000");
 
 const body = z
   .object({
@@ -25,7 +25,7 @@ const body = z
 
 export const POST = handler(async (req: Request) => {
   const parsed = body.safeParse(await req.json());
-  if (!parsed.success) throw new HttpError(400, parsed.error.issues.map((i) => i.message).join("; "));
+  if (!parsed.success) throw new HttpError(400, [...new Set(parsed.error.issues.map((i) => i.message))].join("; "));
   await rateLimit(`listings:ip:${clientIp(req)}`, 20, 3600);
   const input = parsed.data;
 

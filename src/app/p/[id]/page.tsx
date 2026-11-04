@@ -93,6 +93,14 @@ export default async function ProofPage({ params }: Props) {
             }
             at={p.paidAt}
           />
+          {p.dispute && (
+            <Step
+              done
+              title="Buyer's PayPal dispute answered with this record"
+              detail={`${p.dispute.reason === "MERCHANDISE_OR_SERVICE_NOT_RECEIVED" ? "The buyer later claimed the item never arrived. " : "The buyer later opened a PayPal dispute. "}Avowly sent PayPal the handoff record as evidence${p.dispute.secondsToAnswer !== null ? ` ${humanDuration(p.dispute.secondsToAnswer)} after PayPal asked the seller` : ""}, with no action from the seller.`}
+              at={p.dispute.answeredAt}
+            />
+          )}
         </ol>
       </div>
 

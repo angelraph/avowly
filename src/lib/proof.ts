@@ -22,6 +22,8 @@ export type Proof = {
   paidAt: string | null;
   secondsCheckToPaid: number | null;
   coverPhotoId: string | null;
+  /** Set when a buyer opened a PayPal dispute and Avowly answered it with the record. */
+  dispute: { askedAt: string | null; answeredAt: string; secondsToAnswer: number | null; reason: string | null } | null;
 };
 
 const COMPLETE = new Set(["released", "settled"]);
@@ -81,6 +83,20 @@ export async function loadProof(dealId: string): Promise<Proof | null> {
     secondsCheckToPaid: checkedAt && paidAt ? Math.max(0, Math.round((paidAt.getTime() - checkedAt.getTime()) / 1000)) : null,
     // The seller's own listing photo, which is already public on the listing page.
     coverPhotoId: photos.at(-1) ?? null,
+    dispute: disputeSummary(events),
+  };
+}
+
+function disputeSummary(events: Awaited<ReturnType<typeof dealEvents>>): Proof["dispute"] {
+  const answered = events.find((e) => e.type === "dispute.evidence_submitted");
+  if (!answered) return null;
+  const asked = events.find((e) => e.type === "dispute.seen" && (e.payload as { status?: string }).status === "WAITING_FOR_SELLER_RESPONSE");
+  const reason = ((asked ?? events.find((e) => e.type === "dispute.seen"))?.payload as { reason?: string } | undefined)?.reason ?? null;
+  return {
+    askedAt: asked?.createdAt.toISOString() ?? null,
+    answeredAt: answered.createdAt.toISOString(),
+    secondsToAnswer: asked ? Math.max(0, Math.round((answered.createdAt.getTime() - asked.createdAt.getTime()) / 1000)) : null,
+    reason,
   };
 }
 

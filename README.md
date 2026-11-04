@@ -73,7 +73,10 @@ The model reports what it sees, with a confidence. It never calls PayPal, never 
 
 - `npm test`: unit tests for every money rule, scam scoring and data sanitizing.
 - `npm run test:paypal`: runs the money paths against the PayPal sandbox with a test card. Results: fee capture then void of the remainder; fee then final partial capture; a further capture refused (`AUTHORIZATION_ALREADY_CAPTURED`); void before capture; capture then payout to a sandbox seller.
-- A full sale ran on the live site in the PayPal sandbox with a real phone, started by an AI agent over MCP and approved by a person in PayPal. A different phone's IMEI got MISMATCH, the anti-theft switch left on was blocked, and the right phone captured the hold and paid the seller. PayPal's webhooks confirmed each step.
+- A full sale ran on the live site in the PayPal sandbox with a real phone, started by an AI agent over MCP and approved by a person in PayPal. A different phone's IMEI got MISMATCH, the anti-theft switch left on was blocked, and the right phone captured the hold and paid the seller. PayPal's webhooks confirmed each step. [Proof page](https://avowly.vercel.app/p/jz8gdc2k34f7).
+- A full rental ran on the live site: a laptop with a $20 fee and $100 deposit. The renter recorded pickup; the first return photo included the charger and came back clean; a rescan without it found the missing charger, so $25 was captured from the price list and $75 released. The owner was paid $45 in total by Payouts. [Proof page](https://avowly.vercel.app/p/d6r8tnmjta2m).
+- A PayPal dispute ran end to end: the sandbox buyer filed "item not received" on the sale above. PayPal's webhook reached Avowly about 3 minutes later; when PayPal moved the case to waiting for the seller, Avowly sent the handoff record PDF as `PROOF_OF_FULFILLMENT` evidence 2 seconds later with no action from the seller, and PayPal moved the case to waiting for the buyer.
+- Not yet proven: web push notifications. Google's push service accepts every message Avowly sends (HTTP 201), but on the Oppo test phone none were displayed. Android phone makers often block browser notifications by default; the app now tells people which settings to change, and logs each delivery in the deal history.
 
 ## Run it locally
 
