@@ -50,7 +50,7 @@ function eventLabel(e: State["events"][number]): string {
     "paypal.capture": `PayPal captured${amt} (${String(p.purpose ?? "").replace("_", " ")})`,
     "paypal.payout": `Payout sent to seller${amt}`,
     "dispute.seen": `Buyer opened a PayPal dispute (${p.disputeId ?? ""})`,
-    "dispute.evidence_submitted": "Clasp sent the handoff record to PayPal as evidence",
+    "dispute.evidence_submitted": "Avowly sent the handoff record to PayPal as evidence",
     "dispute.defense_failed": "Couldn't send evidence automatically. Use “Send record to PayPal”",
     "paypal.voided": "PayPal hold cancelled, money released",
     "paypal.hold_lapses": "Remaining hold will lapse on its own; nothing more can be charged",
@@ -165,14 +165,14 @@ export function DealRoom({ id, urlKey, initialError }: { id: string; urlKey: str
   useEffect(() => {
     if (!urlKey || !state?.role) return;
     try {
-      if (state.role === "buyer") localStorage.setItem(`clasp:deal:${id}`, urlKey);
+      if (state.role === "buyer") localStorage.setItem(`avowly:deal:${id}`, urlKey);
     } catch {}
   }, [id, urlKey, state?.role]);
 
   useEffect(() => {
     if (urlKey) return;
     try {
-      setKey(localStorage.getItem(`clasp:deal:${id}`));
+      setKey(localStorage.getItem(`avowly:deal:${id}`));
     } catch {}
   }, [id, urlKey]);
 
@@ -295,7 +295,7 @@ export function DealRoom({ id, urlKey, initialError }: { id: string; urlKey: str
         </dl>
         {deal.status === "held" && honorLeft && (
           <p className="mt-3 text-xs text-ink-500">
-            Guaranteed by PayPal for {honorLeft === "ended" ? "a little longer" : honorLeft}; Clasp renews it automatically, up to 29 days.
+            Guaranteed by PayPal for {honorLeft === "ended" ? "a little longer" : honorLeft}; Avowly renews it automatically, up to 29 days.
           </p>
         )}
         {deal.feeCents > 0 && (
@@ -458,10 +458,10 @@ export function DealRoom({ id, urlKey, initialError }: { id: string; urlKey: str
         <section className="space-y-3 rounded-[10px] border border-line bg-card p-5 text-center">
           <p className="font-serif text-2xl">Nobody had to trust anybody.</p>
           <p className="text-sm text-ink-500">
-            {role === "seller" ? "Share your proof. It's how the next buyer knows you're the real deal." : "Share the proof, or use Clasp for your next deal."}
+            {role === "seller" ? "Share your proof. It's how the next buyer knows you're the real deal." : "Share the proof, or use Avowly for your next deal."}
           </p>
           <ShareProof dealId={id} title={listing.title} />
-          <Link href="/new" className="btn-secondary">Sell or rent something with Clasp</Link>
+          <Link href="/new" className="btn-secondary">Sell or rent something with Avowly</Link>
         </section>
       )}
 
@@ -475,7 +475,7 @@ export function DealRoom({ id, urlKey, initialError }: { id: string; urlKey: str
               {busy === "defend" ? "Checking PayPal for disputes…" : "Check for disputes and send the record"}
             </button>
           )}
-          <p className="text-xs text-ink-500">If the buyer ever opens a PayPal dispute, Clasp sends this record to PayPal automatically.</p>
+          <p className="text-xs text-ink-500">If the buyer ever opens a PayPal dispute, Avowly sends this record to PayPal automatically.</p>
         </section>
       )}
 

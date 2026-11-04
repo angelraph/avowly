@@ -19,7 +19,7 @@ function pushConfigured(): boolean {
   const pub = process.env.VAPID_PUBLIC_KEY;
   const priv = process.env.VAPID_PRIVATE_KEY;
   vapidReady = !!(pub && priv);
-  if (vapidReady) webpush.setVapidDetails(process.env.VAPID_SUBJECT ?? "mailto:hello@clasp.app", pub!, priv!);
+  if (vapidReady) webpush.setVapidDetails(process.env.VAPID_SUBJECT ?? "https://avowly.vercel.app", pub!, priv!);
   return vapidReady;
 }
 
@@ -86,10 +86,10 @@ async function sendEmail(to: string | null | undefined, msg: Message, url: strin
     method: "POST",
     headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
     body: JSON.stringify({
-      from: process.env.EMAIL_FROM ?? "Clasp <onboarding@resend.dev>",
+      from: process.env.EMAIL_FROM ?? "Avowly <onboarding@resend.dev>",
       to: [to],
       subject: msg.title,
-      html: `<div style="font-family:system-ui,sans-serif;max-width:480px"><h2 style="margin:0 0 8px">${escapeHtml(msg.title)}</h2><p style="color:#363c4a">${escapeHtml(msg.body)}</p><p><a href="${url}" style="display:inline-block;background:#11141b;color:#fff;padding:12px 18px;border-radius:12px;text-decoration:none">Open in Clasp</a></p><p style="color:#6b7385;font-size:12px">Clasp: money moves only when the thing does.</p></div>`,
+      html: `<div style="font-family:system-ui,sans-serif;max-width:480px"><h2 style="margin:0 0 8px">${escapeHtml(msg.title)}</h2><p style="color:#363c4a">${escapeHtml(msg.body)}</p><p><a href="${url}" style="display:inline-block;background:#11141b;color:#fff;padding:12px 18px;border-radius:12px;text-decoration:none">Open in Avowly</a></p><p style="color:#6b7385;font-size:12px">Avowly: money moves only when the thing does.</p></div>`,
     }),
   });
   if (!res.ok) console.error("Email failed", res.status, await res.text());

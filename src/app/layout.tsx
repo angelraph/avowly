@@ -12,7 +12,7 @@ const newsreader = Newsreader({ variable: "--font-newsreader", subsets: ["latin"
 
 export const metadata: Metadata = {
   metadataBase: new URL(env.appUrl()),
-  title: "Clasp: pay strangers like you trust them",
+  title: "Avowly: pay strangers like you trust them",
   description:
     "PayPal holds the money. AI checks the item at the handoff. Money moves only when the thing does.",
 };
@@ -47,7 +47,7 @@ const footer = [
       ["Docs", "/docs"],
       ["Privacy", "/privacy"],
       ["Terms", "/terms"],
-      ["Source code", "https://github.com/angelraph/clasp"],
+      ["Source code", "https://github.com/angelraph/avowly"],
     ],
   },
 ];
@@ -58,7 +58,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body className={`${geistSans.variable} ${geistMono.variable} ${newsreader.variable} font-sans antialiased`}>
         <header className="sticky top-0 z-30 border-b border-line/70 bg-paper/80 backdrop-blur">
           <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
-            <Link href="/" aria-label="Clasp home">
+            <Link href="/" aria-label="Avowly home">
               <Logo size={26} />
             </Link>
             <nav className="flex items-center gap-1 text-sm">
@@ -98,7 +98,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             ))}
           </div>
           <div className="mx-auto max-w-6xl px-4 pb-10 text-xs text-ink-500">
-            Clasp is a hackathon prototype running on the PayPal sandbox. No real money moves. PayPal is a trademark of PayPal, Inc.; Clasp is not
+            Avowly is a hackathon prototype running on the PayPal sandbox. No real money moves. PayPal is a trademark of PayPal, Inc.; Avowly is not
             affiliated with or endorsed by PayPal.
           </div>
         </footer>

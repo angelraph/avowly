@@ -14,7 +14,7 @@ export const GET = handler(async (req: Request, { params }: RouteCtx) => {
   return new Response(Buffer.from(pdf), {
     headers: {
       "Content-Type": "application/pdf",
-      "Content-Disposition": `attachment; filename="clasp-handoff-record-${deal.id}.pdf"`,
+      "Content-Disposition": `attachment; filename="avowly-handoff-record-${deal.id}.pdf"`,
     },
   });
 });

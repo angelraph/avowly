@@ -5,7 +5,7 @@ import { Mark } from "@/components/Logo";
 import { ItemSketch } from "./ItemSketch";
 
 const SERIAL = "3569 3803 5643 809";
-const SCENES = ["listing", "clasped", "scan", "matched"] as const;
+const SCENES = ["listing", "held", "scan", "matched"] as const;
 type Scene = (typeof SCENES)[number];
 
 function Status({ tone, children }: { tone: "brass" | "matched" | "ink"; children: React.ReactNode }) {
@@ -19,7 +19,7 @@ function Status({ tone, children }: { tone: "brass" | "matched" | "ink"; childre
   );
 }
 
-/** A phone that plays the whole Clasp flow on a loop: listed, clasped, scanned, matched. */
+/** A phone that plays the whole Avowly flow on a loop: listed, held, scanned, matched. */
 export function FlowPhone() {
   const [i, setI] = useState(0);
   const [typed, setTyped] = useState(0);
@@ -62,9 +62,9 @@ export function FlowPhone() {
             <div className="mt-3 rounded-[10px] bg-ink-900 py-2.5 text-center text-sm font-medium text-paper">Pay into a hold</div>
           </div>
 
-          {/* clasped */}
-          <div className={`absolute inset-x-0 top-12 px-4 transition-all duration-700 ${scene === "clasped" ? "opacity-100" : "pointer-events-none translate-y-2 opacity-0"}`}>
-            <Status tone="brass">Clasped</Status>
+          {/* held */}
+          <div className={`absolute inset-x-0 top-12 px-4 transition-all duration-700 ${scene === "held" ? "opacity-100" : "pointer-events-none translate-y-2 opacity-0"}`}>
+            <Status tone="brass">Held</Status>
             <p className="amount mt-3 text-5xl">$262.50</p>
             <p className="mt-1 text-sm text-ink-500">held by PayPal, not charged</p>
             <dl className="mt-6 space-y-2 border-t border-line pt-4 text-sm">

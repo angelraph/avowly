@@ -7,12 +7,12 @@ export const FAQ: FaqGroup[] = [
     title: "The basics",
     items: [
       {
-        q: "What is Clasp?",
-        a: "Clasp is a way to buy, sell or rent things from strangers without either side having to trust the other. The buyer's money is held by PayPal, not charged, and released to the seller only when the item in the buyer's hands is proven to be the item that was listed.",
+        q: "What is Avowly?",
+        a: "Avowly is a way to buy, sell or rent things from strangers without either side having to trust the other. The buyer's money is held by PayPal, not charged, and released to the seller only when the item in the buyer's hands is proven to be the item that was listed.",
       },
       {
         q: "How is this different from an escrow app?",
-        a: "In a normal escrow app a person taps \"received\" and the money moves on their word. In Clasp the item itself releases the payment: the serial number or unique marks recorded when it was listed must match what the buyer scans at the handoff. A swapped, fake or locked device can't pass.",
+        a: "In a normal escrow app a person taps \"received\" and the money moves on their word. In Avowly the item itself releases the payment: the serial number or unique marks recorded when it was listed must match what the buyer scans at the handoff. A swapped, fake or locked device can't pass.",
       },
       {
         q: "What does it cost?",
@@ -20,11 +20,11 @@ export const FAQ: FaqGroup[] = [
       },
       {
         q: "What is the free scam check?",
-        a: "Paste any listing or the seller's messages, or add a screenshot, and Clasp looks for the warning signs of a scam and compares the price with live retail offers. There's no sign-up and we don't store what you send, only the verdict. No warning signs doesn't prove a listing is safe, which is why you can ask the seller to verify with Clasp.",
+        a: "Paste any listing or the seller's messages, or add a screenshot, and Avowly looks for the warning signs of a scam and compares the price with live retail offers. There's no sign-up and we don't store what you send, only the verdict. No warning signs doesn't prove a listing is safe, which is why you can ask the seller to verify with Avowly.",
       },
       {
         q: "Is this real money?",
-        a: "Not yet. Clasp is a prototype running on the PayPal sandbox, PayPal's test environment. Every payment step is a real PayPal API call, but with test accounts and test money.",
+        a: "Not yet. Avowly is a prototype running on the PayPal sandbox, PayPal's test environment. Every payment step is a real PayPal API call, but with test accounts and test money.",
       },
     ],
   },
@@ -37,7 +37,7 @@ export const FAQ: FaqGroup[] = [
       },
       {
         q: "What if it's not the item that was listed?",
-        a: "Clasp shows a mismatch, for example a different IMEI, and the money stays held. You can scan again or cancel, and cancelling releases the hold with nothing charged.",
+        a: "Avowly shows a mismatch, for example a different IMEI, and the money stays held. You can scan again or cancel, and cancelling releases the hold with nothing charged.",
       },
       {
         q: "What if the seller never shows up?",
@@ -45,7 +45,7 @@ export const FAQ: FaqGroup[] = [
       },
       {
         q: "How do I avoid a fake IMEI screenshot?",
-        a: "Check the device in your hands, not one the seller shows you. Dial *#06# on it yourself and scan that screen. For phones, Clasp also asks for the Find My or Find Hub screen showing the anti-theft lock is off, so you don't buy a locked device.",
+        a: "Check the device in your hands, not one the seller shows you. Dial *#06# on it yourself and scan that screen. For phones, Avowly also asks for the Find My or Find Hub screen showing the anti-theft lock is off, so you don't buy a locked device.",
       },
     ],
   },
@@ -54,7 +54,7 @@ export const FAQ: FaqGroup[] = [
     items: [
       {
         q: "When do I get paid?",
-        a: "The moment the buyer's scan matches and they release the payment, Clasp captures it and sends your full price to your PayPal account. You'll get a notification when PayPal confirms the payout.",
+        a: "The moment the buyer's scan matches and they release the payment, Avowly captures it and sends your full price to your PayPal account. You'll get a notification when PayPal confirms the payout.",
       },
       {
         q: "Why the code on paper?",
@@ -62,11 +62,11 @@ export const FAQ: FaqGroup[] = [
       },
       {
         q: "My item has no serial number. Can I still sell it?",
-        a: "Yes. Clasp records marks unique to your exact item, like a scuff, a sticker or wear in a particular place, and the buyer's scan must show them. Add close-ups when you list.",
+        a: "Yes. Avowly records marks unique to your exact item, like a scuff, a sticker or wear in a particular place, and the buyer's scan must show them. Add close-ups when you list.",
       },
       {
         q: "What if the buyer disputes the payment later?",
-        a: "Clasp keeps a handoff record: your possession photo, the match result, the photos and the full PayPal timeline. If the buyer opens a PayPal dispute, Clasp sends that record to PayPal as evidence automatically.",
+        a: "Avowly keeps a handoff record: your possession photo, the match result, the photos and the full PayPal timeline. If the buyer opens a PayPal dispute, Avowly sends that record to PayPal as evidence automatically.",
       },
     ],
   },
@@ -99,8 +99,8 @@ export const FAQ: FaqGroup[] = [
         a: "Photos are private by default. Only shots the AI judges free of serial numbers, phone numbers, faces, documents and screens appear on the public listing. Everything else is visible only to the people in the deal.",
       },
       {
-        q: "Does Clasp see my card or bank details?",
-        a: "No. You pay inside PayPal. Clasp only receives the PayPal order and authorization, never your card, bank account or PayPal password.",
+        q: "Does Avowly see my card or bank details?",
+        a: "No. You pay inside PayPal. Avowly only receives the PayPal order and authorization, never your card, bank account or PayPal password.",
       },
       {
         q: "Can an AI shopping agent buy something for me?",

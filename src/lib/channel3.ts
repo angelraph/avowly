@@ -1,5 +1,5 @@
 /**
- * Channel3: live product data across retailers. Clasp uses it to give every listing a
+ * Channel3: live product data across retailers. Avowly uses it to give every listing a
  * market price check and to confirm the photos show what the title claims.
  */
 import type { Listing } from "./db/schema";

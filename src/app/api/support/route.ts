@@ -14,7 +14,7 @@ const body = z.object({
   message: z.string().trim().min(10, "Tell us a little more (10+ characters)").max(4000),
 });
 
-/** Accepts a deal ID or any Clasp deal/proof URL and returns the deal ID, if it exists. */
+/** Accepts a deal ID or any Avowly deal/proof URL and returns the deal ID, if it exists. */
 async function resolveDeal(input: string): Promise<string | null> {
   const id = input.match(/\/(?:d|p)\/([a-z0-9]{12})/)?.[1] ?? (/^[a-z0-9]{12}$/.test(input) ? input : null);
   if (!id) return null;
@@ -42,7 +42,7 @@ export const POST = handler(async (req: Request) => {
       method: "POST",
       headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, "Content-Type": "application/json" },
       body: JSON.stringify({
-        from: process.env.EMAIL_FROM ?? "Clasp <onboarding@resend.dev>",
+        from: process.env.EMAIL_FROM ?? "Avowly <onboarding@resend.dev>",
         to: [to],
         reply_to: email,
         subject: `[${id}] ${topic}${dealId ? ` · deal ${dealId}` : ""}`,

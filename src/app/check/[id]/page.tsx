@@ -20,8 +20,8 @@ async function load(id: string) {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   const row = await load(id);
-  if (!row) return { title: "Clasp" };
-  const title = `${row.headline} · Clasp scam check`;
+  if (!row) return { title: "Avowly" };
+  const title = `${row.headline} · Avowly scam check`;
   return { title, description: "Free check for the warning signs of a marketplace scam.", openGraph: { title, type: "website" } };
 }
 
@@ -37,7 +37,7 @@ export default async function CheckResultPage({ params }: Props) {
   if (!row) notFound();
   const t = TONE[row.level] ?? TONE.caution;
   const verifyUrl = `${env.appUrl()}/new`;
-  const message = `Before I pay, can you verify the item with Clasp? It takes 2 minutes and it's free for you: you prove you have it, PayPal holds my money, and you're paid at the handoff as soon as it checks out. ${verifyUrl}`;
+  const message = `Before I pay, can you verify the item with Avowly? It takes 2 minutes and it's free for you: you prove you have it, PayPal holds my money, and you're paid at the handoff as soon as it checks out. ${verifyUrl}`;
 
   return (
     <div className="mx-auto max-w-xl space-y-6 px-4 pb-10 pt-8">
@@ -61,7 +61,7 @@ export default async function CheckResultPage({ params }: Props) {
       <section className="rounded-[10px] border border-line bg-card p-6">
         <h2 className="text-xl font-semibold tracking-tight">Don&apos;t guess. Ask the seller to prove it.</h2>
         <p className="mt-2 text-ink-500">
-          With Clasp, the seller proves they have the item, PayPal holds your money, and they&apos;re paid only when the item in your hands checks out. A real
+          With Avowly, the seller proves they have the item, PayPal holds your money, and they&apos;re paid only when the item in your hands checks out. A real
           seller loses nothing. A scammer can&apos;t do it.
         </p>
         <p className="mt-4 rounded-[10px] border border-line bg-paper p-3 text-sm text-ink-700">{message}</p>

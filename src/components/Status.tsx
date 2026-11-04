@@ -27,7 +27,7 @@ export function Status({ tone, children, pulse = false }: { tone: Tone; children
 /** Deal status → the word and tone shown everywhere. */
 export const DEAL_STATUS: Record<string, { word: string; tone: Tone; line: string }> = {
   awaiting_payment: { word: "Awaiting payment", tone: "muted", line: "Waiting for the buyer to approve in PayPal" },
-  held: { word: "Clasped", tone: "brass", line: "Held by PayPal, not charged" },
+  held: { word: "Held", tone: "brass", line: "Held by PayPal, not charged" },
   releasing: { word: "Releasing", tone: "brass", line: "Paying the seller" },
   released: { word: "Released", tone: "matched", line: "Matched and paid to the seller" },
   picking_up: { word: "Recording", tone: "brass", line: "Recording pickup condition" },

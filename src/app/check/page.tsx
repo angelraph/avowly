@@ -3,7 +3,7 @@ import { RISK_FLAGS } from "@/lib/policy";
 import { CheckForm } from "./CheckForm";
 
 export const metadata: Metadata = {
-  title: "Is this listing a scam? Free check · Clasp",
+  title: "Is this listing a scam? Free check · Avowly",
   description: "Paste a listing or the seller's messages and get an instant check for the warning signs of a marketplace scam. Free, no sign-up, nothing stored.",
 };
 

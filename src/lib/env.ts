@@ -17,8 +17,8 @@ export const env = {
    */
   paypalSettlement: () =>
     (process.env.PAYPAL_SETTLEMENT ?? "platform_payout") as "direct_payee" | "platform_payout",
-  /** Buyer-paid protection fee in basis points (500 = 5%). Only charged when Clasp is the payee. */
-  claspFeeBps: () => Number(process.env.CLASP_FEE_BPS ?? 500),
+  /** Buyer-paid protection fee in basis points (500 = 5%). Only charged when Avowly is the payee. */
+  avowlyFeeBps: () => Number(process.env.AVOWLY_FEE_BPS ?? 500),
   openaiApiKey: () => required("OPENAI_API_KEY"),
   openaiModel: () => process.env.OPENAI_MODEL ?? "gpt-6.1-sol",
   /** Public base URL: APP_URL if set to a real host, else Vercel's production domain, else localhost. */

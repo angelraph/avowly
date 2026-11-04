@@ -9,7 +9,7 @@ export function ShareListing({ listingId, title, compact = false }: { listingId:
     const url = `${window.location.origin}/l/${listingId}`;
     if (navigator.share) {
       try {
-        await navigator.share({ title, text: `${title}: verified with Clasp. Pay into a PayPal hold.`, url });
+        await navigator.share({ title, text: `${title}: verified with Avowly. Pay into a PayPal hold.`, url });
         return;
       } catch {
         // cancelled

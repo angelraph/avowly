@@ -51,7 +51,7 @@ export const POST = handler(async (req: Request, { params }: RouteCtx) => {
   await updateDeal(id, { status: "returned", decision, returnInspection: { reading, photoIds: ids } });
   await logEvent({ dealId: id, type: `rental.return_${verdict.verdict}`, payload: { reading, verdict } });
   notifyLater("buyer", listing, deal, verdict.totalCents > 0
-    ? { title: `Return checked: ${formatMoney(verdict.totalCents)} in agreed charges`, body: `${verdict.charges.map((c) => c.reason).join("; ")}. ${formatMoney(verdict.releasedCents)} of your deposit will be released. See the photos in Clasp.` }
+    ? { title: `Return checked: ${formatMoney(verdict.totalCents)} in agreed charges`, body: `${verdict.charges.map((c) => c.reason).join("; ")}. ${formatMoney(verdict.releasedCents)} of your deposit will be released. See the photos in Avowly.` }
     : { title: "Return checked: no new damage", body: `Your full ${formatMoney(listing.depositCents)} deposit for "${listing.title}" will be released.` });
   return decision;
 });

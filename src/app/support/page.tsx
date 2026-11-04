@@ -4,7 +4,7 @@ import { DocPage } from "@/components/DocPage";
 import { SupportForm } from "@/components/SupportForm";
 
 export const metadata: Metadata = {
-  title: "Help center · Clasp",
+  title: "Help center · Avowly",
   description: "Step-by-step guides for listing, paying, scanning at the handoff, rentals, notifications and disputes, and a way to reach support.",
 };
 
@@ -45,7 +45,7 @@ export default function SupportPage() {
   return (
     <DocPage
       eyebrow="Help center"
-      title="How to use Clasp, step by step."
+      title="How to use Avowly, step by step."
       lead={
         <>
           Short guides for every moment of a deal. Looking for quick answers? Try the <Link href="/faq" className="text-brass-ink underline underline-offset-4">FAQ</Link>.
@@ -58,7 +58,7 @@ export default function SupportPage() {
           <Steps
             items={[
               <>Tap <strong>Sell or rent</strong>, describe the item, set a price and where you&apos;ll meet. Use the PayPal email you want to be paid at.</>,
-              <>Clasp shows a <strong>one-time code</strong>. Write it on paper and photograph it next to the item.</>,
+              <>Avowly shows a <strong>one-time code</strong>. Write it on paper and photograph it next to the item.</>,
               <>Add close-ups of what makes it unique: a serial number or IMEI (on a phone, dial <code className="serial rounded border border-line bg-card px-1">*#06#</code>), and any scratches or marks.</>,
               <>Tap <strong>Verify with AI</strong>. Personal information in your photos, like phone numbers or names, is blurred automatically before anything is saved.</>,
               <>Share your listing link anywhere you sell: Marketplace, Craigslist, Reddit or WhatsApp.</>,
@@ -88,9 +88,9 @@ export default function SupportPage() {
         </Guide>
 
         <Guide id="no-match" title="If it doesn't match">
-          <div className="prose-clasp mt-4">
+          <div className="prose-avowly mt-4">
             <p><strong>Mismatch</strong> means the serial in your hands isn&apos;t the one on the listing. Don&apos;t release. Ask about it, scan again if you think the photo was unclear, or cancel. Cancelling releases the hold and nothing is charged.</p>
-            <p><strong>One more photo</strong> means Clasp couldn&apos;t read something clearly, or still needs the lock screen. Take a closer, sharper photo in good light. Earlier matches in the same deal are remembered for an hour.</p>
+            <p><strong>One more photo</strong> means Avowly couldn&apos;t read something clearly, or still needs the lock screen. Take a closer, sharper photo in good light. Earlier matches in the same deal are remembered for an hour.</p>
             <p><strong>Locked</strong> means the anti-theft lock is on. Ask the seller to sign out of the device and turn it off before you pay.</p>
           </div>
         </Guide>
@@ -100,25 +100,25 @@ export default function SupportPage() {
             items={[
               <>Owners list the item with a deposit and a short price list for missing accessories or specific damage. Renters see it before paying.</>,
               <>At pickup the renter photographs the item and every accessory. That records what they received, and the rental fee is paid.</>,
-              <>At return the owner scans it back in. Clasp compares it with the pickup photos and charges only confident findings from the agreed list. The rest of the deposit is released.</>,
+              <>At return the owner scans it back in. Avowly compares it with the pickup photos and charges only confident findings from the agreed list. The rest of the deposit is released.</>,
             ]}
           />
         </Guide>
 
         <Guide id="notifications" title="Notifications">
-          <div className="prose-clasp mt-4">
+          <div className="prose-avowly mt-4">
             <p>Tap <strong>Notify me</strong> on your listing or deal to get alerts when a buyer pays, an item matches, you&apos;re paid, or your deposit is back.</p>
             <ul>
               <li><strong>Android and desktop:</strong> allow notifications when your browser asks.</li>
-              <li><strong>iPhone:</strong> tap Share, then <em>Add to Home Screen</em>, open Clasp from your home screen, then tap Notify me. iOS only allows web notifications for apps added this way.</li>
+              <li><strong>iPhone:</strong> tap Share, then <em>Add to Home Screen</em>, open Avowly from your home screen, then tap Notify me. iOS only allows web notifications for apps added this way.</li>
             </ul>
           </div>
         </Guide>
 
         <Guide id="disputes" title="Disputes">
-          <div className="prose-clasp mt-4">
+          <div className="prose-avowly mt-4">
             <p>Every completed deal has a <strong>handoff record</strong>: the possession photo, the match result, the photos and the full PayPal timeline. Either side can download it from the deal room.</p>
-            <p>If a buyer opens a PayPal dispute, Clasp sends that record to PayPal as evidence automatically. Sellers can also tap <strong>Check for disputes and send the record</strong> at any time.</p>
+            <p>If a buyer opens a PayPal dispute, Avowly sends that record to PayPal as evidence automatically. Sellers can also tap <strong>Check for disputes and send the record</strong> at any time.</p>
           </div>
         </Guide>
 

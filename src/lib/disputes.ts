@@ -1,6 +1,6 @@
 /**
- * Dispute defense: when a buyer disputes a Clasp payment, the handoff record already
- * exists, so Clasp submits it as evidence the moment PayPal asks the seller to respond.
+ * Dispute defense: when a buyer disputes an Avowly payment, the handoff record already
+ * exists, so Avowly submits it as evidence the moment PayPal asks the seller to respond.
  */
 import { and, eq, sql } from "drizzle-orm";
 import { getDb, schema } from "./db";
@@ -41,7 +41,7 @@ function requestedEvidenceType(dispute: paypal.Dispute): string {
   return requested?.evidence_type ?? "OTHER";
 }
 
-export type DefenseResult = { disputeId: string; dealId: string | null; outcome: "submitted" | "recorded" | "already_submitted" | "not_clasp" };
+export type DefenseResult = { disputeId: string; dealId: string | null; outcome: "submitted" | "recorded" | "already_submitted" | "not_avowly" };
 
 export async function defendDispute(disputeId: string): Promise<DefenseResult> {
   const dispute = await paypal.getDispute(disputeId);
@@ -51,7 +51,7 @@ export async function defendDispute(disputeId: string): Promise<DefenseResult> {
     dealId = await findDealIdByCaptureId(id);
     if (dealId) break;
   }
-  if (!dealId) return { disputeId, dealId: null, outcome: "not_clasp" };
+  if (!dealId) return { disputeId, dealId: null, outcome: "not_avowly" };
 
   await logEvent({
     dealId,
@@ -68,19 +68,19 @@ export async function defendDispute(disputeId: string): Promise<DefenseResult> {
   const evidenceType = requestedEvidenceType(dispute);
   const notes =
     listing.mode === "sale"
-      ? `In-person handoff verified by Clasp. The seller proved possession with a one-time code before payment. At the meetup the buyer photographed the item; its identifier matched the listing, and the buyer pressed Release before any funds were captured. Full record with photos and PayPal timeline attached (deal ${deal.id}).`
-      : `Rental verified by Clasp. Condition and accessories were recorded by the renter at pickup and compared at return. Only charges from a price table the renter saw before paying were captured. Full record with photos and PayPal timeline attached (deal ${deal.id}).`;
+      ? `In-person handoff verified by Avowly. The seller proved possession with a one-time code before payment. At the meetup the buyer photographed the item; its identifier matched the listing, and the buyer pressed Release before any funds were captured. Full record with photos and PayPal timeline attached (deal ${deal.id}).`
+      : `Rental verified by Avowly. Condition and accessories were recorded by the renter at pickup and compared at return. Only charges from a price table the renter saw before paying were captured. Full record with photos and PayPal timeline attached (deal ${deal.id}).`;
 
   await paypal.provideDisputeEvidence({
     disputeId,
     evidenceType,
     notes,
-    file: { name: `clasp-handoff-record-${deal.id}.pdf`, mime: "application/pdf", data: pdf },
+    file: { name: `avowly-handoff-record-${deal.id}.pdf`, mime: "application/pdf", data: pdf },
   });
   await logEvent({ dealId, type: "dispute.evidence_submitted", payload: { disputeId, evidenceType, bytes: pdf.byteLength } });
   await notify("seller", listing, deal, {
     title: "Buyer opened a PayPal dispute. Your evidence is in",
-    body: `Clasp sent PayPal the handoff record for "${listing.title}": possession proof, the match result, photos and the full payment timeline.`,
+    body: `Avowly sent PayPal the handoff record for "${listing.title}": possession proof, the match result, photos and the full payment timeline.`,
   });
   return { disputeId, dealId, outcome: "submitted" };
 }

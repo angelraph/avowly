@@ -21,7 +21,7 @@ export const dynamic = "force-dynamic";
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
   const listing = await getListing(id).catch(() => null);
-  if (!listing) return { title: "Clasp" };
+  if (!listing) return { title: "Avowly" };
   const title = `${listing.title} · ${formatMoney(listing.priceCents)}${listing.mode === "rental" ? " rental" : ""}`;
   const description =
     listing.mode === "sale"
@@ -152,7 +152,7 @@ export default async function ListingPage({
             <div className="space-y-5">
               <Highlight
                 title="In the seller's hands"
-                body="Photographed beside a one-time code Clasp generated, so this isn't a picture from somewhere else."
+                body="Photographed beside a one-time code Avowly generated, so this isn't a picture from somewhere else."
               />
               {fp.identifiers.length > 0 ? (
                 <Highlight
@@ -180,7 +180,7 @@ export default async function ListingPage({
 
           {fp && (
             <div className="border-t border-line pt-6">
-              <h2 className="text-xl font-semibold tracking-tight">What Clasp verified</h2>
+              <h2 className="text-xl font-semibold tracking-tight">What Avowly verified</h2>
               <dl className="mt-4 grid gap-x-6 gap-y-3 text-sm sm:grid-cols-2">
                 {fp.make && (
                   <div className="flex justify-between gap-3 border-b border-line pb-2 sm:block sm:border-0 sm:pb-0">

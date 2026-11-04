@@ -3,8 +3,8 @@ import Link from "next/link";
 import { DocPage, StillStuck } from "@/components/DocPage";
 
 export const metadata: Metadata = {
-  title: "Trust & safety · Clasp",
-  description: "What Clasp verifies, what the AI can and can't do, how photos stay private, and the honest limits.",
+  title: "Trust & safety · Avowly",
+  description: "What Avowly verifies, what the AI can and can't do, how photos stay private, and the honest limits.",
 };
 
 const TOC = [
@@ -32,7 +32,7 @@ export default function TrustPage() {
     <DocPage
       eyebrow="Trust & safety"
       title="Built so nobody has to trust anybody."
-      lead="Clasp's job is to make a deal with a stranger as safe as one with a friend. Here's exactly how, and where the edges are."
+      lead="Avowly's job is to make a deal with a stranger as safe as one with a friend. Here's exactly how, and where the edges are."
       toc={TOC}
     >
       <div className="grid gap-3 sm:grid-cols-3">
@@ -41,17 +41,17 @@ export default function TrustPage() {
         <Pillar word="Private" title="Photos are cleaned" body="Other people's details are blurred before anything is saved." />
       </div>
 
-      <article className="prose-clasp mt-6">
+      <article className="prose-avowly mt-6">
         <h2 id="money">Who holds the money</h2>
         <p>
           PayPal does. When a buyer pays, PayPal places an <strong>authorization</strong> on their account: the money is reserved, not sent.
-          Clasp captures it only when the release rules are met, and pays the seller through PayPal Payouts. Clasp never sees card numbers,
+          Avowly captures it only when the release rules are met, and pays the seller through PayPal Payouts. Avowly never sees card numbers,
           bank details or PayPal passwords.
         </p>
 
         <h2 id="verify">What we verify</h2>
         <ul>
-          <li><strong>Possession.</strong> Sellers photograph the item beside a one-time code Clasp generates. A photo copied from elsewhere can&apos;t have it.</li>
+          <li><strong>Possession.</strong> Sellers photograph the item beside a one-time code Avowly generates. A photo copied from elsewhere can&apos;t have it.</li>
           <li><strong>Identity.</strong> Serials and IMEIs are read at listing and again from the item in the buyer&apos;s hands. IMEIs must pass their built-in checksum, so a misread digit doesn&apos;t count.</li>
           <li><strong>Unique marks.</strong> For items without serials, specific scratches, stickers or wear are recorded and must be seen again.</li>
           <li><strong>Locks.</strong> For phones and tablets, the Find My or Find Hub switch must be shown off before payment can be released.</li>
@@ -70,7 +70,7 @@ export default function TrustPage() {
 
         <h2 id="privacy">Your photos</h2>
         <p>
-          Before any photo is saved, Clasp blurs other people&apos;s personal information: phone numbers, contact names, call logs, messages,
+          Before any photo is saved, Avowly blurs other people&apos;s personal information: phone numbers, contact names, call logs, messages,
           emails and faces. It also strips hidden photo data like location. The unblurred original is never stored.
         </p>
         <p>
@@ -80,7 +80,7 @@ export default function TrustPage() {
 
         <h2 id="scams">Scams we stop</h2>
         <table>
-          <thead><tr><th>Scam</th><th>How Clasp stops it</th></tr></thead>
+          <thead><tr><th>Scam</th><th>How Avowly stops it</th></tr></thead>
           <tbody>
             <tr><td>Fake listing (item doesn&apos;t exist)</td><td>No possession photo with the one-time code, no verified listing.</td></tr>
             <tr><td>Deposit-first or send-first</td><td>Nobody sends anything. PayPal holds, and nothing moves before the handoff.</td></tr>
@@ -96,12 +96,12 @@ export default function TrustPage() {
           <li>Meet in a public, well-lit place. Many police stations offer safe-exchange spots.</li>
           <li>Hold the item yourself and scan it. On a phone, dial <code>*#06#</code> on the device in your hands.</li>
           <li>Never release payment before the deal room says <strong>Matched</strong>.</li>
-          <li>Never move the conversation to paying outside Clasp. If someone insists, walk away.</li>
+          <li>Never move the conversation to paying outside Avowly. If someone insists, walk away.</li>
         </ul>
 
         <h2 id="limits">Honest limits</h2>
         <ul>
-          <li>Clasp is a prototype on the PayPal sandbox; no real money moves yet.</li>
+          <li>Avowly is a prototype on the PayPal sandbox; no real money moves yet.</li>
           <li>The AI is not a certified inspector. It can misread, which is why low-confidence reads ask for another photo instead of deciding.</li>
           <li>A matching serial proves it&apos;s the listed item, not that every part works. Test the item at the meetup.</li>
           <li>Lock status is read from the device&apos;s own screen; carrier blacklist checks aren&apos;t included yet.</li>

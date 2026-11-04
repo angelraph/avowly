@@ -373,7 +373,7 @@ export function priceSignal(input: { askingCents: number; offerCents: number[] }
   const pct = Math.round((input.askingCents / referenceCents) * 100);
   const base = { referenceCents, offerCount, percentOfReference: pct };
   if (pct < 40) {
-    return { ...base, level: "too_low", message: "Far below the going rate. Scams often look like this, which is why Clasp holds the money until you check the item." };
+    return { ...base, level: "too_low", message: "Far below the going rate. Scams often look like this, which is why Avowly holds the money until you check the item." };
   }
   if (pct < 65) {
     return { ...base, level: "low", message: "A good deal compared with retail. Check the condition carefully at the handoff." };

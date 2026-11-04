@@ -3,8 +3,8 @@ import type { MetadataRoute } from "next";
 /** Installable app: required on iPhone for web push, and nicer on Android. */
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Clasp",
-    short_name: "Clasp",
+    name: "Avowly",
+    short_name: "Avowly",
     description: "Pay strangers like you trust them. PayPal holds the money; AI checks the item at the handoff.",
     start_url: "/",
     display: "standalone",

@@ -1,8 +1,8 @@
-# Clasp
+# Avowly
 
 **Pay strangers like you trust them.** PayPal holds the money. AI checks the item in the buyer's hands. The seller is paid the moment it's the real thing, and never if it isn't.
 
-**Live:** https://clasp-nine.vercel.app · **Judges:** [testing guide](docs/JUDGE_TESTING.md) · **Docs:** [/docs](https://clasp-nine.vercel.app/docs) · **Agents:** `https://clasp-nine.vercel.app/api/mcp`
+**Live:** https://avowly.vercel.app · **Judges:** [testing guide](docs/JUDGE_TESTING.md) · **Docs:** [/docs](https://avowly.vercel.app/docs) · **Agents:** `https://avowly.vercel.app/api/mcp`
 
 Runs on the PayPal sandbox. Every payment step is a real PayPal API call; no real money moves.
 
@@ -14,7 +14,7 @@ Buying from a stranger still runs on cash, hope and screenshots.
 - Reported US fraud losses reached **$12.5B** in 2024, with online shopping the second most reported category (FTC).
 - Cash and instant transfers protect nobody. Sellers fear "empty box" claims, buyers fear swapped or locked devices, and rental deposits are argued from memory.
 
-Escrow apps exist, but in each one I found, a person taps "received" and the money moves on their word. **In Clasp, the item itself releases the payment.**
+Escrow apps exist, but in each one I found, a person taps "received" and the money moves on their word. **In Avowly, the item itself releases the payment.**
 
 ## How it works
 
@@ -29,7 +29,7 @@ Escrow apps exist, but in each one I found, a person taps "received" and the mon
 One hold covers fee + protection + deposit. The fee is captured at pickup with `final_capture: false`. At return the AI compares the item with its pickup photos, and code charges only confident findings from a price list both sides saw up front, capped at the deposit. A clean return voids the rest.
 
 ### Self-spreading
-- **Free scam check** ([/check](https://clasp-nine.vercel.app/check)): paste any listing and get a verdict, plus a ready message asking the seller to verify with Clasp. The asking buyer recruits the seller.
+- **Free scam check** ([/check](https://avowly.vercel.app/check)): paste any listing and get a verdict, plus a ready message asking the seller to verify with Avowly. The asking buyer recruits the seller.
 - **Live badge and post kit:** sellers paste a verified link or badge into posts on any marketplace, and the badge shows the listing's real status.
 - **Proof pages and link previews:** every completed deal is a shareable, privacy-safe proof of a good seller.
 
@@ -80,14 +80,14 @@ The model reports what it sees, with a confidence. It never calls PayPal, never 
 Requires Node 20+, a PayPal sandbox app and an OpenAI key.
 
 ```bash
-git clone https://github.com/angelraph/clasp
-cd clasp
+git clone https://github.com/angelraph/avowly
+cd avowly
 npm install
 cp .env.example .env.local   # add your PayPal sandbox and OpenAI keys
 npm run dev
 ```
 
-Open http://localhost:3000. No database setup is needed: without `DATABASE_URL`, Clasp uses an embedded Postgres in `./.data`. Create US sandbox accounts as described in [SETUP.md](SETUP.md).
+Open http://localhost:3000. No database setup is needed: without `DATABASE_URL`, Avowly uses an embedded Postgres in `./.data`. Create US sandbox accounts as described in [SETUP.md](SETUP.md).
 
 ## Honest limits
 

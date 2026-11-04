@@ -3,8 +3,8 @@ import { DocPage, StillStuck } from "@/components/DocPage";
 import { FAQ } from "@/lib/faq";
 
 export const metadata: Metadata = {
-  title: "FAQ · Clasp",
-  description: "How Clasp holds money with PayPal and releases it only when the item checks out: buying, selling, renting, AI and privacy.",
+  title: "FAQ · Avowly",
+  description: "How Avowly holds money with PayPal and releases it only when the item checks out: buying, selling, renting, AI and privacy.",
 };
 
 const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");

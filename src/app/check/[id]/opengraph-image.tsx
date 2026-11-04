@@ -4,7 +4,7 @@ import { ogCard, OG_SIZE } from "@/lib/og";
 
 export const size = OG_SIZE;
 export const contentType = "image/png";
-export const alt = "Clasp scam check result";
+export const alt = "Avowly scam check result";
 
 export default async function Image({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -15,7 +15,7 @@ export default async function Image({ params }: { params: Promise<{ id: string }
     tone: row?.level === "high" ? "oxblood" : "brass",
     title: row?.headline ?? "Is this listing a scam?",
     line: row?.reasons[0] ?? "Check any marketplace listing for free.",
-    footer: "Free scam check by Clasp",
+    footer: "Free scam check by Avowly",
     photoId: null,
   });
 }

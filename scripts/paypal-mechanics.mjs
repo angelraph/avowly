@@ -1,5 +1,5 @@
 // Set SANDBOX_SELLER_EMAIL to a sandbox business account. 4111... is the standard test card number.
-// Exercises Clasp's money paths directly against the PayPal SANDBOX with a test card.
+// Exercises Avowly's money paths directly against the PayPal SANDBOX with a test card.
 const B = process.env.PAYPAL_API_BASE;
 const basic = Buffer.from(`${process.env.PAYPAL_CLIENT_ID}:${process.env.PAYPAL_CLIENT_SECRET}`).toString("base64");
 const tok = await (await fetch(`${B}/v1/oauth2/token`, { method: "POST", headers: { Authorization: `Basic ${basic}`, "Content-Type": "application/x-www-form-urlencoded" }, body: "grant_type=client_credentials" })).json();
@@ -70,7 +70,7 @@ if (a) {
   const br = c.j.seller_receivable_breakdown;
   console.log(`  capture: ${c.status} ${c.j.status ?? issue(c)} | PayPal fee ${br?.paypal_fee?.value} net ${br?.net_amount?.value}`);
   const p = await call("POST", "/v1/payments/payouts", {
-    sender_batch_header: { sender_batch_id: `mech-${run}`, email_subject: "Clasp sandbox test" },
+    sender_batch_header: { sender_batch_id: `mech-${run}`, email_subject: "Avowly sandbox test" },
     items: [{ recipient_type: "EMAIL", receiver: process.env.SANDBOX_SELLER_EMAIL, amount: { currency: "USD", value: "250.00" }, sender_item_id: `mech-${run}` }],
   });
   const id = p.j.batch_header?.payout_batch_id;

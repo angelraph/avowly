@@ -8,7 +8,7 @@ export type DB = NodePgDatabase<typeof schema>;
 const MIGRATIONS = path.join(process.cwd(), "drizzle");
 
 // One instance per server process; survives Next.js dev hot reloads.
-const globalForDb = globalThis as unknown as { claspDb?: Promise<DB> };
+const globalForDb = globalThis as unknown as { avowlyDb?: Promise<DB> };
 
 async function connect(): Promise<DB> {
   const url = process.env.DATABASE_URL;
@@ -41,13 +41,13 @@ async function connect(): Promise<DB> {
 }
 
 export function getDb(): Promise<DB> {
-  if (!globalForDb.claspDb) {
-    globalForDb.claspDb = connect().catch((err) => {
-      globalForDb.claspDb = undefined;
+  if (!globalForDb.avowlyDb) {
+    globalForDb.avowlyDb = connect().catch((err) => {
+      globalForDb.avowlyDb = undefined;
       throw err;
     });
   }
-  return globalForDb.claspDb;
+  return globalForDb.avowlyDb;
 }
 
 export { schema };

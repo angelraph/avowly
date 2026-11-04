@@ -22,9 +22,9 @@ function headline(p: NonNullable<Awaited<ReturnType<typeof loadProof>>>) {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   const p = await loadProof(id);
-  if (!p) return { title: "Clasp" };
+  if (!p) return { title: "Avowly" };
   const title = `${p.mode === "sale" ? "Verified sale" : "Verified rental"}: ${p.title}`;
-  return { title, description: `${headline(p)}. Verified with Clasp: money moves only when the thing does.`, openGraph: { title, type: "website" } };
+  return { title, description: `${headline(p)}. Verified with Avowly: money moves only when the thing does.`, openGraph: { title, type: "website" } };
 }
 
 function Step({ done, title, detail, at }: { done: boolean; title: string; detail: string; at: string | null }) {
@@ -59,7 +59,7 @@ export default async function ProofPage({ params }: Props) {
           <img src={`/api/photos/${p.coverPhotoId}`} alt="" className="h-56 w-full object-cover" />
         )}
         <div className="p-5">
-          <p className="text-sm font-medium text-ok-600">✓ Verified {p.mode === "sale" ? "sale" : "rental"} with Clasp</p>
+          <p className="text-sm font-medium text-ok-600">✓ Verified {p.mode === "sale" ? "sale" : "rental"} with Avowly</p>
           <h1 className="mt-1 text-2xl font-semibold">{p.title}</h1>
           <p className="mt-2 text-lg">{headline(p)}.</p>
           <p className="mt-1 text-sm text-ink-500">
@@ -71,7 +71,7 @@ export default async function ProofPage({ params }: Props) {
       </div>
 
       <div className="card">
-        <h2 className="font-semibold">What Clasp verified</h2>
+        <h2 className="font-semibold">What Avowly verified</h2>
         <ol className="mt-3 space-y-4">
           <Step done title="Seller proved they had it" detail="Photographed with a one-time code before anyone paid." at={p.verifiedAt} />
           <Step
@@ -99,10 +99,10 @@ export default async function ProofPage({ params }: Props) {
       <div className="card bg-ink-900 text-white">
         <h2 className="text-lg font-semibold">Buying, selling or renting with a stranger?</h2>
         <p className="mt-1 text-sm text-ink-300">
-          Clasp holds the money with PayPal and releases it only when the item checks out. Free for sellers.
+          Avowly holds the money with PayPal and releases it only when the item checks out. Free for sellers.
         </p>
         <div className="mt-4 grid grid-cols-2 gap-2">
-          <Link href="/new?mode=sale" className="btn bg-white text-ink-900 hover:bg-ink-100">Sell with Clasp</Link>
+          <Link href="/new?mode=sale" className="btn bg-white text-ink-900 hover:bg-ink-100">Sell with Avowly</Link>
           <Link href="/new?mode=rental" className="btn border border-white/30 text-white hover:bg-white/10">Rent out</Link>
         </div>
       </div>

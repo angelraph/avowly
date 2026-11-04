@@ -1,4 +1,4 @@
-/** A line drawing of the item: a used phone, back and side, with the wear Clasp records. */
+/** A line drawing of the item: a used phone, back and side, with the wear Avowly records. */
 export function ItemSketch({ className = "" }: { className?: string }) {
   return (
     <svg viewBox="0 0 200 240" className={className} fill="none" aria-hidden>

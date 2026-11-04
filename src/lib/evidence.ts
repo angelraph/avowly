@@ -1,5 +1,5 @@
 /**
- * Builds the "Clasp handoff record" PDF: what was listed, what was verified, what the
+ * Builds the "Avowly handoff record" PDF: what was listed, what was verified, what the
  * buyer scanned, and what PayPal did, with the photos. Used as dispute evidence and as
  * a downloadable record for the seller.
  */
@@ -88,11 +88,11 @@ const LABELS: Record<string, string> = {
 
 export async function buildEvidencePdf(deal: Deal, listing: Listing): Promise<Uint8Array> {
   const doc = await PDFDocument.create();
-  doc.setTitle(`Clasp handoff record ${deal.id}`);
-  doc.setProducer("Clasp");
+  doc.setTitle(`Avowly handoff record ${deal.id}`);
+  doc.setProducer("Avowly");
   const w = new Writer(doc, await doc.embedFont(StandardFonts.Helvetica), await doc.embedFont(StandardFonts.HelveticaBold));
 
-  w.text("Clasp handoff record", { size: 20, bold: true });
+  w.text("Avowly handoff record", { size: 20, bold: true });
   w.text(`Deal ${deal.id} - generated ${new Date().toISOString()}`, { size: 9, color: [0.4, 0.43, 0.5] });
   w.gap(10);
   w.text(listing.mode === "sale" ? "Sale" : "Rental", { bold: true, size: 12 });
@@ -105,7 +105,7 @@ export async function buildEvidencePdf(deal: Deal, listing: Listing): Promise<Ui
   const fp = listing.fingerprint;
   w.text("1. Seller possession verified at listing", { bold: true, size: 12 });
   w.text(
-    `On ${listing.verifiedAt?.toISOString() ?? "unknown"} the seller photographed the item next to the one-time code "${listing.possessionCode}", which Clasp generated for this listing. The code was read from the photo and matched.`,
+    `On ${listing.verifiedAt?.toISOString() ?? "unknown"} the seller photographed the item next to the one-time code "${listing.possessionCode}", which Avowly generated for this listing. The code was read from the photo and matched.`,
   );
   if (fp) {
     if (fp.identifiers.length) w.text(`Identifiers read: ${fp.identifiers.map((i) => `${i.kind} ${i.value}`).join(", ")}`);

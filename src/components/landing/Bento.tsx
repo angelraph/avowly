@@ -59,7 +59,7 @@ export function HoldCard() {
     <Card title="Held, not charged" body="The buyer approves in PayPal. The money waits in a hold until the item checks out.">
       <div className="mx-6 mb-6 w-full rounded-[10px] border border-line bg-paper p-5">
         <div className="flex items-center justify-between">
-          <span className="status text-brass-ink"><span className="h-1.5 w-1.5 animate-pulse rounded-full bg-brass" />Clasped</span>
+          <span className="status text-brass-ink"><span className="h-1.5 w-1.5 animate-pulse rounded-full bg-brass" />Held</span>
           <span className="serial text-ink-500">AUTH 8MF54…482J</span>
         </div>
         <p className="amount mt-3 text-4xl">$262.50</p>
@@ -133,7 +133,7 @@ export function DepositCard() {
 /** The handoff record, filed with PayPal if a buyer disputes later. */
 export function RecordCard() {
   return (
-    <Card title="Your proof, already filed" body="If a buyer disputes later, Clasp sends PayPal the record: possession photo, match, and the payment timeline.">
+    <Card title="Your proof, already filed" body="If a buyer disputes later, Avowly sends PayPal the record: possession photo, match, and the payment timeline.">
       <div className="relative mx-6 mb-0 h-44 w-full">
         {[2, 1, 0].map((k) => (
           <div
@@ -143,7 +143,7 @@ export function RecordCard() {
           >
             {k === 0 && (
               <>
-                <p className="font-serif text-lg">Clasp handoff record</p>
+                <p className="font-serif text-lg">Avowly handoff record</p>
                 <div className="mt-3 space-y-1.5">
                   {[90, 70, 82, 55].map((w, j) => (
                     <div key={j} className="h-1.5 rounded-full bg-ink-100" style={{ width: `${w}%` }} />

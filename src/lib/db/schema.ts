@@ -66,9 +66,9 @@ export const deals = pgTable("deals", {
   authorizedCents: integer("authorized_cents").notNull(),
   authorizedAt: timestamp("authorized_at", { withTimezone: true }),
   capturedCents: integer("captured_cents").notNull().default(0),
-  // Buyer-paid Clasp protection fee, included in the hold and captured with the first capture.
+  // Buyer-paid Avowly protection fee, included in the hold and captured with the first capture.
   feeCents: integer("fee_cents").notNull().default(0),
-  // What actually reached the seller (captures minus Clasp's fee).
+  // What actually reached the seller (captures minus Avowly's fee).
   paidOutCents: integer("paid_out_cents").notNull().default(0),
   // awaiting_payment -> held -> (sale) released | (rental) active -> returned -> settled; voided at any point
   status: text("status").notNull().default("awaiting_payment"),

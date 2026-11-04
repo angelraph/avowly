@@ -54,7 +54,7 @@ export function PayButton({ listingId }: { listingId: string }) {
       if (!res.ok) throw new Error(data.error ?? "Couldn't start payment");
       deal.current = { dealId: data.dealId, buyerKey: data.buyerKey };
       try {
-        localStorage.setItem(`clasp:deal:${data.dealId}`, data.buyerKey);
+        localStorage.setItem(`avowly:deal:${data.dealId}`, data.buyerKey);
       } catch {}
       return { orderId: data.orderId };
     }

@@ -38,7 +38,7 @@ export function MarketCard({ market, askingCents, isSeller }: { market: MarketCh
         <ul className="mt-3 divide-y divide-ink-200/60">
           {offers.map((o) => (
             <li key={o.url} className="flex justify-between gap-3 py-1.5">
-              <a href={o.url} target="_blank" rel="noreferrer nofollow" className="truncate text-clasp-600">
+              <a href={o.url} target="_blank" rel="noreferrer nofollow" className="truncate text-avowly-600">
                 {o.domain}
               </a>
               <span className="shrink-0">

@@ -4,8 +4,8 @@ import { DocPage } from "@/components/DocPage";
 import { env } from "@/lib/env";
 
 export const metadata: Metadata = {
-  title: "Docs · Clasp",
-  description: "How Clasp is built: PayPal authorization and capture, the AI/policy boundary, photo privacy, webhooks, disputes, payouts and the MCP server for agents.",
+  title: "Docs · Avowly",
+  description: "How Avowly is built: PayPal authorization and capture, the AI/policy boundary, photo privacy, webhooks, disputes, payouts and the MCP server for agents.",
 };
 
 const TOC = [
@@ -28,7 +28,7 @@ function Diagram() {
   const box = "fill-card stroke-line";
   return (
     <figure className="not-prose my-6 overflow-x-auto rounded-[10px] border border-line bg-paper p-4">
-      <svg viewBox="0 0 760 320" className="min-w-[640px]" role="img" aria-label="Clasp architecture">
+      <svg viewBox="0 0 760 320" className="min-w-[640px]" role="img" aria-label="Avowly architecture">
         <defs>
           <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
             <path d="M0 0 L10 5 L0 10 z" fill="#6F6A62" />
@@ -40,7 +40,7 @@ function Diagram() {
           <text x="75" y="158" textAnchor="middle" fill="#6F6A62">camera · PayPal JS v6</text>
 
           <rect x="200" y="20" width="200" height="260" rx="10" className={box} />
-          <text x="300" y="44" textAnchor="middle" fontWeight="600">Clasp (Next.js)</text>
+          <text x="300" y="44" textAnchor="middle" fontWeight="600">Avowly (Next.js)</text>
           {[
             ["Privacy redaction", 70],
             ["Vision reading", 112],
@@ -95,19 +95,19 @@ export default function DocsPage() {
   return (
     <DocPage
       eyebrow="Docs"
-      title="How Clasp works under the hood."
+      title="How Avowly works under the hood."
       lead="For developers and judges: the PayPal flows, where the AI stops and plain rules take over, how photos stay private, and how agents connect."
       toc={TOC}
     >
-      <article className="prose-clasp">
+      <article className="prose-avowly">
         <h2 id="overview">Overview</h2>
         <p>
-          Clasp ties a PayPal payment to a physical item. The buyer&apos;s money is <strong>authorized, not captured</strong>. It&apos;s captured
+          Avowly ties a PayPal payment to a physical item. The buyer&apos;s money is <strong>authorized, not captured</strong>. It&apos;s captured
           only after the item in the buyer&apos;s hands is proven to be the one that was listed: the same serial or IMEI, or the same unique
           marks. Sales use one handoff; rentals use two (pickup and return) against a fee-plus-deposit hold.
         </p>
         <p>
-          Source: <a href="https://github.com/angelraph/clasp">github.com/angelraph/clasp</a> (MIT). Stack: Next.js 15, TypeScript, Drizzle on
+          Source: <a href="https://github.com/angelraph/avowly">github.com/angelraph/avowly</a> (MIT). Stack: Next.js 15, TypeScript, Drizzle on
           Postgres (Neon in production, embedded PGlite locally), the OpenAI Responses API with strict structured outputs, PayPal REST APIs and
           JS SDK v6, sharp for image processing, web push.
         </p>
@@ -127,7 +127,7 @@ export default function DocsPage() {
           </tbody>
         </table>
         <p>
-          Holds are honored for 3 days. After that Clasp reauthorizes (allowed to day 29) before capturing. Every money call carries a
+          Holds are honored for 3 days. After that Avowly reauthorizes (allowed to day 29) before capturing. Every money call carries a
           <code>PayPal-Request-Id</code>, and each step is guarded by a compare-and-set status change, so a double tap can&apos;t charge twice.
         </p>
 
@@ -174,7 +174,7 @@ export default function DocsPage() {
           </tbody>
         </table>
         <p>
-          Settlement uses <code>platform_payout</code>: Clasp is the payee and pays sellers by Payouts, so it can add buyer protection on top
+          Settlement uses <code>platform_payout</code>: Avowly is the payee and pays sellers by Payouts, so it can add buyer protection on top
           (5%, min $1). Naming the seller as payee is supported in code, but PayPal refuses AUTHORIZE holds for third-party payees without
           partner approval.
         </p>
@@ -186,7 +186,7 @@ export default function DocsPage() {
           completed/declined/refunded, payout item outcomes, and dispute created/updated/resolved.
         </p>
         <p>
-          On a dispute, Clasp builds the handoff record (possession proof, match, photos, PayPal timeline) and submits it with the evidence type
+          On a dispute, Avowly builds the handoff record (possession proof, match, photos, PayPal timeline) and submits it with the evidence type
           PayPal requested, falling back to <code>OTHER</code>. Submissions are recorded so nothing is sent twice.
         </p>
 
@@ -230,12 +230,12 @@ export default function DocsPage() {
         <p>Write endpoints and every AI call are rate limited per caller and per listing or deal.</p>
 
         <h2 id="run">Run it</h2>
-        <pre><code>{`git clone https://github.com/angelraph/clasp
-cd clasp && npm install
+        <pre><code>{`git clone https://github.com/angelraph/avowly
+cd avowly && npm install
 cp .env.example .env.local   # PayPal sandbox + OpenAI keys
 npm run dev                   # http://localhost:3000
 npm test                      # policy unit tests`}</code></pre>
-        <p>Without <code>DATABASE_URL</code>, Clasp uses an embedded Postgres in <code>./.data</code>, so there&apos;s nothing else to install.</p>
+        <p>Without <code>DATABASE_URL</code>, Avowly uses an embedded Postgres in <code>./.data</code>, so there&apos;s nothing else to install.</p>
 
         <h2 id="limits">Limits</h2>
         <ul>

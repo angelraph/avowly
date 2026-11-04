@@ -3,8 +3,8 @@ import Link from "next/link";
 import { DocPage } from "@/components/DocPage";
 
 export const metadata: Metadata = {
-  title: "Privacy · Clasp",
-  description: "What Clasp collects, why, who it's shared with, and how photos are protected.",
+  title: "Privacy · Avowly",
+  description: "What Avowly collects, why, who it's shared with, and how photos are protected.",
 };
 
 const TOC = [
@@ -23,11 +23,11 @@ export default function PrivacyPage() {
     <DocPage
       eyebrow="Privacy"
       title="Privacy policy"
-      lead="Clasp collects the minimum needed to hold money safely and prove a handoff happened. We don't sell data, run ads, or use trackers."
+      lead="Avowly collects the minimum needed to hold money safely and prove a handoff happened. We don't sell data, run ads, or use trackers."
       toc={TOC}
       updated="October 15, 2026"
     >
-      <article className="prose-clasp">
+      <article className="prose-avowly">
         <h2 id="summary">Summary</h2>
         <ul>
           <li>Payments happen inside PayPal. We never receive card numbers, bank details or PayPal passwords.</li>
@@ -46,7 +46,7 @@ export default function PrivacyPage() {
             <tr><td>Optional updates email</td><td>Seller</td><td>To send deal notifications</td></tr>
             <tr><td>Buyer&apos;s PayPal email</td><td>PayPal, on approval</td><td>To send the buyer deal updates</td></tr>
             <tr><td>Photos (redacted)</td><td>Seller and buyer</td><td>Verification, handoff checks and dispute evidence</td></tr>
-            <tr><td>Deal timeline (PayPal IDs, statuses, times)</td><td>Clasp and PayPal</td><td>To run the deal and build the handoff record</td></tr>
+            <tr><td>Deal timeline (PayPal IDs, statuses, times)</td><td>Avowly and PayPal</td><td>To run the deal and build the handoff record</td></tr>
             <tr><td>Notification subscriptions</td><td>Your browser, if you opt in</td><td>To deliver push notifications</td></tr>
             <tr><td>Support messages and email</td><td>You</td><td>To answer you</td></tr>
             <tr><td>Scam-check verdicts (not what you pasted)</td><td>The check you run</td><td>So the result can be shared. Your text and screenshots are sent for analysis and never stored.</td></tr>
@@ -100,7 +100,7 @@ export default function PrivacyPage() {
 
         <h2 id="contact">Contact</h2>
         <p>Questions or requests: use the <Link href="/support#contact">support form</Link> and choose &ldquo;Privacy or a photo&rdquo;.</p>
-        <p className="text-sm text-ink-500">Clasp is a prototype built for the PayPal AI Hackathon and runs on the PayPal sandbox.</p>
+        <p className="text-sm text-ink-500">Avowly is a prototype built for the PayPal AI Hackathon and runs on the PayPal sandbox.</p>
       </article>
     </DocPage>
   );

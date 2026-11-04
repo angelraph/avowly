@@ -199,7 +199,7 @@ export async function ensureFreshHold(deal: Deal): Promise<Deal> {
  * Releases whatever is still held. PayPal can refuse to void a reauthorization (it wants
  * the original) or a partially captured authorization; in that case we try the original,
  * and if nothing can be voided the uncaptured remainder simply lapses. Either way no more
- * money can be taken, because Clasp never captures again.
+ * money can be taken, because Avowly never captures again.
  */
 export async function releaseHold(deal: Deal, requestId: string): Promise<{ voided: boolean; note: string }> {
   if (!deal.authorizationId) return { voided: false, note: "No hold to release" };
@@ -225,16 +225,16 @@ export async function releaseHold(deal: Deal, requestId: string): Promise<{ void
   }
   const reason = lastError instanceof Error ? lastError.message : "refused";
   await logEvent({ dealId: deal.id, type: "paypal.hold_lapses", payload: { reason } });
-  return { voided: false, note: "PayPal keeps the uncaptured remainder until it expires; Clasp will never capture it" };
+  return { voided: false, note: "PayPal keeps the uncaptured remainder until it expires; Avowly will never capture it" };
 }
 
-/** The buyer protection fee for a price. Zero when the seller is the payee, since Clasp couldn't collect it. */
+/** The buyer protection fee for a price. Zero when the seller is the payee, since Avowly couldn't collect it. */
 export function feeFor(priceCents: number): number {
-  return env.paypalSettlement() === "platform_payout" ? protectionFeeCents(priceCents, env.claspFeeBps()) : 0;
+  return env.paypalSettlement() === "platform_payout" ? protectionFeeCents(priceCents, env.avowlyFeeBps()) : 0;
 }
 
 /**
- * The only place money is captured. With platform_payout, Clasp captures
+ * The only place money is captured. With platform_payout, Avowly captures
  * `captureCents` (which may include its fee) and pays the seller exactly
  * `payoutCents` by Payouts. With direct_payee the order already names the seller,
  * so the capture itself pays them.
@@ -255,7 +255,7 @@ export async function captureForSeller(input: {
     currency: input.listing.currency,
     finalCapture: input.finalCapture,
     requestId,
-    noteToPayer: `Clasp: ${input.listing.title} (${input.purpose})`,
+    noteToPayer: `Avowly: ${input.listing.title} (${input.purpose})`,
   });
   await logEvent({
     dealId: input.deal.id,
@@ -271,7 +271,7 @@ export async function captureForSeller(input: {
       receiverEmail: input.listing.sellerPaypalEmail,
       amountCents: input.payoutCents,
       currency: input.listing.currency,
-      note: `Payment for ${input.listing.title}, verified by Clasp.`,
+      note: `Payment for ${input.listing.title}, verified by Avowly.`,
     });
     await logEvent({
       dealId: input.deal.id,

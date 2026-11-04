@@ -3,13 +3,13 @@ import Link from "next/link";
 import { DocPage } from "@/components/DocPage";
 
 export const metadata: Metadata = {
-  title: "Terms · Clasp",
-  description: "The terms for using Clasp, a prototype running on the PayPal sandbox.",
+  title: "Terms · Avowly",
+  description: "The terms for using Avowly, a prototype running on the PayPal sandbox.",
 };
 
 const TOC = [
   { id: "prototype", label: "A prototype" },
-  { id: "what", label: "What Clasp does" },
+  { id: "what", label: "What Avowly does" },
   { id: "paypal", label: "PayPal" },
   { id: "fees", label: "Fees" },
   { id: "rules", label: "Your responsibilities" },
@@ -21,24 +21,24 @@ const TOC = [
 
 export default function TermsPage() {
   return (
-    <DocPage eyebrow="Terms" title="Terms of use" lead="Plain-language terms for using Clasp." toc={TOC} updated="October 15, 2026">
-      <article className="prose-clasp">
+    <DocPage eyebrow="Terms" title="Terms of use" lead="Plain-language terms for using Avowly." toc={TOC} updated="October 15, 2026">
+      <article className="prose-avowly">
         <h2 id="prototype">A prototype</h2>
         <p>
-          Clasp is a prototype built for the PayPal AI Hackathon. It runs on the <strong>PayPal sandbox</strong>, PayPal&apos;s test
-          environment: payments use test accounts and <strong>no real money moves</strong>. Don&apos;t rely on Clasp for real transactions yet.
+          Avowly is a prototype built for the PayPal AI Hackathon. It runs on the <strong>PayPal sandbox</strong>, PayPal&apos;s test
+          environment: payments use test accounts and <strong>no real money moves</strong>. Don&apos;t rely on Avowly for real transactions yet.
         </p>
 
-        <h2 id="what">What Clasp does</h2>
+        <h2 id="what">What Avowly does</h2>
         <p>
-          Clasp coordinates a deal between two people: it verifies a listing from photos, asks PayPal to hold the buyer&apos;s payment, checks
-          the item at the handoff, and releases or cancels the payment by published rules. Clasp is not a bank, an escrow agent or a party to
+          Avowly coordinates a deal between two people: it verifies a listing from photos, asks PayPal to hold the buyer&apos;s payment, checks
+          the item at the handoff, and releases or cancels the payment by published rules. Avowly is not a bank, an escrow agent or a party to
           the sale. The seller sells, the buyer buys, and PayPal processes the payment.
         </p>
 
         <h2 id="paypal">PayPal</h2>
         <p>
-          Payments are subject to PayPal&apos;s own terms and policies, including its buyer protection and dispute processes. Clasp is not
+          Payments are subject to PayPal&apos;s own terms and policies, including its buyer protection and dispute processes. Avowly is not
           affiliated with or endorsed by PayPal, Inc. A PayPal authorization can be honored for up to 3 days and renewed up to 29; an unused
           hold expires on its own.
         </p>
@@ -69,21 +69,21 @@ export default function TermsPage() {
 
         <h2 id="ai">AI and verification</h2>
         <p>
-          Clasp uses AI to read photos. Readings can be wrong. Verification shows that an item matches what was listed; it is not a guarantee
+          Avowly uses AI to read photos. Readings can be wrong. Verification shows that an item matches what was listed; it is not a guarantee
           of condition, authenticity or function. Low-confidence readings ask for another photo instead of deciding, and AI findings can never
           add rental charges outside the agreed list.
         </p>
 
         <h2 id="liability">Liability</h2>
         <p>
-          Clasp is provided &ldquo;as is&rdquo; while it&apos;s a prototype, without warranties. To the extent the law allows, we&apos;re not
+          Avowly is provided &ldquo;as is&rdquo; while it&apos;s a prototype, without warranties. To the extent the law allows, we&apos;re not
           liable for losses arising from deals between users, items that don&apos;t meet expectations, or service interruptions. Nothing here
           limits rights you have under consumer law or PayPal&apos;s own protections.
         </p>
 
         <h2 id="changes">Changes &amp; contact</h2>
         <p>
-          We may update these terms as Clasp develops and will change the date above when we do. Questions? <Link href="/support#contact">Contact support</Link>.
+          We may update these terms as Avowly develops and will change the date above when we do. Questions? <Link href="/support#contact">Contact support</Link>.
         </p>
       </article>
     </DocPage>

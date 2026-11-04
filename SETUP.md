@@ -12,7 +12,7 @@ Create them at https://developer.paypal.com/dashboard/accounts → **Create acco
 
 | Name | Type | Purpose |
 |---|---|---|
-| Clasp Platform | Business | Your app runs under this account |
+| Avowly Platform | Business | Your app runs under this account |
 | Sam Seller | Business | Receives sale and rental money |
 | Bella Buyer | Personal | Pays. Set a $5,000 balance under **…** → View/edit account |
 
@@ -20,7 +20,7 @@ Save each sandbox email and password. Log into them at https://www.sandbox.paypa
 
 ## 3. Sandbox app (API keys)
 - https://developer.paypal.com/dashboard/applications/sandbox → **Create App**
-- Type **Merchant**, linked to **Clasp Platform**
+- Type **Merchant**, linked to **Avowly Platform**
 - Copy **Client ID** → `PAYPAL_CLIENT_ID` and **Secret** → `PAYPAL_CLIENT_SECRET`
 
 ## 4. OpenAI

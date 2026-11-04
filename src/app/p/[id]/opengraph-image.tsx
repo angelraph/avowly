@@ -4,13 +4,13 @@ import { humanDuration, loadProof } from "@/lib/proof";
 
 export const size = OG_SIZE;
 export const contentType = "image/png";
-export const alt = "Verified with Clasp";
+export const alt = "Verified with Avowly";
 
 export default async function Image({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const p = await loadProof(id);
   if (!p) {
-    return ogCard({ badge: "Clasp", title: "Pay strangers like you trust them", line: "Money moves only when the thing does.", footer: "PayPal holds it. AI checks it.", photoId: null });
+    return ogCard({ badge: "Avowly", title: "Pay strangers like you trust them", line: "Money moves only when the thing does.", footer: "PayPal holds it. AI checks it.", photoId: null });
   }
   const line =
     p.mode === "sale"

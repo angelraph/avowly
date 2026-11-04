@@ -33,7 +33,7 @@ function RowsEditor({ rows, onChange, placeholder }: { rows: Row[]; onChange: (r
           </button>
         </div>
       ))}
-      <button type="button" className="text-sm font-medium text-clasp-600" onClick={() => onChange([...rows, { label: "", price: "" }])}>
+      <button type="button" className="text-sm font-medium text-avowly-600" onClick={() => onChange([...rows, { label: "", price: "" }])}>
         + Add
       </button>
     </div>
@@ -87,7 +87,7 @@ export function NewListing({ initialMode }: { initialMode: Mode }) {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
       try {
-        localStorage.setItem(`clasp:listing:${data.id}`, data.sellerKey);
+        localStorage.setItem(`avowly:listing:${data.id}`, data.sellerKey);
       } catch {}
       setCreated(data);
     } catch (err) {
@@ -123,7 +123,7 @@ export function NewListing({ initialMode }: { initialMode: Mode }) {
       <div className="mx-auto max-w-xl px-4 pt-6 space-y-4">
         <div className="card border-ok-600/30 bg-ok-50">
           <p className="text-sm font-medium text-ok-600">Possession verified</p>
-          <h1 className="mt-1 text-2xl font-semibold">Your Clasp link is live</h1>
+          <h1 className="mt-1 text-2xl font-semibold">Your Avowly link is live</h1>
           <p className="mt-2 text-sm text-ink-700">
             Paste it into your Marketplace, Craigslist, or Reddit listing. Buyers can see the item was verified in your
             hands, and pay into a PayPal hold.

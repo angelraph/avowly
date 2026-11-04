@@ -103,7 +103,7 @@ export async function createAuthorizeOrder(input: {
       payment_source: {
         paypal: {
           experience_context: {
-            brand_name: "Clasp",
+            brand_name: "Avowly",
             shipping_preference: "NO_SHIPPING",
             user_action: "PAY_NOW",
             ...(input.returnUrl ? { return_url: input.returnUrl, cancel_url: input.cancelUrl } : {}),
@@ -185,7 +185,7 @@ export async function payout(input: {
     body: {
       sender_batch_header: {
         sender_batch_id: input.batchId,
-        email_subject: "You've been paid through Clasp",
+        email_subject: "You've been paid through Avowly",
         email_message: input.note,
       },
       items: [

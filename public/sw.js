@@ -1,6 +1,6 @@
-// Clasp service worker: shows deal updates as notifications and opens the deal on tap.
+// Avowly service worker: shows deal updates as notifications and opens the deal on tap.
 self.addEventListener("push", (event) => {
-  let data = { title: "Clasp", body: "Your deal has an update.", url: "/" };
+  let data = { title: "Avowly", body: "Your deal has an update.", url: "/" };
   try {
     data = { ...data, ...event.data.json() };
   } catch {

@@ -12,7 +12,7 @@ export const dynamic = "force-dynamic";
 export default async function Home() {
   const stats = await loadStats().catch(() => null);
   const faqPreview = FAQ.flatMap((g) => g.items).filter((f) =>
-    ["What is Clasp?", "When am I actually charged?", "Can the AI take my money?", "What does it cost?"].includes(f.q),
+    ["What is Avowly?", "When am I actually charged?", "Can the AI take my money?", "What does it cost?"].includes(f.q),
   );
 
   return (
@@ -166,7 +166,7 @@ export default async function Home() {
             <p className="status text-brass-ink">Free tool</p>
             <h2 className="mt-3 text-3xl font-semibold tracking-[-0.03em] sm:text-4xl">Not sure about a listing? Check it first.</h2>
             <p className="mt-3 max-w-xl text-ink-500">
-              Paste any listing or the seller&apos;s messages. Clasp looks for the warning signs of a scam and compares the price with live retail offers. No
+              Paste any listing or the seller&apos;s messages. Avowly looks for the warning signs of a scam and compares the price with live retail offers. No
               sign-up, nothing stored.
             </p>
           </div>
@@ -199,7 +199,7 @@ export default async function Home() {
       <section className="relative mx-4 overflow-hidden rounded-[10px] bg-ink-900 text-paper sm:mx-auto sm:max-w-6xl">
         <Ribbon lines={20} className="pointer-events-none absolute inset-0 h-full w-full opacity-60" />
         <div className="relative px-6 py-16 text-center sm:py-20">
-          <h2 className="mx-auto max-w-2xl text-3xl font-semibold tracking-[-0.03em] sm:text-5xl">Your next deal with a stranger, clasped.</h2>
+          <h2 className="mx-auto max-w-2xl text-3xl font-semibold tracking-[-0.03em] sm:text-5xl">Your next deal with a stranger, proven.</h2>
           <p className="mx-auto mt-4 max-w-lg text-paper/70">List in two minutes. Free for sellers. The buyer pays into a PayPal hold that only the real item can release.</p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Link href="/new?mode=sale" className="rounded-[10px] bg-paper px-5 py-3 font-medium text-ink-900 hover:bg-card">Sell an item</Link>

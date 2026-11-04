@@ -11,7 +11,7 @@ export function parseDollarsToCents(input: string): number {
 }
 
 /**
- * Clasp's buyer protection fee: a percentage of the price (never the deposit), minimum $1.
+ * Avowly's buyer protection fee: a percentage of the price (never the deposit), minimum $1.
  * The seller always receives their full asking price.
  */
 export function protectionFeeCents(priceCents: number, bps: number): number {

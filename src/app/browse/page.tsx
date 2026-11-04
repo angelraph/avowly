@@ -5,7 +5,7 @@ import { searchListings } from "@/lib/search";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
-  title: "Browse verified listings · Clasp",
+  title: "Browse verified listings · Avowly",
   description: "Second-hand items and rentals verified in the seller's hands. Pay into a PayPal hold; money moves only when the item checks out.",
 };
 
@@ -37,7 +37,7 @@ export default async function BrowsePage({ searchParams }: Props) {
       </form>
 
       {results.length === 0 ? (
-        <p className="card text-center text-sm text-ink-500">Nothing verified matches yet. <Link className="text-clasp-600" href="/new">List something</Link>.</p>
+        <p className="card text-center text-sm text-ink-500">Nothing verified matches yet. <Link className="text-avowly-600" href="/new">List something</Link>.</p>
       ) : (
         <ul className="space-y-2">
           {results.map((r) => (

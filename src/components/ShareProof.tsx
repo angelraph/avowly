@@ -6,12 +6,12 @@ import { useState } from "react";
 export function ShareProof({ dealId, title }: { dealId: string; title: string }) {
   const [copied, setCopied] = useState(false);
   const url = typeof window === "undefined" ? `/p/${dealId}` : `${window.location.origin}/p/${dealId}`;
-  const text = `Verified with Clasp: ${title}. PayPal held the money until the item checked out.`;
+  const text = `Verified with Avowly: ${title}. PayPal held the money until the item checked out.`;
 
   async function share() {
     if (navigator.share) {
       try {
-        await navigator.share({ title: "Verified with Clasp", text, url });
+        await navigator.share({ title: "Verified with Avowly", text, url });
         return;
       } catch {
         // Cancelled or unsupported: fall through to copying.
@@ -32,7 +32,7 @@ export function ShareProof({ dealId, title }: { dealId: string; title: string })
       >
         WhatsApp
       </a>
-      <a className="col-span-2 text-sm font-medium text-clasp-600" href={`/p/${dealId}`} target="_blank" rel="noreferrer">
+      <a className="col-span-2 text-sm font-medium text-avowly-600" href={`/p/${dealId}`} target="_blank" rel="noreferrer">
         View public proof page
       </a>
     </div>

@@ -20,7 +20,7 @@ export function NotifyButton({ subscriptionKey, listingId, dealId, label }: { su
   const [state, setState] = useState<State>("idle");
   const [error, setError] = useState<string | null>(null);
   const [sent, setSent] = useState<boolean | null>(null);
-  const storageKey = `clasp:push:${dealId ?? listingId}`;
+  const storageKey = `avowly:push:${dealId ?? listingId}`;
 
   useEffect(() => {
     const isIos = /iphone|ipad|ipod/i.test(navigator.userAgent);
@@ -78,13 +78,13 @@ export function NotifyButton({ subscriptionKey, listingId, dealId, label }: { su
         <p className="text-ok-600">🔔 Notifications on for this {dealId ? "deal" : "listing"}.</p>
         {sent === true && <p className="text-ink-500">A test one was just sent. Don&apos;t see it? Allow notifications for your browser in your phone&apos;s Settings → Apps.</p>}
         {sent === false && <p className="text-bad-600">We couldn&apos;t reach this device. Check that your phone allows notifications for your browser, then try again.</p>}
-        <button type="button" className="text-clasp-600 underline" onClick={enable}>Send a test notification</button>
+        <button type="button" className="text-avowly-600 underline" onClick={enable}>Send a test notification</button>
       </div>
     );
   if (state === "denied") return <p className="text-sm text-ink-500">Notifications are blocked. Private windows always block them, so use a normal window; otherwise allow them for this site in your browser settings.</p>;
   if (state === "unsupported") return null;
   if (state === "ios-install")
-    return <p className="text-sm text-ink-500">To get alerts on iPhone: tap Share → Add to Home Screen, then open Clasp from there.</p>;
+    return <p className="text-sm text-ink-500">To get alerts on iPhone: tap Share → Add to Home Screen, then open Avowly from there.</p>;
   return (
     <div>
       <button className="btn-secondary" disabled={state === "working"} onClick={enable}>

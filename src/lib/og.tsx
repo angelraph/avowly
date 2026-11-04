@@ -10,7 +10,7 @@ async function photoDataUrl(photoId: string | null): Promise<string | null> {
   return `data:${photo.mime};base64,${Buffer.from(photo.data).toString("base64")}`;
 }
 
-/** The preview card shown when a Clasp link is pasted into WhatsApp, Facebook, X, iMessage. */
+/** The preview card shown when an Avowly link is pasted into WhatsApp, Facebook, X, iMessage. */
 export async function ogCard(input: {
   badge: string;
   title: string;
@@ -31,11 +31,10 @@ export async function ogCard(input: {
         <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", flex: 1, padding: 56 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
             <svg width="56" height="56" viewBox="0 0 64 64" fill="none">
-              <path d="M50 17.5 L32 7.5 L12.5 18.5 L12.5 45.5 L32 56.5 L50 46.5" stroke="#A67C52" strokeWidth="8.5" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M26.5 20 H37.5 Q40 20 40 22.5 V37.6 L32 42.6 L24 37.6 V22.5 Q24 20 26.5 20 Z" fill="#141413" />
-              <path d="M27.6 31.2 L30.9 34.4 L36.6 28.2" stroke="#D9B98F" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M9 55 L32 9 L55 55" stroke="#141413" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M24.5 38.5 L30.5 44.5 L39.5 33.5" stroke="#A67C52" strokeWidth="5.5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
-            <div style={{ fontSize: 38, fontWeight: 700 }}>Clasp</div>
+            <div style={{ fontSize: 38, fontWeight: 700 }}>Avowly</div>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
             <div style={{ display: "flex", fontSize: 24, fontWeight: 700, letterSpacing: 3, textTransform: "uppercase", color }}>{input.badge}</div>

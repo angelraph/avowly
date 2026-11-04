@@ -14,7 +14,7 @@ import { HttpError } from "./store";
 export function clientIp(req: Request): string {
   const forwarded = req.headers.get("x-forwarded-for");
   const ip = (forwarded?.split(",")[0] ?? req.headers.get("x-real-ip") ?? "unknown").trim();
-  const salt = process.env.PAYPAL_CLIENT_SECRET ?? "clasp";
+  const salt = process.env.PAYPAL_CLIENT_SECRET ?? "avowly";
   return createHash("sha256").update(`${salt}:${ip}`).digest("base64url").slice(0, 16);
 }
 

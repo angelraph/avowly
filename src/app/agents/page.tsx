@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { env } from "@/lib/env";
 
 export const metadata: Metadata = {
-  title: "Clasp for AI agents",
+  title: "Avowly for AI agents",
   description: "Let shopping agents find verified second-hand listings and start PayPal-protected purchases that only a human can approve.",
 };
 
@@ -18,7 +18,7 @@ export default function AgentsPage() {
   return (
     <div className="mx-auto max-w-xl px-4 pt-6 space-y-4">
       <div>
-        <h1 className="text-2xl font-semibold">Clasp for AI agents</h1>
+        <h1 className="text-2xl font-semibold">Avowly for AI agents</h1>
         <p className="mt-2 text-ink-700">
           Shopping agents can find listings verified in the seller&apos;s hands and start a protected purchase. They can never move money:
           the human approves the hold in PayPal, and the seller is paid only when the item checks out at the handoff.
@@ -40,9 +40,9 @@ export default function AgentsPage() {
         <p className="text-ink-500">MCP server (Streamable HTTP, no auth needed for search):</p>
         <pre className="overflow-x-auto rounded-xl bg-ink-900 p-3 text-xs text-white">{url}</pre>
         <p className="text-ink-500">Claude Code:</p>
-        <pre className="overflow-x-auto rounded-xl bg-ink-900 p-3 text-xs text-white">{`claude mcp add --transport http clasp ${url}`}</pre>
+        <pre className="overflow-x-auto rounded-xl bg-ink-900 p-3 text-xs text-white">{`claude mcp add --transport http avowly ${url}`}</pre>
         <p className="text-ink-500">Any MCP client config:</p>
-        <pre className="overflow-x-auto rounded-xl bg-ink-900 p-3 text-xs text-white">{JSON.stringify({ mcpServers: { clasp: { url } } }, null, 2)}</pre>
+        <pre className="overflow-x-auto rounded-xl bg-ink-900 p-3 text-xs text-white">{JSON.stringify({ mcpServers: { avowly: { url } } }, null, 2)}</pre>
       </div>
 
       <div className="card text-sm">

@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /*
- * Clasp: a paper receipt and a metal latch. Warm paper, warm ink, one metal (brass).
+ * Avowly: a paper receipt and a maker's stamp. Warm paper, warm ink, one metal (brass).
  * Status colors are reserved for money states: matched (green), kept (dark brass),
  * mismatch (oxblood, rare). PayPal's own button keeps PayPal's colors.
  */
@@ -28,9 +28,9 @@
   --color-ink-700: #3a3733;
   --color-ink-900: #141413;
 
-  --color-clasp-50: #f1e8da;
-  --color-clasp-500: #a67c52;
-  --color-clasp-600: #7a5532;
+  --color-avowly-50: #f1e8da;
+  --color-avowly-500: #a67c52;
+  --color-avowly-600: #7a5532;
   --color-ok-50: #e6efe8;
   --color-ok-600: #1f6b4a;
   --color-hold-50: #f4eadb;
@@ -128,14 +128,14 @@ body {
 }
 
 /* Long-form pages (docs, policies): readable measure, quiet hierarchy. */
-.prose-clasp {
+.prose-avowly {
   color: var(--color-ink-700);
   line-height: 1.7;
 }
-.prose-clasp > * + * {
+.prose-avowly > * + * {
   margin-top: 1rem;
 }
-.prose-clasp h2 {
+.prose-avowly h2 {
   margin-top: 2.75rem;
   scroll-margin-top: 5rem;
   color: var(--color-ink-900);
@@ -144,36 +144,36 @@ body {
   letter-spacing: -0.02em;
   line-height: 1.25;
 }
-.prose-clasp h3 {
+.prose-avowly h3 {
   margin-top: 1.75rem;
   scroll-margin-top: 5rem;
   color: var(--color-ink-900);
   font-size: 1.1rem;
   font-weight: 600;
 }
-.prose-clasp a {
+.prose-avowly a {
   color: var(--color-brass-ink);
   text-decoration: underline;
   text-underline-offset: 3px;
 }
-.prose-clasp strong {
+.prose-avowly strong {
   color: var(--color-ink-900);
   font-weight: 600;
 }
-.prose-clasp ul,
-.prose-clasp ol {
+.prose-avowly ul,
+.prose-avowly ol {
   padding-left: 1.25rem;
 }
-.prose-clasp ul {
+.prose-avowly ul {
   list-style: disc;
 }
-.prose-clasp ol {
+.prose-avowly ol {
   list-style: decimal;
 }
-.prose-clasp li + li {
+.prose-avowly li + li {
   margin-top: 0.35rem;
 }
-.prose-clasp code {
+.prose-avowly code {
   border: 1px solid var(--color-line);
   border-radius: 6px;
   background: var(--color-card);
@@ -182,7 +182,7 @@ body {
   font-size: 0.85em;
   color: var(--color-ink-900);
 }
-.prose-clasp pre {
+.prose-avowly pre {
   overflow-x: auto;
   border-radius: 10px;
   background: var(--color-ink-900);
@@ -192,13 +192,13 @@ body {
   line-height: 1.6;
   color: var(--color-paper);
 }
-.prose-clasp pre code {
+.prose-avowly pre code {
   border: 0;
   background: none;
   padding: 0;
   color: inherit;
 }
-.prose-clasp table {
+.prose-avowly table {
   display: block;
   width: 100%;
   overflow-x: auto;
@@ -206,26 +206,26 @@ body {
   font-size: 0.9rem;
 }
 /* On phones, columns keep a readable width and the table scrolls sideways instead of crushing. */
-.prose-clasp td,
-.prose-clasp th {
+.prose-avowly td,
+.prose-avowly th {
   min-width: 9rem;
 }
-.prose-clasp td:first-child,
-.prose-clasp th:first-child {
+.prose-avowly td:first-child,
+.prose-avowly th:first-child {
   min-width: 5.5rem;
 }
-.prose-clasp td code {
+.prose-avowly td code {
   white-space: normal;
   overflow-wrap: anywhere;
 }
-.prose-clasp th,
-.prose-clasp td {
+.prose-avowly th,
+.prose-avowly td {
   border-bottom: 1px solid var(--color-line);
   padding: 0.6rem 0.5rem 0.6rem 0;
   text-align: left;
   vertical-align: top;
 }
-.prose-clasp th {
+.prose-avowly th {
   color: var(--color-ink-900);
   font-weight: 600;
 }

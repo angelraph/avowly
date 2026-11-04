@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 
 /**
- * A slowly flowing band of fine brass lines, like a latch spring. Stripe's ribbon,
+ * A slowly flowing band of fine brass lines. Stripe's ribbon,
  * drawn with hairlines instead of gradients. Static when reduced motion is on.
  */
 export function Ribbon({ lines = 28, className = "" }: { lines?: number; className?: string }) {

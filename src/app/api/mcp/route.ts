@@ -9,11 +9,11 @@ import { getDeal, getListing, HttpError, roleFor } from "@/lib/store";
 
 export const maxDuration = 60;
 
-const INSTRUCTIONS = `Clasp lets you shop second-hand and rental listings that were verified in the seller's hands, and pay through PayPal with protection built in.
+const INSTRUCTIONS = `Avowly lets you shop second-hand and rental listings that were verified in the seller's hands, and pay through PayPal with protection built in.
 
 How protection works, so you can explain it to your user:
 - Every listing was photographed by the seller with a one-time code, so the item exists and the seller has it.
-- Payment is a PayPal authorization (a hold). Nothing is charged until the buyer scans the item at an in-person handoff and Clasp confirms it is the listed item (serial number/IMEI or unique marks).
+- Payment is a PayPal authorization (a hold). Nothing is charged until the buyer scans the item at an in-person handoff and Avowly confirms it is the listed item (serial number/IMEI or unique marks).
 - Rentals hold fee + deposit; only damage from a price list shown up front can be charged.
 
 Rules for agents:
@@ -181,7 +181,7 @@ const handler = createMcpHandler(
     );
   },
   {
-    serverInfo: { name: "clasp", version: "1.0.0" },
+    serverInfo: { name: "avowly", version: "1.0.0" },
     instructions: INSTRUCTIONS,
   },
 );
