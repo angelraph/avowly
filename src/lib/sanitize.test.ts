@@ -13,6 +13,15 @@ describe("timelinePayload", () => {
     expect(out).toEqual({ amount: { value: "250.00" }, purpose: "sale" });
     expect(JSON.stringify(out)).not.toContain("490154203237518");
   });
+  it("passes short status words but not free text or objects", () => {
+    expect(timelinePayload({ status: "WAITING_FOR_SELLER_RESPONSE", accepted: 1, devices: 2, audience: "seller" })).toEqual({
+      status: "WAITING_FOR_SELLER_RESPONSE",
+      accepted: 1,
+      devices: 2,
+      audience: "seller",
+    });
+    expect(timelinePayload({ status: "IMEI 490154203237518", accepted: "1", audience: { x: 1 } })).toEqual({});
+  });
 });
 
 describe("decisionView", () => {

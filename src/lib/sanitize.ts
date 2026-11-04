@@ -3,11 +3,17 @@
  * readings (full identifiers, on-screen text), so the timeline gets only an allow-list.
  */
 const TIMELINE_FIELDS = ["amount", "purpose", "by", "disputeId", "ticket"] as const;
+/** Short status words (PayPal enums, push results): passed only as plain strings or numbers. */
+const TIMELINE_SCALARS = { status: "string", audience: "string", accepted: "number", devices: "number" } as const;
 
 export function timelinePayload(payload: Record<string, unknown>): Record<string, unknown> {
   const out: Record<string, unknown> = {};
   for (const field of TIMELINE_FIELDS) {
     if (payload[field] !== undefined && payload[field] !== null) out[field] = payload[field];
+  }
+  for (const [field, type] of Object.entries(TIMELINE_SCALARS)) {
+    const v = payload[field];
+    if (typeof v === type && (type !== "string" || /^[A-Za-z_ -]{1,40}$/.test(v as string))) out[field] = v;
   }
   return out;
 }
