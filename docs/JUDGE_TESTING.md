@@ -4,6 +4,15 @@
 
 **Sandbox logins are in the Devpost "testing instructions" field**, not in this public repo. Log in with them only inside the PayPal window.
 
+## Fastest: the 2-minute demo deal (no phone, no second person)
+
+1. Open [/demo](https://avowly.vercel.app/demo) and tap **Start a demo deal**. Avowly lists a sample phone that is already verified.
+2. Tap **Buy it as the buyer**, then the PayPal button, and log in with the sandbox **buyer** login. You land in the deal room: **HELD** ($126 authorized, nothing charged).
+3. Tap **Demo: use the seller's code** (in a real meetup you'd scan the QR on the seller's phone). Expect "Seller confirmed in person".
+4. Tap the four sample screens in order. Each goes through the real AI check and the real rules:
+   wrong IMEI → **Mismatch**, right IMEI → **One more photo**, Find Hub on → **Locked**, Find Hub off → **Matched**.
+5. Tap **Release**. PayPal captures and pays the sandbox seller by Payouts. Open the proof page and download the PDF record. "Open the seller's view" on the demo page shows the other side.
+
 ## 2-minute tour (no items needed)
 
 1. **Scam check:** open [/check](https://avowly.vercel.app/check) and paste:
