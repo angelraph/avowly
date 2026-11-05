@@ -1,0 +1,31 @@
+Avowly: demo video transcript
+
+[0:00] When you meet a stranger to buy a used phone, you bring cash and hope. A third of the marketplace listings one bank checked were fake. Avowly fixes that moment.
+
+[0:10] PayPal holds the money, AI checks the item in your hands, and the seller is paid only when it's the real thing.
+
+[0:17] The seller photographs the item beside a one-time code, so a stolen photo can't pass. AI reads the serial, and personal details are blurred before anything is saved.
+
+[0:28] Sellers can also log in with PayPal. Buyers then see a PayPal verified seller, and payouts go to that exact account.
+
+[0:37] The buyer pays with PayPal, but the money is only held, not charged.
+
+[0:42] At the meetup, the buyer scans a code on the seller's phone, proving they're meeting the real seller. Or the seller ships it, and the buyer checks it on arrival.
+
+[0:52] This is a real sale. A different phone was scanned first: mismatch, nothing moved. The right phone with its lock on: blocked. Lock off: matched. The buyer released, PayPal captured, and the seller was paid by Payouts.
+
+[1:08] Then the buyer claimed it never arrived. Two seconds after PayPal asked the seller to respond, Avowly had sent the full handoff record as evidence. The seller did nothing.
+
+[1:20] Rentals use the same engine. This laptop came back without its charger: twenty-five dollars kept from a price list both sides agreed, seventy-five returned automatically.
+
+[1:31] Every step can be emailed too, so it works even on phones that block notifications.
+
+[1:37] Judges can try all of it in two minutes. The demo deal runs the real PayPal hold and the real AI checks on sample screens, then pays the seller.
+
+[1:46] AI shopping agents can buy too, but only a human can approve the hold in PayPal.
+
+[1:52] And anyone can paste a listing into the free scam check, then ask the seller to prove it with Avowly.
+
+[1:58] The rule behind all of it: the AI reads, plain rules decide. It never sees a price, never knows which serial to expect, and never touches PayPal. Avowly. Money moves only when the thing does.
+
+Try it: https://avowly.vercel.app/demo  ·  Code: https://github.com/angelraph/avowly
