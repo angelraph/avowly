@@ -27,7 +27,12 @@ type State = {
     distinctiveFeatures: string[];
     identifierKinds: string[];
     accessories: { name: string }[];
+    demo: boolean;
+    delivery: "meetup" | "shipping";
+    paypalVerified: boolean;
   };
+  checkedInAt: string | null;
+  checkin: { code: string; url: string; qrSvg: string | null } | null;
   deal: {
     status: string;
     authorizedCents: number;
@@ -37,6 +42,7 @@ type State = {
     decision: Decision | null;
     pickupInspection: { presentAtPickup: Record<string, boolean>; conditionNotes: string[] } | null;
     clock: { honorEndsAt: string; expiresAt: string; phase: string } | null;
+    shipping: { carrier: string; tracking: string; at: string } | null;
   };
   events: { type: string; at: string; payload: Record<string, unknown> }[];
 };
@@ -73,7 +79,11 @@ function eventLabel(e: State["events"][number]): string {
     "deal.released": "Deal complete",
     "deal.settled": "Rental settled",
     "support.ticket_opened": `Support ticket ${p.ticket ?? ""} opened`,
-    "notify.email": `Email to the ${p.audience ?? "party"}: ${p.sent ? "sent" : "not sent"}`,
+    "handoff.checkin": "Buyer checked in with the seller's code: it's really them",
+    "handoff.checkin_failed": "Check-in code didn't match the seller",
+    "deal.shipped": `Seller shipped it${p.carrier ? ` with ${p.carrier}` : ""}${p.tracking ? `, tracking ${p.tracking}` : ""}`,
+    "listing.paypal_verified": "Seller verified with PayPal",
+    "notify.email":`Email to the ${p.audience ?? "party"}: ${p.sent ? "sent" : "not sent"}`,
     "notify.email_set": `The ${p.audience ?? "party"} turned on email updates${p.sent ? "" : " (test email didn't send)"}`,
     "notify.push":`Notification sent to the ${p.audience ?? "party"}: ${p.accepted ?? 0} of ${p.devices ?? 0} device${p.devices === 1 ? "" : "s"} reached`,
   };
@@ -164,7 +174,15 @@ function useCountdown(target: string | undefined) {
   return h >= 24 ? `${Math.floor(h / 24)}d ${h % 24}h` : `${h}h ${Math.floor((ms % 3_600_000) / 60_000)}m`;
 }
 
-export function DealRoom({ id, urlKey, initialError }: { id: string; urlKey: string | null; initialError?: string | null }) {
+/** Judge demo: sample screens a buyer can "scan" instead of photographing a real phone. */
+const DEMO_SHOTS = [
+  { file: "imei-wrong.png", label: "A different phone's IMEI", expect: "Mismatch" },
+  { file: "imei-right.png", label: "The listed phone's IMEI", expect: "One more photo" },
+  { file: "findhub-on.png", label: "Find Hub still on", expect: "Locked" },
+  { file: "findhub-off.png", label: "Find Hub switched off", expect: "Matched" },
+];
+
+export function DealRoom({ id, urlKey, initialError, scannedCode }: { id: string; urlKey: string | null; initialError?: string | null; scannedCode?: string | null }) {
   const [key, setKey] = useState<string | null>(urlKey);
   const [state, setState] = useState<State | null>(null);
   const [photos, setPhotos] = useState<File[]>([]);
@@ -201,8 +219,24 @@ export function DealRoom({ id, urlKey, initialError }: { id: string; urlKey: str
   }, [refresh]);
 
   const honorLeft = useCountdown(state?.deal.clock?.honorEndsAt);
+  const [code, setCode] = useState("");
+  const [ship, setShip] = useState({ carrier: "", tracking: "" });
 
-  async function act(path: string, label: string, withPhotos = false) {
+  // Arrived by scanning the seller's QR: check in once the deal has loaded as the buyer.
+  const [autoCheckin, setAutoCheckin] = useState(scannedCode ?? null);
+  useEffect(() => {
+    if (!autoCheckin || state?.role !== "buyer" || state.checkedInAt || state.deal.status !== "held") return;
+    setAutoCheckin(null);
+    act("checkin", "checkin", false, { code: autoCheckin });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoCheckin, state?.role, state?.checkedInAt, state?.deal.status]);
+
+  async function demoScan(file: string, label: string) {
+    const blob = await (await fetch(`/demo/${file}`)).blob();
+    await act("handoff", label, [new File([blob], file, { type: "image/png" })]);
+  }
+
+  async function act(path: string, label: string, withPhotos: boolean | File[] = false, extra: Record<string, string> = {}) {
     setError(null);
     setNotice(null);
     setBusy(label);
@@ -211,13 +245,13 @@ export function DealRoom({ id, urlKey, initialError }: { id: string; urlKey: str
       if (withPhotos) {
         const form = new FormData();
         form.set("key", key ?? "");
-        photos.forEach((p) => form.append("photos", p));
+        (Array.isArray(withPhotos) ? withPhotos : photos).forEach((p) => form.append("photos", p));
         res = await fetch(`/api/deals/${id}/${path}`, { method: "POST", body: form });
       } else {
         res = await fetch(`/api/deals/${id}/${path}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ key }),
+          body: JSON.stringify({ key, ...extra }),
         });
       }
       const data = await res.json();
@@ -390,6 +424,73 @@ export function DealRoom({ id, urlKey, initialError }: { id: string; urlKey: str
       )}
 
       {/* the one thing to do next */}
+      {listing.mode === "sale" && deal.status === "held" && role === "buyer" && listing.delivery === "shipping" && (
+        <section className="rounded-[10px] border border-line bg-card p-5 text-sm">
+          <p className="status text-ink-500">Shipped sale</p>
+          {deal.shipping ? (
+            <p className="mt-2 text-ink-700">
+              📦 On its way with <b>{deal.shipping.carrier}</b>, tracking <span className="font-mono">{deal.shipping.tracking}</span>. When it arrives, scan it below before you release the money. If it never comes, cancel and nothing is charged.
+            </p>
+          ) : (
+            <p className="mt-2 text-ink-700">Waiting for {listing.sellerName.split(/\s+/)[0]} to ship it. You&apos;ll be told the tracking number. The money stays held until you scan it on arrival.</p>
+          )}
+        </section>
+      )}
+
+      {listing.mode === "sale" && deal.status === "held" && role === "buyer" && listing.delivery === "meetup" && (
+        <section className={`rounded-[10px] border p-5 text-sm ${state.checkedInAt ? "border-matched/25 bg-matched-tint" : "border-line bg-card"}`}>
+          {state.checkedInAt ? (
+            <p className="text-ink-700">
+              <span className="font-medium text-matched">✓ Seller confirmed in person.</span> You scanned the code on their phone at{" "}
+              {new Date(state.checkedInAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}. Now scan the item.
+            </p>
+          ) : (
+            <form
+              className="space-y-2"
+              onSubmit={(e) => {
+                e.preventDefault();
+                act("checkin", "checkin", false, { code });
+              }}
+            >
+              <p className="font-medium text-ink-900">At the meetup? Check in first.</p>
+              <p className="text-ink-500">Ask the seller to open their Avowly deal. Scan the QR code on their screen with your camera, or type the 6-digit code. It proves you&apos;re meeting the person who listed this.</p>
+              <div className="grid grid-cols-[1fr_auto] gap-2">
+                <input className="field min-w-0 font-mono tracking-widest" inputMode="numeric" maxLength={7} placeholder="123 456" value={code} onChange={(e) => setCode(e.target.value)} />
+                <button className="btn-secondary w-auto px-5" disabled={!!busy || code.replace(/\D/g, "").length !== 6}>
+                  {busy === "checkin" ? "Checking…" : "Check in"}
+                </button>
+              </div>
+              {listing.demo && state.checkin && (
+                <button type="button" className="text-sm text-accent underline" onClick={() => act("checkin", "checkin", false, { code: state.checkin!.code })}>
+                  Demo: use the seller&apos;s code ({state.checkin.code})
+                </button>
+              )}
+            </form>
+          )}
+        </section>
+      )}
+
+      {listing.mode === "sale" && deal.status === "held" && role === "buyer" && listing.demo && !(decision?.kind === "sale_handoff" && decision.canRelease) && (
+        <section className="rounded-[10px] border border-accent/30 bg-accent-tint p-5 text-sm">
+          <p className="status text-accent-ink">Judge demo</p>
+          <p className="mt-2 text-ink-700">
+            No phone needed. Tap these sample screens in order; each goes through the real AI check and the real rules. Watch the result change, then release the money.
+          </p>
+          <div className="mt-3 grid grid-cols-2 gap-2">
+            {DEMO_SHOTS.map((d, i) => (
+              <button key={d.file} type="button" className="btn-secondary flex-col gap-1 py-3 text-left" disabled={!!busy} onClick={() => demoScan(d.file, d.file)}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={`/demo/${d.file}`} alt="" className="h-20 w-auto rounded border border-line" />
+                <span className="text-sm font-medium">
+                  {i + 1}. {busy === d.file ? "Reading…" : d.label}
+                </span>
+                <span className="text-xs text-ink-500">Expect: {d.expect}</span>
+              </button>
+            ))}
+          </div>
+        </section>
+      )}
+
       {listing.mode === "sale" && deal.status === "held" && role === "buyer" && (
         <div className="space-y-3">
           {decision?.kind === "sale_handoff" && decision.canRelease ? (
@@ -398,7 +499,7 @@ export function DealRoom({ id, urlKey, initialError }: { id: string; urlKey: str
             </button>
           ) : (
             scanner(
-              "Scan the item in your hands",
+              listing.delivery === "shipping" ? "Scan it when it arrives" : "Scan the item in your hands",
               <ScanGuide
                 kinds={listing.identifierKinds}
                 marks={listing.distinctiveFeatures}
@@ -415,10 +516,53 @@ export function DealRoom({ id, urlKey, initialError }: { id: string; urlKey: str
           </button>
         </div>
       )}
-      {listing.mode === "sale" && deal.status === "held" && role === "seller" && (
-        <p className="rounded-[10px] border border-line bg-card p-5 text-ink-700">
-          The buyer&apos;s money is held. At the meetup they scan the item; if it matches your verified listing, you&apos;re paid on the spot.{listing.hasAntiTheftLock && " They will also ask you to turn off the Find switch: Settings → Google → All services → Find Hub on Android, or Settings → your name → Find My on iPhone."}
-        </p>
+      {listing.mode === "sale" && deal.status === "held" && role === "seller" && listing.delivery === "meetup" && (
+        <section className="space-y-4 rounded-[10px] border border-line bg-card p-5">
+          <p className="text-ink-700">
+            The buyer&apos;s money is held. At the meetup they scan the item; if it matches your verified listing, you&apos;re paid on the spot.{listing.hasAntiTheftLock && " They will also ask you to turn off the Find switch: Settings → Google → All services → Find Hub on Android, or Settings → your name → Find My on iPhone."}
+          </p>
+          {state.checkedInAt ? (
+            <p className="text-sm font-medium text-matched">✓ The buyer checked in with your code.</p>
+          ) : (
+            state.checkin && (
+              <div className="flex flex-col items-center gap-2 rounded-[10px] border border-line bg-white p-4 text-center">
+                <p className="text-sm font-medium text-ink-900">Show this to the buyer when you meet</p>
+                {state.checkin.qrSvg && <div className="w-52" dangerouslySetInnerHTML={{ __html: state.checkin.qrSvg }} />}
+                <p className="font-mono text-2xl tracking-[0.3em] text-ink-900">
+                  {state.checkin.code.slice(0, 3)} {state.checkin.code.slice(3)}
+                </p>
+                <p className="text-xs text-ink-500">Only your link can show this code, so the buyer knows it&apos;s really you.</p>
+              </div>
+            )
+          )}
+        </section>
+      )}
+      {listing.mode === "sale" && deal.status === "held" && role === "seller" && listing.delivery === "shipping" && (
+        <section className="space-y-3 rounded-[10px] border border-line bg-card p-5">
+          {deal.shipping ? (
+            <p className="text-ink-700">
+              📦 Shipped with <b>{deal.shipping.carrier}</b>, tracking <span className="font-mono">{deal.shipping.tracking}</span>. The buyer scans it on arrival; if it matches your verified listing, you&apos;re paid straight away.
+            </p>
+          ) : (
+            <form
+              className="space-y-2"
+              onSubmit={(e) => {
+                e.preventDefault();
+                act("ship", "ship", false, ship);
+              }}
+            >
+              <p className="font-medium text-ink-900">The buyer&apos;s money is held. Ship it, then add the tracking.</p>
+              <p className="text-sm text-ink-500">Ship the exact item you verified. The buyer scans it on arrival, and you&apos;re paid when it matches.</p>
+              <div className="grid grid-cols-[1fr_2fr] gap-2">
+                <input className="field min-w-0" placeholder="Carrier" value={ship.carrier} onChange={(e) => setShip({ ...ship, carrier: e.target.value })} />
+                <input className="field min-w-0 font-mono" placeholder="Tracking number" value={ship.tracking} onChange={(e) => setShip({ ...ship, tracking: e.target.value })} />
+              </div>
+              <button className="btn-primary" disabled={!!busy || !ship.carrier.trim() || !ship.tracking.trim()}>
+                {busy === "ship" ? "Saving…" : "Mark as shipped"}
+              </button>
+            </form>
+          )}
+        </section>
       )}
 
       {listing.mode === "rental" &&

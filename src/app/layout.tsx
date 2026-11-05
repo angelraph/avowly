@@ -62,7 +62,8 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
               <Logo size={26} />
             </Link>
             <nav className="flex items-center gap-1 text-sm">
-              <Link href="/check" className="hidden rounded-md px-2.5 py-1.5 text-ink-700 hover:text-ink-900 sm:inline">Scam check</Link>
+              <Link href="/demo" className="hidden rounded-md px-2.5 py-1.5 text-ink-700 hover:text-ink-900 md:inline">Demo</Link>
+            <Link href="/check" className="hidden rounded-md px-2.5 py-1.5 text-ink-700 hover:text-ink-900 sm:inline">Scam check</Link>
               <Link href="/browse" className="hidden rounded-md px-2.5 py-1.5 text-ink-700 hover:text-ink-900 sm:inline">Browse</Link>
               <Link href="/my" className="hidden rounded-md px-2.5 py-1.5 text-ink-700 hover:text-ink-900 lg:inline">My deals</Link>
               <Link href="/support" className="hidden rounded-md px-2.5 py-1.5 text-ink-700 hover:text-ink-900 sm:inline">Help</Link>

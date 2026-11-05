@@ -71,6 +71,13 @@
       "when": 1793795457952,
       "tag": "0009_push_per_deal",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1793879286317,
+      "tag": "0010_delivery_paypal_demo",
+      "breakpoints": true
     }
   ]
 }

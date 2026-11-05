@@ -82,6 +82,8 @@ const LABELS: Record<string, string> = {
   "rental.pickup_recorded": "Rental pickup condition recorded",
   "rental.return_clean": "Rental return: no new damage",
   "rental.return_charge": "Rental return: agreed charges found",
+  "handoff.checkin": "Buyer checked in with the seller's one-time code (seller present in person)",
+  "deal.shipped": "Seller shipped the item with tracking",
   "deal.released": "Buyer released payment",
   "deal.settled": "Rental settled",
 };

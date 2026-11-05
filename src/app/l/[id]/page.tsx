@@ -52,10 +52,10 @@ export default async function ListingPage({
   searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ k?: string; cancelled?: string }>;
+  searchParams: Promise<{ k?: string; cancelled?: string; paypal?: string }>;
 }) {
   const { id } = await params;
-  const { k, cancelled } = await searchParams;
+  const { k, cancelled, paypal } = await searchParams;
   const listing = await getListing(id).catch((e) => {
     if (e instanceof HttpError && e.status === 404) notFound();
     throw e;
@@ -63,7 +63,7 @@ export default async function ListingPage({
   const isSeller = k === listing.sellerKey;
   // Buyers see only photos judged free of identifiers; the seller sees everything they uploaded.
   const photos = await photoIds({ listingId: id, stage: "listing", publicOnly: !isSeller });
-  const srcs = photos.map((p) => `/api/photos/${p}${isSeller ? `?k=${encodeURIComponent(k ?? "")}` : ""}`);
+  const srcs = listing.demo ? ["/demo/imei-right.png"] : photos.map((p) => `/api/photos/${p}${isSeller ? `?k=${encodeURIComponent(k ?? "")}` : ""}`);
   const fp = listing.fingerprint;
   const fee = feeFor(listing.priceCents);
   const total = listing.priceCents + fee + listing.depositCents;
@@ -106,13 +106,21 @@ export default async function ListingPage({
   return (
     <div className="mx-auto max-w-5xl px-4 pb-28 pt-4 sm:pt-8 lg:pb-8">
       {cancelled && <p className="mb-4 rounded-[10px] border border-line bg-card px-4 py-3 text-sm">Payment cancelled in PayPal. Nothing was charged.</p>}
+      {paypal === "ok" && <p className="mb-4 rounded-[10px] border border-matched/25 bg-matched-tint px-4 py-3 text-sm text-matched">PayPal confirmed your account. Buyers now see you as a PayPal verified seller, and payouts go to that account.</p>}
+      {paypal === "error" && <p className="mb-4 rounded-[10px] border border-oxblood/25 bg-oxblood-tint px-4 py-3 text-sm text-oxblood">PayPal didn&apos;t confirm the account. Nothing changed; you can try again from the seller view.</p>}
+      {listing.demo && !isSeller && (
+        <div className="mb-4 rounded-[10px] border border-accent/30 bg-accent-tint px-4 py-3 text-sm text-ink-700">
+          <p className="font-medium text-accent-ink">Judge demo</p>
+          <p className="mt-1">This sample phone is already verified. Pay with the PayPal sandbox buyer login from the testing instructions: the money is only held. In the deal room, tap the sample screens to run the real AI check, then release. Nothing real is charged.</p>
+        </div>
+      )}
 
       {/* title row */}
       <div className="mb-4 hidden items-end justify-between gap-4 sm:flex">
         <div>
           <h1 className="text-3xl font-semibold tracking-[-0.02em]">{listing.title}</h1>
           <p className="mt-1 text-ink-500">
-            {listing.mode === "sale" ? "For sale" : "For rent"}
+            {listing.mode === "sale" ? (listing.delivery === "shipping" ? "For sale · ships to you" : "For sale") : "For rent"}
             {listing.location && ` · ${listing.location}`}
           </p>
         </div>
@@ -130,7 +138,7 @@ export default async function ListingPage({
               <ShareListing listingId={listing.id} title={listing.title} compact />
             </div>
             <p className="mt-1 text-ink-500">
-              {listing.mode === "sale" ? "For sale" : "For rent"}
+              {listing.mode === "sale" ? (listing.delivery === "shipping" ? "For sale · ships to you" : "For sale") : "For rent"}
               {listing.location && ` · ${listing.location}`}
             </p>
           </div>
@@ -146,15 +154,23 @@ export default async function ListingPage({
                   ? `Possession verified ${listing.verifiedAt.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}`
                   : "Verification pending"}
               </p>
+              {listing.paypalIdentity && (
+                <p className="mt-0.5 text-sm font-medium text-matched">
+                  ✓ PayPal verified seller{listing.paypalIdentity.verifiedAccount ? " · verified PayPal account" : ""}
+                </p>
+              )}
             </div>
           </div>
 
           {listing.verifiedAt && fp ? (
             <div className="space-y-5">
               <Highlight
-                title="In the seller's hands"
-                body="Photographed beside a one-time code Avowly generated, so this isn't a picture from somewhere else."
+                title={listing.demo ? "Demo item" : "In the seller's hands"}
+                body={listing.demo ? "A sample phone, pre-verified so you can try a full deal without one. Real sellers photograph the item beside a one-time code." : "Photographed beside a one-time code Avowly generated, so this isn't a picture from somewhere else."}
               />
+              {listing.mode === "sale" && listing.delivery === "shipping" && (
+                <Highlight title="Shipped, checked on arrival" body="The seller ships it with tracking. You scan it when it arrives; if it isn't the verified item, nothing is charged." />
+              )}
               {fp.identifiers.length > 0 ? (
                 <Highlight
                   title={`${fp.identifiers[0].kind.replace(/\d+$/, "")} on file`}
@@ -274,6 +290,17 @@ export default async function ListingPage({
                   {listing.status === "verified" ? "Live" : listing.status}
                 </Status>
               </div>
+              {!listing.demo &&
+                (listing.paypalIdentity ? (
+                  <p className="text-sm text-matched">✓ Verified with PayPal. Payouts go to {listing.paypalIdentity.email}.</p>
+                ) : (
+                  <div className="space-y-1">
+                    <a href={`/api/paypal/connect?l=${listing.id}&k=${encodeURIComponent(listing.sellerKey)}`} className="btn-secondary">
+                      Verify with PayPal
+                    </a>
+                    <p className="text-xs text-ink-500">Log in with PayPal so buyers see &quot;PayPal verified seller&quot;. Payouts then go to that PayPal account.</p>
+                  </div>
+                ))}
               <NotifyButton subscriptionKey={listing.sellerKey} listingId={listing.id} label="Notify me when a buyer pays" />
               {listing.notifyEmail ? (
                 <p className="text-sm text-ink-500">✉️ Updates are emailed to the address you gave when listing.</p>

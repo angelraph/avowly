@@ -21,6 +21,10 @@ export type ListingSummary = {
   verifiedBy: string;
   conditionNotes: string[];
   marketSignal: string | null;
+  /** "meetup": checked in person; "shipping": the buyer checks it on arrival. */
+  delivery: "meetup" | "shipping";
+  /** The seller logged in with PayPal, and payouts go to that account. */
+  paypalVerifiedSeller: boolean;
 };
 
 export function summarize(l: Listing): ListingSummary {
@@ -44,6 +48,8 @@ export function summarize(l: Listing): ListingSummary {
         : "possession photo",
     conditionNotes: publicConditionNotes(fp?.conditionNotes ?? []),
     marketSignal: market?.signal?.message ?? null,
+    delivery: l.delivery,
+    paypalVerifiedSeller: !!l.paypalIdentity,
   };
 }
 
@@ -62,6 +68,7 @@ export async function searchListings(input: {
     .where(
       and(
         eq(schema.listings.status, "verified"),
+        eq(schema.listings.demo, false),
         ...(input.mode ? [eq(schema.listings.mode, input.mode)] : []),
         ...(input.maxPriceCents ? [lte(schema.listings.priceCents, input.maxPriceCents)] : []),
         ...(input.location ? [ilike(schema.listings.location, `%${input.location.trim()}%`)] : []),

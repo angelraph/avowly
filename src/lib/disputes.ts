@@ -67,7 +67,9 @@ export async function defendDispute(disputeId: string): Promise<DefenseResult> {
   const pdf = await buildEvidencePdf(deal, listing);
   const evidenceType = requestedEvidenceType(dispute);
   const notes =
-    listing.mode === "sale"
+    listing.mode === "sale" && listing.delivery === "shipping"
+      ? `Shipped sale verified by Avowly. The seller proved possession with a one-time code before payment and shipped it${deal.shipping ? ` with ${deal.shipping.carrier}, tracking ${deal.shipping.tracking}` : ""}. On arrival the buyer photographed the item; its identifier matched the listing, and the buyer pressed Release before any funds were captured. Full record with photos and PayPal timeline attached (deal ${deal.id}).`
+      : listing.mode === "sale"
       ? `In-person handoff verified by Avowly. The seller proved possession with a one-time code before payment. At the meetup the buyer photographed the item; its identifier matched the listing, and the buyer pressed Release before any funds were captured. Full record with photos and PayPal timeline attached (deal ${deal.id}).`
       : `Rental verified by Avowly. Condition and accessories were recorded by the renter at pickup and compared at return. Only charges from a price table the renter saw before paying were captured. Full record with photos and PayPal timeline attached (deal ${deal.id}).`;
 

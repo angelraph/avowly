@@ -47,6 +47,9 @@ export default async function Home() {
               <Link href="/new?mode=rental" className="rounded-[10px] border border-line bg-card px-5 py-3 font-medium hover:bg-ink-100">
                 Rent something out
               </Link>
+              <Link href="/demo" className="rounded-[10px] border border-accent/40 bg-accent-tint px-5 py-3 font-medium text-accent-ink hover:bg-accent/15">
+                Try a full deal in 2 min
+              </Link>
             </div>
             <p className="mt-5 animate-[rise_0.7s_0.32s_both] text-sm text-ink-500">
               For Marketplace, Craigslist and Reddit deals, local meetups and gear rentals. <Link href="/browse" className="text-accent-ink underline-offset-4 hover:underline">Browse verified listings</Link>

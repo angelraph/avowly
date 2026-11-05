@@ -51,9 +51,19 @@ export const listings = pgTable("listings", {
   damageRules: jsonb("damage_rules").$type<DamageRule[]>().notNull().default([]),
   // Channel3 market price check, filled in shortly after verification.
   market: jsonb("market").$type<Record<string, unknown> | null>(),
+  // Sales only: "meetup" (checked in person) or "shipping" (checked by the buyer on arrival).
+  delivery: text("delivery").$type<Delivery>().notNull().default("meetup"),
+  // Set when the seller logs in with PayPal; payouts then go to that PayPal account.
+  paypalIdentity: jsonb("paypal_identity").$type<PayPalIdentity | null>(),
+  // Judge demo listings: pre-verified with sample data, hidden from search and stats.
+  demo: boolean("demo").notNull().default(false),
   verifiedAt: timestamp("verified_at", { withTimezone: true }),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
+
+export type Delivery = "meetup" | "shipping";
+export type PayPalIdentity = { email: string; verifiedAccount: boolean | null; name: string | null; at: string };
+export type Shipping = { carrier: string; tracking: string; at: string };
 
 export const deals = pgTable("deals", {
   id: text("id").primaryKey(),
@@ -76,6 +86,8 @@ export const deals = pgTable("deals", {
   decision: jsonb("decision").$type<Record<string, unknown> | null>(),
   pickupInspection: jsonb("pickup_inspection").$type<Record<string, unknown> | null>(),
   returnInspection: jsonb("return_inspection").$type<Record<string, unknown> | null>(),
+  // Shipped sales: carrier and tracking the seller entered when sending it.
+  shipping: jsonb("shipping").$type<Shipping | null>(),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
 

@@ -45,6 +45,7 @@ export function NewListing({ initialMode }: { initialMode: Mode }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState("");
+  const [delivery, setDelivery] = useState<"meetup" | "shipping">("meetup");
   const [price, setPrice] = useState("");
   const [deposit, setDeposit] = useState("");
   const [sellerName, setSellerName] = useState("");
@@ -87,6 +88,7 @@ export function NewListing({ initialMode }: { initialMode: Mode }) {
           title,
           description,
           location,
+          delivery: mode === "sale" ? delivery : "meetup",
           priceCents: amount(price, mode === "rental" ? "the rental fee" : "the price"),
           depositCents: mode === "rental" ? amount(deposit, "the deposit") : 0,
           sellerName,
@@ -210,8 +212,27 @@ export function NewListing({ initialMode }: { initialMode: Mode }) {
           <label className="label" htmlFor="desc">Details</label>
           <textarea id="desc" className="field" rows={2} value={description} onChange={(e) => setDescription(e.target.value)} />
         </div>
+        {mode === "sale" && (
+          <fieldset>
+            <legend className="label">How does it reach the buyer?</legend>
+            <div className="grid grid-cols-2 gap-2">
+              {(
+                [
+                  ["meetup", "Meet in person", "Buyer checks it in your hands"],
+                  ["shipping", "Ship it", "Buyer checks it on arrival"],
+                ] as const
+              ).map(([value, title, hint]) => (
+                <label key={value} className={`cursor-pointer rounded-[10px] border p-3 text-sm ${delivery === value ? "border-accent bg-accent-tint" : "border-line bg-card"}`}>
+                  <input type="radio" name="delivery" value={value} checked={delivery === value} onChange={() => setDelivery(value)} className="sr-only" />
+                  <span className="block font-medium text-ink-900">{title}</span>
+                  <span className="text-ink-500">{hint}</span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+        )}
         <div>
-          <label className="label" htmlFor="location">Where to meet</label>
+          <label className="label" htmlFor="location">{mode === "sale" && delivery === "shipping" ? "Ships from" : "Where to meet"}</label>
           <input id="location" className="field" required minLength={2} placeholder="City and area, e.g. Lagos, Ikeja" value={location} onChange={(e) => setLocation(e.target.value)} />
         </div>
         <div className="grid grid-cols-2 gap-3">

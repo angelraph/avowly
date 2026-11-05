@@ -15,6 +15,11 @@ export function timelinePayload(payload: Record<string, unknown>): Record<string
     const v = payload[field];
     if (typeof v === type && (type !== "string" || /^[A-Za-z_ -]{1,40}$/.test(v as string))) out[field] = v;
   }
+  // Shipping: carrier and tracking number, which both parties already see on the deal.
+  for (const field of ["carrier", "tracking"]) {
+    const v = payload[field];
+    if (typeof v === "string" && /^[A-Za-z0-9 -]{1,60}$/.test(v)) out[field] = v;
+  }
   return out;
 }
 
