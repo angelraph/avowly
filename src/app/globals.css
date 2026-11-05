@@ -181,6 +181,8 @@ body {
   font-family: var(--font-geist-mono);
   font-size: 0.85em;
   color: var(--color-ink-900);
+  /* Long identifiers like get_deal_status must wrap on 320px phones instead of widening the page. */
+  overflow-wrap: anywhere;
 }
 .prose-avowly pre {
   overflow-x: auto;
