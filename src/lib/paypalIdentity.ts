@@ -7,7 +7,8 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
 import { env } from "./env";
 
-const SCOPES = "openid email profile https://uri.paypal.com/services/paypalattributes";
+// "profile" is refused by PayPal for this app ("invalid scope"); email and verification status are enough.
+const SCOPES = "openid email https://uri.paypal.com/services/paypalattributes";
 
 export function redirectUri(): string {
   return `${env.appUrl()}/api/paypal/callback`;
