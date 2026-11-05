@@ -62,10 +62,10 @@ export function EmailUpdates({ subscriptionKey, listingId, dealId }: { subscript
       <label htmlFor="updates-email" className="text-sm text-ink-700">
         Email me updates (works on every phone)
       </label>
-      <div className="flex gap-2">
+      <div className="grid grid-cols-[1fr_auto] gap-2">
         <input
           id="updates-email"
-          className="field min-w-0 flex-1"
+          className="field min-w-0"
           type="email"
           required
           autoComplete="email"
@@ -73,7 +73,7 @@ export function EmailUpdates({ subscriptionKey, listingId, dealId }: { subscript
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-        <button className="btn-secondary shrink-0" disabled={busy}>
+        <button className="btn-secondary w-auto px-5" disabled={busy}>
           {busy ? "Saving…" : "Save"}
         </button>
       </div>
