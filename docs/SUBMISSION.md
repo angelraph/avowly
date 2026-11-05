@@ -1,56 +1,90 @@
-# Devpost submission text
+# Avowly: Devpost submission
 
 **Name:** Avowly
-**Tagline:** Pay strangers like you trust them. Money moves only when the thing does.
-**Demo:** https://avowly.vercel.app
+**Elevator pitch:** Pay strangers like you trust them. PayPal holds the money, AI checks the item in your hands, and the seller is paid only when it's the real thing.
+**Live app:** https://avowly.vercel.app
+**Try a full deal in 2 minutes:** https://avowly.vercel.app/demo
 **Code:** https://github.com/angelraph/avowly
-**Video:** add the public YouTube link before submitting
+**Video:** https://youtu.be/evy2Yd8vFI8
 
-## Inspiration
-One UK bank's fraud team contacted 100 Facebook Marketplace sellers and found 34% of the listings were fraudulent. Reported US fraud losses reached $12.5B in 2024. Yet the moment two strangers meet to swap money for a used phone still runs on cash and hope. PayPal solved trust between strangers online. Nobody had solved it for the meetup.
+## About the project
 
-## What it does
-Avowly ties a PayPal payment to a physical item.
+### Inspiration
 
-- **Prove it:** the seller photographs the item beside a one-time code, so fake listings can't pass.
-- **Hold it:** the buyer approves in PayPal; the money is authorized, not charged.
-- **Check it:** at the handoff the buyer scans the item. The serial or IMEI must match, or for items without serials, unique marks recorded at listing. A swapped device or an activation-locked phone can't pass.
-- **Release it:** on a match, PayPal captures and the seller is paid their full price by Payouts. Otherwise nothing is charged.
-- **Rentals:** one hold covers fee and deposit. At return, AI compares the item with its pickup photos, and only damage on a price list both sides saw up front can be charged. The rest is released.
-- **Disputes:** a PDF handoff record goes to PayPal automatically as evidence.
-- **Agents:** an MCP server lets AI shopping agents find verified items and start a purchase, but only the human can approve it in PayPal.
-- **Free scam check:** paste any listing for a verdict and a ready message asking the seller to verify. Listings, badges and proof pages spread Avowly on their own.
+I've watched people buy phones from strangers more times than I can count. Same routine every time: meet somewhere public, hand over cash, hope it's not a swapped phone or one that gets locked remotely an hour later. When it goes wrong, the money is gone and there's nobody to call.
 
-## How we built it
-Next.js and TypeScript on Vercel, Postgres on Neon. PayPal: JS SDK v6, Orders v2 (AUTHORIZE), Payments v2 (partial and final capture, void, reauthorize), Payouts, signature-verified Webhooks and the Disputes API. AI: the OpenAI Responses API with vision and strict structured outputs. Channel3 supplies live retail prices. `mcp-handler` serves the agent tools.
+It's not a small problem. When TSB, a UK bank, contacted 100 Facebook Marketplace sellers, 34% of the listings turned out to be fraudulent. Americans reported $12.5 billion in fraud losses in 2024, and online shopping was the second most reported category.
 
-**The core design rule: the AI reads, plain rules decide.** The model only reports what it sees, with a confidence. It isn't told which serial to expect, never sees a price it could change, and never calls PayPal. Every money decision lives in tested, public code.
+PayPal fixed trust between strangers online years ago. Nobody fixed it for the moment two strangers actually meet. That's what I wanted to build.
 
-## Tools and how they were used
-- **OpenAI (vision, structured outputs):** reads codes, serials, marks, lock screens and accessories; compares pickup and return photos; locates personal information to blur; picks scam-check flags from a fixed list.
-- **PayPal developer platform:** central to the product, as listed above.
-- **Channel3:** market price checks, matched only on the same brand and model number, needing at least 3 offers.
-- **Model Context Protocol:** the agent commerce server.
-- **Vercel and Neon:** hosting and database.
+### What it does
 
-## Challenges
-- **PayPal refused holds paid directly to a third-party seller** without partner approval, so Avowly holds through its own sandbox account and pays sellers by Payouts, which also funds buyer protection.
-- **Privacy:** real IMEI screenshots contain other people's phone numbers. Every photo is now pixelated before storage, and originals are never saved. Our first version of the blur silently did nothing; we caught it by looking at the output.
-- **Honest pricing:** a catalog search for one phone returned a different model and flip-flops. Prices now require the same brand and model number.
+Avowly ties a PayPal payment to the actual item.
 
-## Accomplishments
-- A full sale ran on the live site: an AI agent found a real phone and started the purchase, a person approved in PayPal, a different phone was refused, a locked phone was blocked, and the right phone paid the seller.
-- A rental ran on the live site: a missing charger was found at return, $25 was charged from the agreed price list and $75 of the deposit came back.
-- A real PayPal dispute ("item not received") was answered automatically: Avowly sent the handoff record as evidence 2 seconds after PayPal asked the seller, and PayPal passed the case back to the buyer.
-- Every money rule is unit tested, and the money paths have a repeatable script against the sandbox.
-- In the scam check, a listing that told the AI to approve it still came back high risk.
-- Testing on a real phone found what tidy test data missed: screens label an IMEI "SIM slot 1" and add a software version after it. Both are now handled and covered by tests.
+- **Prove it.** The seller photographs the item next to a one-time code. A stolen photo can't have that code. AI reads the serial or IMEI, and blurs anyone's personal details before the photo is saved.
+- **Hold it.** The buyer pays with PayPal, but the money is only authorized. Nothing is charged yet.
+- **Check in.** At the meetup the buyer scans a QR code on the seller's phone. Only the real seller's link can show it.
+- **Check it.** The buyer scans the item. The serial has to match. For phones, Find My or Find Hub has to be off, so nobody pays for a phone that can be locked later.
+- **Release it.** On a match, PayPal captures the payment and the seller gets their full price through Payouts. Wrong item, locked phone, anything else: nothing is charged.
 
-## What we learned
-Models are excellent readers and poor judges of money. Separating the two made the product both more capable and easier to trust.
+The same engine handles rentals. One hold covers the fee and the deposit. When the item comes back, AI compares it with the pickup photos, and only damage on a price list both sides agreed to can be charged. The rest of the deposit comes back by itself.
 
-## What's next
-Shipped deals scanned on delivery, PayPal platform partner approval, carrier and IMEI data checks, rental business accounts, and a "Verified handoff" option PayPal could offer natively. See [WHY_PAYPAL.md](WHY_PAYPAL.md).
+A few more things it does:
 
-## Testing instructions field (paste into Devpost; do not commit the passwords)
-See docs/JUDGE_TESTING.md in the repo. Sandbox buyer login: (paste email and password from the PayPal dashboard). Sandbox seller email for listings: (paste).
+- If the buyer opens a PayPal dispute later, Avowly sends PayPal the full handoff record as evidence, on its own.
+- Sellers can log in with PayPal, so buyers see "PayPal verified seller" and payouts go to that exact account.
+- Sellers can ship instead of meeting. The buyer scans the item when it arrives.
+- Updates by email, so it works even on phones that block browser notifications.
+- AI shopping agents can find verified items and start a purchase through an MCP server, but only a human can approve the payment in PayPal.
+- A free scam check: paste any listing and get a verdict, plus a message asking the seller to prove it with Avowly.
+- A judge demo at /demo that runs a full deal in two minutes with no phone needed.
+
+### What actually happened on the live site
+
+I didn't want to claim anything I hadn't seen work, so everything below ran on the live site in the PayPal sandbox, with PayPal's own webhooks confirming each step.
+
+- **A phone sale started by an AI agent.** An agent found my Oppo over MCP and started the purchase, and I approved it in PayPal ($262.50 held). I scanned a different phone first: Mismatch. Then the right phone with Find Hub still on: blocked. Switch off: Matched. Release captured the money and the seller got $250.
+- **A real PayPal dispute.** Then I opened an "item not received" case from the buyer account. Two seconds after PayPal asked the seller to respond, Avowly had already sent the evidence PDF. PayPal passed the case back to the buyer.
+- **A laptop rental.** $20 fee, $100 deposit. It came back without the charger, so $25 was kept from the agreed list and $75 went back automatically.
+- **The judge demo.** $126 held, check-in, four AI checks, $120 paid out.
+
+### How I built it
+
+Next.js and TypeScript on Vercel, with Postgres on Neon.
+
+PayPal is the backbone: JS SDK v6, Orders v2 with intent AUTHORIZE for the hold, Payments v2 for partial and final captures, voids and reauthorizations, Payouts to pay sellers, signature-verified webhooks, the Disputes API to send evidence, and Log in with PayPal for verified sellers.
+
+The AI is OpenAI's Responses API with vision and strict structured outputs. It reads serials, codes, lock screens and accessories, compares rental photos, and finds personal details to blur. Channel3 gives live market prices. The agent tools run on an MCP server.
+
+The one rule I stuck to the whole way: **the AI reads, plain rules decide.** The model only reports what it sees and how sure it is. It's never told which serial to expect, never sees a price, and never touches PayPal. Every money decision is in normal code with unit tests.
+
+### Challenges I ran into
+
+- **PayPal wouldn't let me hold money payable straight to a third party seller** without partner approval. So Avowly holds through its own account and pays sellers with Payouts, which also covers the buyer protection fee.
+- **Real phones are messier than test data.** My phone's screen labels the IMEI "SIM slot 1" and adds a software version after it. Both broke the reader until I fixed them and added tests.
+- **Privacy.** Real IMEI screenshots show other people's phone numbers. Now every photo is blurred before it's saved and the original is thrown away. My first blur silently did nothing, and I only caught it by actually looking at the output.
+- **My test phone blocked notifications.** Google accepted every push I sent, but the phone never showed them. So I added email updates, and those landed in the inbox.
+
+### Accomplishments I'm proud of
+
+- A real sale, a real rental and a real dispute all ran end to end on the live site.
+- A scam listing that literally told the AI to approve it still came back high risk.
+- 52 unit tests cover every rule that moves money.
+
+### What I learned
+
+AI models are great at reading and bad at deciding about money. Once I split those two jobs, the product got more capable and easier to trust at the same time.
+
+### What's next
+
+Carrier blacklist checks for phones, PayPal partner approval so sellers get paid directly, accounts for rental businesses, and a "verified handoff" option PayPal could offer to everyone.
+
+## Built with
+
+paypal, next.js, typescript, react, openai, model-context-protocol, postgresql, neon, vercel, tailwindcss, drizzle, web-push, node.js
+
+## Testing instructions (paste into Devpost; the password stays out of this repo)
+
+The fastest way is the 2 minute demo: https://avowly.vercel.app/demo. Tap Start a demo deal, pay with the sandbox buyer below, tap "Demo: use the seller's code", then the four sample screens in order (Mismatch, One more photo, Locked, Matched), then Release. Full guide: [JUDGE_TESTING.md](JUDGE_TESTING.md).
+
+Sandbox buyer: (email and password from the PayPal sandbox dashboard)
