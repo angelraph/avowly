@@ -1,4 +1,4 @@
-import { and, asc, eq, inArray } from "drizzle-orm";
+import { and, asc, eq, inArray, sql } from "drizzle-orm";
 import { customAlphabet } from "nanoid";
 import { getDb, schema } from "./db";
 import type { Deal, Listing } from "./db/schema";
@@ -257,11 +257,20 @@ export async function captureForSeller(input: {
     requestId,
     noteToPayer: `Avowly: ${input.listing.title} (${input.purpose})`,
   });
-  await logEvent({
-    dealId: input.deal.id,
-    type: "paypal.capture",
-    payload: { purpose: input.purpose, captureId: capture.id, status: capture.status, amount: capture.amount, finalCapture: input.finalCapture },
-  });
+  // A retry after a failed payout gets the same capture back (idempotent request id): record it once.
+  const db = await getDb();
+  const [seen] = await db
+    .select({ id: schema.events.id })
+    .from(schema.events)
+    .where(and(eq(schema.events.dealId, input.deal.id), eq(schema.events.type, "paypal.capture"), sql`${schema.events.payload}->>'captureId' = ${capture.id}`))
+    .limit(1);
+  if (!seen) {
+    await logEvent({
+      dealId: input.deal.id,
+      type: "paypal.capture",
+      payload: { purpose: input.purpose, captureId: capture.id, status: capture.status, amount: capture.amount, finalCapture: input.finalCapture },
+    });
+  }
 
   const platform = env.paypalSettlement() === "platform_payout";
   const paidOut = platform ? input.payoutCents : input.captureCents;

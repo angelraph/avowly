@@ -127,7 +127,16 @@ export default async function ListingPage({
         <ShareListing listingId={listing.id} title={listing.title} />
       </div>
 
-      <PhotoMosaic srcs={srcs} />
+      {listing.demo ? (
+        <div className="flex justify-center gap-4 rounded-[10px] border border-line bg-card p-4">
+          {["imei-right.png", "findhub-off.png"].map((f) => (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img key={f} src={`/demo/${f}`} alt="Sample phone screen" className="h-64 w-auto rounded-[10px] border border-line object-contain" />
+          ))}
+        </div>
+      ) : (
+        <PhotoMosaic srcs={srcs} />
+      )}
 
       <div className="mt-6 grid gap-10 lg:grid-cols-[1fr_360px]">
         <div className="min-w-0 space-y-8">
