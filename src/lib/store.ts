@@ -268,7 +268,7 @@ export async function captureForSeller(input: {
   if (platform && input.payoutCents > 0) {
     const result = await paypal.payout({
       batchId: `payout-${input.deal.id}-${input.purpose}`,
-      receiverEmail: input.listing.sellerPaypalEmail,
+      receiverEmail: input.listing.sellerPaypalEmail.replace(/[﻿​\s]/g, ""),
       amountCents: input.payoutCents,
       currency: input.listing.currency,
       note: `Payment for ${input.listing.title}, verified by Avowly.`,

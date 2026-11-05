@@ -15,7 +15,8 @@ const DEMO_IMEIS = ["490154203237518", "490154203237526"];
  */
 export const POST = handler(async (req: Request) => {
   await rateLimit(`demo:ip:${clientIp(req)}`, 10, 3600);
-  const sellerEmail = process.env.SANDBOX_SELLER_EMAIL;
+  // Strip invisible characters (e.g. a byte-order mark from a Windows shell) that PayPal rejects as an invalid receiver.
+  const sellerEmail = process.env.SANDBOX_SELLER_EMAIL?.replace(/[﻿​\s]/g, "");
   if (!sellerEmail) throw new HttpError(503, "Demo mode isn't set up on this server");
 
   const id = newId();
